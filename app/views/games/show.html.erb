@@ -1,0 +1,160 @@
+<% content_for :title, "Word Quest | Let's grow your word power" %>
+<div class="app-shell" data-controller="game">
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Word Quest home">
+      <span class="brand-mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M6 7c4-1 7 0 10 2 3-2 6-3 10-2v19c-4-1-7 0-10 2-3-2-6-3-10-2V7Z" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/><path d="M16 10v17M10 13l3 1m-3 4 3 1m7-5 3-1m-3 6 3-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+      Word<span class="brand-light">Quest</span><span class="brand-dot">.</span>
+    </a>
+    <div class="nav-label">YOUR LITTLE ADVENTURE</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/" class="nav-item active" aria-current="page"><span class="nav-icon">◈</span> Let's play <span class="nav-arrow">→</span></a>
+      <button class="nav-item" data-action="game#openProgress"><span class="nav-icon">▥</span> My progress</button>
+      <button class="nav-item" data-action="game#openHelp"><span class="nav-icon">☷</span> How to play</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="little-note"><span class="note-star">✧</span><strong>Small steps.<br>Super spelling.</strong><p>Every word is a little win.</p><span class="note-doodle">〰</span></div>
+      <div class="made-for"><span>♡</span> Made for curious little minds</div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <noscript><p class="storage-notice">Please enable JavaScript to play the spelling game.</p></noscript>
+    <header class="topbar">
+      <span class="breadcrumb">A place to play. A world to learn.</span>
+      <div class="topbar-actions">
+        <span class="streak-pill"><span>🔥</span> <strong data-game-target="streak">0 day streak</strong></span>
+        <button class="sound-button" data-game-target="soundButton" data-action="game#toggleSound" aria-label="Turn spoken words on" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m11 5-5 4H3v6h3l5 4V5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m16 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <div class="avatar" aria-label="Little explorer">🌱</div>
+      </div>
+    </header>
+
+    <section class="page-intro">
+      <div class="eyebrow"><span></span> BIG DISCOVERIES START WITH LITTLE LETTERS</div>
+      <h1>Let's grow your <span>word power.</span><svg class="title-sparkle" viewBox="0 0 40 40" aria-hidden="true"><path d="m20 2 4 13 13 5-13 4-4 14-5-14-13-4 13-5Z" fill="none" stroke="currentColor" stroke-width="2"/></svg></h1>
+      <p>A missing letter. A little thinking. A whole lot of “I did it!”</p>
+    </section>
+
+    <section class="level-section" aria-label="Choose difficulty">
+      <div class="section-heading"><h2>Pick your adventure</h2><span>Just the right challenge for you</span></div>
+      <div class="level-options">
+        <button class="level-card selected" data-game-target="level" data-level="easy" data-action="game#changeLevel" aria-pressed="true">
+          <span class="level-icon sprout">🌱</span><span class="level-copy"><strong>Little sprout <span class="level-tag">EASY</span></strong><small>6-letter words, one missing letter</small></span><span class="level-radio"></span>
+        </button>
+        <button class="level-card" data-game-target="level" data-level="medium" data-action="game#changeLevel" aria-pressed="false">
+          <span class="level-icon explorer">🧭</span><span class="level-copy"><strong>Word explorer <span class="level-tag">MEDIUM</span></strong><small>7–8 letters, two missing letters</small></span><span class="level-radio"></span>
+        </button>
+        <button class="level-card" data-game-target="level" data-level="hard" data-action="game#changeLevel" aria-pressed="false">
+          <span class="level-icon wizard">🪄</span><span class="level-copy"><strong>Word wizard <span class="level-tag">HARD</span></strong><small>Tricky words for clever minds</small></span><span class="level-radio"></span>
+        </button>
+        <button class="level-card" data-game-target="level" data-level="advanced" data-action="game#changeLevel" aria-pressed="false">
+          <span class="level-icon scholar">🎓</span><span class="level-copy"><strong>Word scholar <span class="level-tag">GRADE 4</span></strong><small>Advanced words, four missing letters</small></span><span class="level-radio"></span>
+        </button>
+      </div>
+    </section>
+
+    <div class="play-layout">
+      <section class="puzzle-card" aria-label="Spelling puzzle">
+        <div class="puzzle-header"><span class="round-label"><span class="tiny-dot"></span> <span data-game-target="round">WORD 1 OF 5</span></span><span class="points"><span>✦</span> <span data-game-target="points">0 stars</span></span></div>
+        <div class="puzzle-body">
+          <div class="word-celebration" data-game-target="celebration" role="status" aria-live="polite" aria-atomic="true"></div>
+          <div class="picture-scene" role="img" aria-label="A green frog sitting on a lily pad" data-game-target="scene">
+            <svg class="frog-art" data-game-target="frog" viewBox="0 0 300 180" fill="none" aria-hidden="true">
+              <ellipse cx="150" cy="146" rx="116" ry="22" fill="#d6e9e3"/>
+              <path d="M58 143c27-25 127-27 175-2-41 26-127 31-175 2Z" fill="#89b69b"/>
+              <path d="m150 145 78-5-38 15" fill="#b6d1a8"/>
+              <ellipse cx="150" cy="122" rx="54" ry="31" fill="#76a969"/>
+              <ellipse cx="112" cy="135" rx="26" ry="12" fill="#6b9b60" transform="rotate(-12 112 135)"/>
+              <ellipse cx="189" cy="135" rx="26" ry="12" fill="#6b9b60" transform="rotate(12 189 135)"/>
+              <path d="M105 104c-6-25 13-39 45-39s51 14 45 39c-5 24-85 24-90 0Z" fill="#8fbd79"/>
+              <circle cx="122" cy="70" r="19" fill="#8fbd79"/><circle cx="178" cy="70" r="19" fill="#8fbd79"/>
+              <circle cx="123" cy="70" r="11" fill="#faf9e9"/><circle cx="177" cy="70" r="11" fill="#faf9e9"/>
+              <ellipse cx="125" cy="71" rx="4.5" ry="6" fill="#334739"/><ellipse cx="175" cy="71" rx="4.5" ry="6" fill="#334739"/>
+              <circle cx="126" cy="69" r="1.5" fill="white"/><circle cx="176" cy="69" r="1.5" fill="white"/>
+              <ellipse cx="117" cy="97" rx="8" ry="4" fill="#d7ae91"/><ellipse cx="184" cy="97" rx="8" ry="4" fill="#d7ae91"/>
+              <path d="M137 99q13 12 26 0" stroke="#435e3b" stroke-width="3" stroke-linecap="round"/>
+              <path d="m126 120-6 17m54-17 6 17" stroke="#547f4e" stroke-width="3" stroke-linecap="round"/>
+              <path d="M51 123V89m0 19-9-9m9 1 9-12M249 129V93m0 18 8-12" stroke="#9db997" stroke-width="3" stroke-linecap="round"/>
+              <ellipse cx="51" cy="85" rx="4" ry="10" fill="#c3a082"/><ellipse cx="249" cy="89" rx="4" ry="10" fill="#c3a082"/>
+              <path d="m219 52 3-7m-1 8 7-1M78 62l-5-4" stroke="#d4bd67" stroke-width="2.5" stroke-linecap="round"/>
+              <ellipse cx="86" cy="151" rx="5" ry="2" fill="#e9f2ec"/><ellipse cx="216" cy="153" rx="8" ry="2" fill="#e9f2ec"/>
+            </svg>
+            <span class="word-emoji" data-game-target="emoji" hidden></span>
+            <span class="scene-sparkle sparkle-one">✧</span><span class="scene-sparkle sparkle-two">✦</span>
+          </div>
+          <h2 data-game-target="prompt">What’s the missing letter?</h2>
+          <p class="clue" data-game-target="clue">I hop by the pond and say “ribbit!”</p>
+          <div class="letter-slots" data-game-target="slots" aria-label="Word to complete"></div>
+          <p class="choose-label" data-game-target="chooseLabel">PICK A LETTER TO COMPLETE THE WORD</p>
+          <div class="letter-choices" data-game-target="choices" aria-label="Available letters"></div>
+          <div class="feedback" data-game-target="feedback" role="status" aria-live="polite"></div>
+          <div class="puzzle-actions">
+            <button class="hint-button" data-game-target="hintButton" data-action="game#hint"><span>☀</span> A little hint</button>
+            <button class="check-button" data-game-target="checkButton" data-action="game#check" disabled>Check my word <span>→</span></button>
+          </div>
+        </div>
+        <div class="puzzle-footer"><span>♡</span> No timers. No pressure. Just you getting better.</div>
+      </section>
+
+      <aside class="game-aside">
+        <section class="goal-card">
+          <div class="card-heading"><span class="goal-icon">⚑</span><h2>Your daily little goal</h2><span class="goal-sparkle">✧</span></div>
+          <p>Five words. So many possibilities.</p>
+          <div class="word-garden" data-game-target="garden" data-growth="0" role="img" aria-label="Daily word garden: a tiny seed">
+            <svg viewBox="0 0 240 150" fill="none" aria-hidden="true">
+              <circle cx="195" cy="29" r="17" fill="#f4e6b7"/>
+              <path d="M25 137Q120 113 215 137" fill="#dde6d3"/>
+              <ellipse cx="120" cy="135" rx="45" ry="7" fill="#c7d6b9"/>
+              <ellipse cx="120" cy="131" rx="7" ry="5" fill="#b58a6d"/>
+              <g data-stage="1" hidden><path d="M120 131v-23" stroke="#84a16f" stroke-width="5" stroke-linecap="round"/><path d="M120 119q-24 0-23-18 22-2 23 18Z" fill="#a5bf8c"/></g>
+              <g data-stage="2" hidden><path d="M120 112V91" stroke="#84a16f" stroke-width="5" stroke-linecap="round"/><path d="M120 105q25-1 27-22-26 0-27 22Z" fill="#91b27a"/></g>
+              <g data-stage="3" hidden><path d="M120 94V66" stroke="#84a16f" stroke-width="5" stroke-linecap="round"/><path d="M120 86q-32-1-31-25 30 1 31 25Z" fill="#a5bf8c"/><path d="M120 78q28-1 31-23-29-1-31 23Z" fill="#91b27a"/></g>
+              <g data-stage="4" hidden><path d="M120 69V43" stroke="#84a16f" stroke-width="5" stroke-linecap="round"/><path d="M120 51q-23-17 0-28 23 11 0 28Z" fill="#b8a0ce"/></g>
+              <g data-stage="5" hidden>
+                <g fill="#c2a6dd"><ellipse cx="120" cy="23" rx="10" ry="17"/><ellipse cx="120" cy="55" rx="10" ry="17"/><ellipse cx="104" cy="39" rx="17" ry="10"/><ellipse cx="136" cy="39" rx="17" ry="10"/><ellipse cx="109" cy="28" rx="10" ry="14" transform="rotate(-45 109 28)"/><ellipse cx="131" cy="50" rx="10" ry="14" transform="rotate(-45 131 50)"/><ellipse cx="131" cy="28" rx="10" ry="14" transform="rotate(45 131 28)"/><ellipse cx="109" cy="50" rx="10" ry="14" transform="rotate(45 109 50)"/></g>
+                <circle cx="120" cy="39" r="12" fill="#f1d58b"/><circle cx="116" cy="37" r="1.5" fill="#826c54"/><circle cx="124" cy="37" r="1.5" fill="#826c54"/><path d="M117 42q3 3 6 0" stroke="#826c54" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="m60 39 3 7 7 3-7 3-3 7-3-7-7-3 7-3ZM182 76l2 5 5 2-5 2-2 5-2-5-5-2 5-2Z" fill="#d8bc77"/>
+              </g>
+            </svg>
+          </div>
+          <p class="garden-caption" data-game-target="gardenMessage">A tiny seed, a big adventure!</p>
+          <div class="goal-progress"><strong><span data-game-target="goalCount">0</span><span class="goal-total"> / 5</span></strong><span>words today</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Daily word goal" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" data-game-target="goalBar"><span data-game-target="goalFill"></span></div>
+          <div class="goal-bottom"><span>⭐</span><span data-game-target="goalMessage">A little practice goes a long way!</span></div>
+        </section>
+        <section class="steps-card">
+          <h2>A little guide to big wins</h2>
+          <div class="guide-step"><span>1</span><div><strong>Look &amp; wonder</strong><p>The picture and clue are your pals.</p></div></div>
+          <div class="guide-step"><span>2</span><div><strong>Find the missing letters</strong><p>Tap a letter or use your keyboard.</p></div></div>
+          <div class="guide-step"><span>3</span><div><strong>Watch your word bloom</strong><p>Give it a go. Every try helps you grow!</p></div></div>
+        </section>
+        <section class="encouragement-card">
+          <svg class="mascot" viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M49 35C20 34 22 10 22 10s28-2 27 25Z" fill="#a2bca0"/><path d="M49 42c-2-28 29-30 29-30s4 28-29 30Z" fill="#7e9f7d"/><path d="M49 30v24" stroke="#638563" stroke-width="3"/><path d="M23 49h54l-5 32c-2 15-42 15-44 0l-5-32Z" fill="#d49d7f"/><path d="M20 49c0-4 60-4 60 0v9H20v-9Z" fill="#e3b395"/><circle cx="40" cy="70" r="2" fill="#594c46"/><circle cx="60" cy="70" r="2" fill="#594c46"/><path d="M45 77q5 5 10 0" stroke="#594c46" stroke-width="2" stroke-linecap="round"/><ellipse cx="34" cy="76" rx="4" ry="2" fill="#eab9a4"/><ellipse cx="66" cy="76" rx="4" ry="2" fill="#eab9a4"/></svg>
+          <div><h2>Hey, little learner.</h2><p>You don't have to be perfect.<br>Just keep on growing.</p></div><span class="encouragement-star">✧</span>
+        </section>
+      </aside>
+    </div>
+
+    <section class="journey-card" aria-label="Current adventure progress">
+      <div class="journey-heading"><div><h2>Your word trail <span>✧</span></h2><p>Every word brings your garden to life.</p></div><span data-game-target="trailCount">0 of 5 discovered</span></div>
+      <div class="trail" data-game-target="trail"></div>
+    </section>
+    <footer class="page-footer"><span>A little curiosity today. A little more confidence tomorrow.</span><span>HAPPY LEARNING <span class="footer-flower">✿</span></span></footer>
+    <p class="storage-notice" data-game-target="storageNotice" role="status" hidden></p>
+  </main>
+
+  <dialog data-game-target="progressDialog" class="info-dialog">
+    <button class="dialog-close" data-action="game#closeDialog" aria-label="Close progress">×</button>
+    <span class="dialog-art">🌟</span><h2>Look how you're growing!</h2><p>Every word is a step forward.</p>
+    <div class="progress-stats" data-game-target="progressStats"></div>
+    <p class="dialog-note">Your progress is saved in this browser. Your daily goal starts fresh each day.</p>
+    <button class="check-button" data-action="game#closeDialog">Keep exploring <span>→</span></button>
+  </dialog>
+  <dialog data-game-target="helpDialog" class="info-dialog">
+    <button class="dialog-close" data-action="game#closeDialog" aria-label="Close instructions">×</button>
+    <span class="dialog-art">🌱</span><h2>Ready for a word adventure?</h2>
+    <ol class="help-list"><li>Choose a level. Little sprout has one blank, Word explorer has two, Word wizard has three, and Word scholar has four for a fourth-grade challenge.</li><li>Look at the picture and read the clue. Tap a blank to choose where your next letter goes.</li><li>Tap a letter, or type it on your keyboard. Use Backspace to erase and Enter to check.</li><li>Need a hand? “A little hint” fills one letter. You can always try again!</li><li>Discover five words to finish your trail. Turn on sound to hear each word after you solve it.</li></ol>
+    <button class="check-button" data-action="game#closeDialog">Let's play <span>→</span></button>
+  </dialog>
+</div>
