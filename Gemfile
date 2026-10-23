@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.5"
+gem "rails", "~> 8.1.4"
 # Rails 8.0's cookie serializer uses options removed in JSON 3.
 gem "json", "~> 2.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
