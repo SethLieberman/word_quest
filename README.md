@@ -11,6 +11,13 @@ missing-letter puzzles using picture clues, a letter bank, or your keyboard.
 - **Word scholar (Grade 4):** advanced eight- to twelve-letter words, such as
   beautiful, necessary, knowledge, and experiment, with four missing letters.
   Practice tricky vowels, silent letters, and doubled consonants with definition clues.
+- **Mastermind:** words of five to ten letters, with exactly two randomly
+  positioned letters revealed at the start. Fill every other position.
+  Examples include ocean, lightning, friendship, and dictionary.
+  On desktop, words stay on one horizontally scrollable line,
+  automatically following the active blank. On smaller screens, words wrap.
+  Letter banks wrap on all screens.
+  Letter choices can be reused, and hints still fill one missing letter at a time.
 - Complete five randomly selected words to finish an adventure.
 - Use a hint to fill one letter. Earn two stars for an unassisted word or one
   star with hints. Incorrect guesses never cost stars.

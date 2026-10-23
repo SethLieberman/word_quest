@@ -79,6 +79,32 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_selector "[data-game-target='goalCount']", text: "5"
   end
 
+  test "incorrect keyboard submissions do not advance multi-letter levels" do
+    %w[medium hard advanced mastermind].each do |difficulty|
+      level_button = find("[data-level='#{difficulty}']")
+      level_button.click
+      details = page.evaluate_script(<<~JS)
+        (() => {
+          const element = document.querySelector("[data-controller='game']");
+          const game = window.Stimulus.getControllerForElementAndIdentifier(element, "game");
+          const required = game.missing.map((index) => game.entry[0][index]);
+          return {
+            missing: game.missing.length,
+            wrong: game.letters.find((letter) => !required.includes(letter)).toUpperCase()
+          };
+        })()
+      JS
+      wrong_letters = details.fetch("wrong").downcase * details.fetch("missing")
+      level_button.send_keys(wrong_letters)
+      level_button.send_keys(:enter)
+
+      assert_text "Not quite, little explorer."
+      assert_text "WORD 1 OF 5"
+      assert_button "Check my word"
+      assert_no_button "Next word"
+    end
+  end
+
   test "letter bank, editing blanks, instructions, and sound control" do
     click_button "Choose B"
     assert_selector ".letter-slot.missing", text: "B"
@@ -164,5 +190,92 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_text "5 stars"
     click_button "How to play"
     assert_text "Word scholar has four"
+  end
+
+  test "Mastermind reveals exactly two letters throughout a complete adventure" do
+    click_button "Mastermind"
+    assert_selector "[data-level='mastermind'][aria-pressed='true']"
+    words = []
+    5.times do |index|
+      length = all(".letter-slot").length
+      assert_includes 5..10, length
+      assert_selector ".letter-slot:not(.missing)", count: 2
+      assert_selector ".letter-slot.missing", count: length - 2
+      assert_button "Check my word", disabled: true
+      (length - 2).times { click_button "A little hint" }
+      words << all(".letter-slot").map(&:text).join
+      click_button "Check my word"
+      assert_text "1 star for growing"
+      click_button "Next word" if index < 4
+    end
+    assert_equal 5, words.uniq.length
+    assert_selector "[data-finale='true']", text: "Five words! You bloomed!"
+    click_button "Play again"
+    assert_selector ".letter-slot:not(.missing)", count: 2
+    click_button "Word scholar"
+    assert_selector ".letter-slot.missing", count: 4
+    assert_text "5 stars"
+  end
+
+  test "Mastermind supports five-letter and ten-letter words with a reusable letter bank" do
+    click_button "Mastermind"
+    %w[ocean dictionary].each do |word|
+      page.execute_script(<<~JS, word)
+        const element = document.querySelector("[data-controller='game']");
+        const game = window.Stimulus.getControllerForElementAndIdentifier(element, "game");
+        game.deck = [[arguments[0], "🧠", "A spelling challenge."]];
+        game.completed = [];
+        game.nextPuzzle();
+      JS
+      assert_selector ".letter-slot", count: word.length
+      assert_selector ".letter-slot:not(.missing)", count: 2
+      assert_selector ".letter-slot.missing", count: word.length - 2
+      positions = all(".letter-slot.missing").map { |slot| slot["aria-label"][/\d+/].to_i }
+      positions.each do |position|
+        index = position - 1
+        click_button "Missing letter #{position}", exact: true
+        click_button "Choose #{word[index].upcase()}"
+      end
+      click_button "Check my word"
+      assert_text "You did it! #{word.upcase()}"
+      assert_text "2 stars for growing"
+    end
+    assert_text "4 stars"
+  end
+
+  test "desktop words stay on one line and follow the active blank while mobile words wrap" do
+    click_button "Mastermind"
+    page.execute_script(<<~JS)
+      const element = document.querySelector("[data-controller='game']");
+      const game = window.Stimulus.getControllerForElementAndIdentifier(element, "game");
+      game.deck = [["dictionary", "📖", "A spelling challenge."]];
+      game.completed = [];
+      game.nextPuzzle();
+    JS
+    [ 801, 1400 ].each do |width|
+      page.current_window.resize_to(width, 1000)
+      assert_equal 1, page.evaluate_script("[...document.querySelectorAll('.letter-slot')].map(el => el.offsetTop).filter((top, index, rows) => rows.indexOf(top) === index).length")
+      if width == 801
+        assert page.evaluate_script("document.querySelector('.letter-slots').scrollWidth > document.querySelector('.letter-slots').clientWidth")
+      end
+      assert page.evaluate_script("document.documentElement.scrollWidth <= innerWidth")
+    end
+    blanks = all(".letter-slot.missing").length
+    (blanks - 1).times { click_button "A little hint" }
+    assert page.evaluate_script(<<~JS)
+      (() => {
+        const row = document.querySelector(".letter-slots").getBoundingClientRect();
+        const tile = document.querySelector(".letter-slot.focused").getBoundingClientRect();
+        return tile.left >= row.left && tile.right <= row.right;
+      })()
+    JS
+    click_button "A little hint"
+    click_button "Check my word"
+    assert_text "You did it!"
+    page.current_window.resize_to(320, 812)
+    assert page.evaluate_script("new Set([...document.querySelectorAll('.letter-slot')].map(el => el.offsetTop)).size > 1")
+    assert page.evaluate_script("document.documentElement.scrollWidth <= innerWidth")
+  ensure
+    page.current_window.resize_to(1400, 1400)
   end
 end

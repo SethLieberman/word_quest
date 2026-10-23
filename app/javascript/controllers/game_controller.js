@@ -48,6 +48,19 @@ const WORDS = {
     ["surprise", "🎁", "Something unexpected, like a secret birthday gift."],
     ["disappointed", "😞", "How you might feel when something you hoped for does not happen."],
     ["experiment", "🧪", "A scientific test you do to discover how something works."]
+  ],
+  mastermind: [
+    ["ocean", "🌊", "A vast body of salt water covering much of our planet."],
+    ["planet", "🪐", "A large round world that travels around a star."],
+    ["treasure", "💎", "A collection of valuable things hidden in a pirate's chest."],
+    ["earthquake", "🌍", "A sudden shaking of the ground caused by moving rocks deep below."],
+    ["lightning", "⚡", "A bright flash of electricity in the sky during a storm."],
+    ["telescope", "🔭", "A tool that makes distant stars and planets look closer."],
+    ["invisible", "👻", "Something that cannot be seen."],
+    ["friendship", "🤝", "The caring bond between people who enjoy being together."],
+    ["laboratory", "🧪", "A room where scientists carry out tests and discoveries."],
+    ["dictionary", "📖", "A book that explains what words mean and how to spell them."],
+    ["mysterious", "🕵️", "Something puzzling that is difficult to explain or understand."]
   ]
 }
 const STORAGE_KEY = "word-quest-progress-v1"
@@ -129,7 +142,7 @@ export default class extends Controller {
     this.hintsUsed = false
     this.entry = this.deck[this.completed.length]
     const [word, emoji, clue] = this.entry
-    const missingCount = { easy: 1, medium: 2, hard: 3, advanced: 4 }[this.difficulty]
+    const missingCount = this.difficulty === "mastermind" ? word.length - 2 : { easy: 1, medium: 2, hard: 3, advanced: 4 }[this.difficulty]
     this.missing = shuffle(Array.from({ length: word.length }, (_, index) => index)).slice(0, missingCount).sort((a, b) => a - b)
     if (word === "rabbit" && this.completed.length === 0 && this.difficulty === "easy") this.missing = [2]
     this.answers = {}
@@ -141,7 +154,8 @@ export default class extends Controller {
     this.emojiTarget.hidden = word === "frog"
     this.emojiTarget.textContent = emoji
     this.sceneTarget.setAttribute("aria-label", `Picture clue: ${word}`)
-    this.promptTarget.textContent = missingCount === 1 ? "What’s the missing letter?" : "What are the missing letters?"
+    this.promptTarget.textContent = this.difficulty === "mastermind" ? "Two letters. Can you solve the rest?" :
+      missingCount === 1 ? "What’s the missing letter?" : "What are the missing letters?"
     this.clueTarget.textContent = clue
     this.roundTarget.textContent = `WORD ${this.completed.length + 1} OF 5`
     this.chooseLabelTarget.textContent = missingCount === 1 ? "PICK A LETTER TO COMPLETE THE WORD" : "PICK LETTERS TO COMPLETE THE WORD"
@@ -155,6 +169,7 @@ export default class extends Controller {
   }
 
   renderSlots(focus = false) {
+    const previousScroll = this.slotsTarget.scrollLeft
     this.slotsTarget.replaceChildren()
     ;[...this.entry[0]].forEach((letter, index) => {
       const missing = this.missing.includes(index)
@@ -170,6 +185,15 @@ export default class extends Controller {
       }
       this.slotsTarget.append(tile)
     })
+    this.slotsTarget.scrollLeft = previousScroll
+    const activeTile = this.slotsTarget.children[this.activeSlot]
+    if (!this.solved && window.matchMedia("(min-width: 801px)").matches && activeTile) {
+      const container = this.slotsTarget.getBoundingClientRect()
+      const tile = activeTile.getBoundingClientRect()
+      if (tile.left < container.left || tile.right > container.right) {
+        this.slotsTarget.scrollLeft += tile.left - container.left - (container.width - tile.width) / 2
+      }
+    }
     this.checkButtonTarget.disabled = !this.solved && !this.missing.every((index) => this.answers[index])
     if (focus) this.slotsTarget.children[this.activeSlot]?.focus()
   }
@@ -198,8 +222,10 @@ export default class extends Controller {
 
   handleKey(event) {
     if (this.progressDialogTarget.open || this.helpDialogTarget.open || event.ctrlKey || event.metaKey || event.altKey) return
+    const isLevelButton = event.target.closest("[data-game-target='level']")
     if (event.key === "Enter" && event.target.closest("button, a") &&
-        !event.target.matches(".letter-slot, .letter-choice")) return
+        !event.target.matches(".letter-slot, .letter-choice") &&
+        !(isLevelButton && !this.checkButtonTarget.disabled)) return
     if (event.key === "Enter") {
       event.preventDefault()
       this.check()

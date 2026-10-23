@@ -51,6 +51,9 @@
         <button class="level-card" data-game-target="level" data-level="advanced" data-action="game#changeLevel" aria-pressed="false">
           <span class="level-icon scholar">🎓</span><span class="level-copy"><strong>Word scholar <span class="level-tag">GRADE 4</span></strong><small>Advanced words, four missing letters</small></span><span class="level-radio"></span>
         </button>
+        <button class="level-card" data-game-target="level" data-level="mastermind" data-action="game#changeLevel" aria-pressed="false">
+          <span class="level-icon mastermind">🧠</span><span class="level-copy"><strong>Mastermind <span class="level-tag">EXPERT</span></strong><small>5–10 letters, only two revealed</small></span><span class="level-radio"></span>
+        </button>
       </div>
     </section>
 
@@ -85,7 +88,7 @@
           </div>
           <h2 data-game-target="prompt">What’s the missing letter?</h2>
           <p class="clue" data-game-target="clue">I hop by the pond and say “ribbit!”</p>
-          <div class="letter-slots" data-game-target="slots" aria-label="Word to complete"></div>
+          <div class="letter-slots" data-game-target="slots" role="group" tabindex="0" aria-label="Word to complete"></div>
           <p class="choose-label" data-game-target="chooseLabel">PICK A LETTER TO COMPLETE THE WORD</p>
           <div class="letter-choices" data-game-target="choices" aria-label="Available letters"></div>
           <div class="feedback" data-game-target="feedback" role="status" aria-live="polite"></div>
@@ -154,7 +157,7 @@
   <dialog data-game-target="helpDialog" class="info-dialog">
     <button class="dialog-close" data-action="game#closeDialog" aria-label="Close instructions">×</button>
     <span class="dialog-art">🌱</span><h2>Ready for a word adventure?</h2>
-    <ol class="help-list"><li>Choose a level. Little sprout has one blank, Word explorer has two, Word wizard has three, and Word scholar has four for a fourth-grade challenge.</li><li>Look at the picture and read the clue. Tap a blank to choose where your next letter goes.</li><li>Tap a letter, or type it on your keyboard. Use Backspace to erase and Enter to check.</li><li>Need a hand? “A little hint” fills one letter. You can always try again!</li><li>Discover five words to finish your trail. Turn on sound to hear each word after you solve it.</li></ol>
+    <ol class="help-list"><li>Choose a level. Little sprout has one blank, Word explorer has two, Word wizard has three, and Word scholar has four for a fourth-grade challenge. Mastermind starts with only two letters revealed in words of five to ten letters.</li><li>Look at the picture and read the clue. Tap a blank to choose where your next letter goes.</li><li>Tap a letter, or type it on your keyboard. Use Backspace to erase and Enter to check. You can use the same letter more than once.</li><li>Need a hand? “A little hint” fills one letter. You can always try again!</li><li>Discover five words to finish your trail. Turn on sound to hear each word after you solve it.</li></ol>
     <button class="check-button" data-action="game#closeDialog">Let's play <span>→</span></button>
   </dialog>
 </div>

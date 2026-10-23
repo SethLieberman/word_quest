@@ -7,7 +7,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "title", "Word Quest | Let's grow your word power"
     assert_select "[data-controller='game']"
-    assert_select "[data-game-target='level']", count: 4
+    assert_select "[data-game-target='level']", count: 5
+    assert_select "[data-level='mastermind']", text: /Mastermind.*EXPERT/
     assert_select "[data-level='advanced']", text: /Word scholar.*GRADE 4/
     assert_select "[data-level='easy'][aria-pressed='true']"
     assert_select "[data-game-target='slots']"
