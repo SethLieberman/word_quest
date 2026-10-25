@@ -54,12 +54,15 @@
         <button class="level-card" data-game-target="level" data-level="mastermind" data-action="game#changeLevel" aria-pressed="false">
           <span class="level-icon mastermind">🧠</span><span class="level-copy"><strong>Mastermind <span class="level-tag">EXPERT</span></strong><small>5–10 letters, only two revealed</small></span><span class="level-radio"></span>
         </button>
+        <button class="level-card" data-game-target="level" data-level="jumble" data-action="game#changeLevel" aria-pressed="false">
+          <span class="level-icon mastermind">🧩</span><span class="level-copy"><strong>Word jumble <span class="level-tag">JUMBLE</span></strong><small>Reorder every letter to solve the word</small></span><span class="level-radio"></span>
+        </button>
       </div>
     </section>
 
     <div class="play-layout">
       <section class="puzzle-card" aria-label="Spelling puzzle">
-        <div class="puzzle-header"><span class="round-label"><span class="tiny-dot"></span> <span data-game-target="round">WORD 1 OF 5</span></span><span class="points"><span>✦</span> <span data-game-target="points">0 stars</span></span></div>
+        <div class="puzzle-header"><span class="round-label"><span class="tiny-dot"></span> <span data-game-target="round">WORD 1 OF 10</span></span><span class="points"><span>✦</span> <span data-game-target="points">0 stars</span></span></div>
         <div class="puzzle-body">
           <div class="word-celebration" data-game-target="celebration" role="status" aria-live="polite" aria-atomic="true"></div>
           <div class="picture-scene" role="img" aria-label="A green frog sitting on a lily pad" data-game-target="scene">
@@ -102,9 +105,9 @@
 
       <aside class="game-aside">
         <section class="goal-card">
-          <div class="card-heading"><span class="goal-icon">⚑</span><h2>Your daily little goal</h2><span class="goal-sparkle">✧</span></div>
-          <p>Five words. So many possibilities.</p>
-          <div class="word-garden" data-game-target="garden" data-growth="0" role="img" aria-label="Daily word garden: a tiny seed">
+          <div class="card-heading"><span class="goal-icon">⚑</span><h2>Your adventure goal</h2><span class="goal-sparkle">✧</span></div>
+          <p>Ten words. So many possibilities.</p>
+          <div class="word-garden" data-game-target="garden" data-growth="0" role="img" aria-label="Adventure word garden: a tiny seed">
             <svg viewBox="0 0 240 150" fill="none" aria-hidden="true">
               <circle cx="195" cy="29" r="17" fill="#f4e6b7"/>
               <path d="M25 137Q120 113 215 137" fill="#dde6d3"/>
@@ -122,8 +125,8 @@
             </svg>
           </div>
           <p class="garden-caption" data-game-target="gardenMessage">A tiny seed, a big adventure!</p>
-          <div class="goal-progress"><strong><span data-game-target="goalCount">0</span><span class="goal-total"> / 5</span></strong><span>words today</span></div>
-          <div class="progress-track" role="progressbar" aria-label="Daily word goal" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" data-game-target="goalBar"><span data-game-target="goalFill"></span></div>
+          <div class="goal-progress"><strong><span data-game-target="goalCount">0</span><span class="goal-total"> / 10</span></strong><span>words this adventure</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Adventure word goal" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" data-game-target="goalBar"><span data-game-target="goalFill"></span></div>
           <div class="goal-bottom"><span>⭐</span><span data-game-target="goalMessage">A little practice goes a long way!</span></div>
         </section>
         <section class="steps-card">
@@ -140,7 +143,7 @@
     </div>
 
     <section class="journey-card" aria-label="Current adventure progress">
-      <div class="journey-heading"><div><h2>Your word trail <span>✧</span></h2><p>Every word brings your garden to life.</p></div><span data-game-target="trailCount">0 of 5 discovered</span></div>
+      <div class="journey-heading"><div><h2>Your word trail <span>✧</span></h2><p>Every word brings your garden to life.</p></div><span data-game-target="trailCount">0 of 10 discovered</span></div>
       <div class="trail" data-game-target="trail"></div>
     </section>
     <footer class="page-footer"><span>A little curiosity today. A little more confidence tomorrow.</span><span>HAPPY LEARNING <span class="footer-flower">✿</span></span></footer>
@@ -151,13 +154,14 @@
     <button class="dialog-close" data-action="game#closeDialog" aria-label="Close progress">×</button>
     <span class="dialog-art">🌟</span><h2>Look how you're growing!</h2><p>Every word is a step forward.</p>
     <div class="progress-stats" data-game-target="progressStats"></div>
-    <p class="dialog-note">Your progress is saved in this browser. Your daily goal starts fresh each day.</p>
+    <p class="dialog-note">Your total words, stars, and streak are saved in this browser. Your adventure goal starts fresh when you replay, change levels, or reload the page.</p>
     <button class="check-button" data-action="game#closeDialog">Keep exploring <span>→</span></button>
   </dialog>
   <dialog data-game-target="helpDialog" class="info-dialog">
     <button class="dialog-close" data-action="game#closeDialog" aria-label="Close instructions">×</button>
     <span class="dialog-art">🌱</span><h2>Ready for a word adventure?</h2>
-    <ol class="help-list"><li>Choose a level. Little sprout has one blank, Word explorer has two, Word wizard has three, and Word scholar has four for a fourth-grade challenge. Mastermind starts with only two letters revealed in words of five to ten letters.</li><li>Look at the picture and read the clue. Tap a blank to choose where your next letter goes.</li><li>Tap a letter, or type it on your keyboard. Use Backspace to erase and Enter to check. You can use the same letter more than once.</li><li>Need a hand? “A little hint” fills one letter. You can always try again!</li><li>Discover five words to finish your trail. Turn on sound to hear each word after you solve it.</li></ol>
+    <ol class="help-list"><li>Choose a level. Little sprout has one blank, Word explorer has two, Word wizard has three, and Word scholar has four for a fourth-grade challenge. Mastermind starts with only two letters revealed in words of five to ten letters. Word jumble follows Mastermind: every letter is scrambled and every space starts empty.</li><li>Look at the picture and read the clue. Tap a blank to choose where your next letter goes.</li><li>Tap a letter, or type it on your keyboard. Use Backspace to erase and Enter to check. In Word jumble, each tile can be used once; tap a filled space to return its tile. Other levels let you reuse letters.</li><li>Need a hand? “A little hint” fills one letter. You can always try again!</li><li>Discover ten words to finish your trail, then try the next level for a new challenge. Word jumble is the highest level. Turn on sound to hear each word after you solve it.</li></ol>
+    <p class="dialog-note">Some beginner vocabulary is adapted from the <a href="https://www.newgeneralservicelist.com/new-dolch-list">New Dolch List 1.1</a> by Charles Browne and Brent Culligan (2024), under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Word Quest selected words and added original clues and emojis; this adapted dataset uses the same license.</p>
     <button class="check-button" data-action="game#closeDialog">Let's play <span>→</span></button>
   </dialog>
 </div>

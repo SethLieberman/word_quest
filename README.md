@@ -18,20 +18,61 @@ missing-letter puzzles using picture clues, a letter bank, or your keyboard.
   automatically following the active blank. On smaller screens, words wrap.
   Letter banks wrap on all screens.
   Letter choices can be reused, and hints still fill one missing letter at a time.
-- Complete five randomly selected words to finish an adventure.
+- Complete ten randomly selected words without repeats to finish an adventure.
+  A completion message suggests the next level without switching automatically.
+  Word jumble celebrates completing the highest level instead.
+- **Word jumble:** follows Mastermind and uses the same five- to ten-letter
+  vocabulary, with every letter provided as a scrambled tile and no letters
+  revealed. Tap tiles to fill the word in order; tap a filled space to return
+  its tile. Each tile can be used once, including separate tiles for repeated
+  letters. Typing uses available tiles and Backspace returns them. A hint
+  moves a matching tile into the first incorrect space, returning or moving
+  previously placed tiles as needed. Clues, stars, and adventure progress still apply.
 - Use a hint to fill one letter. Earn two stars for an unassisted word or one
   star with hints. Incorrect guesses never cost stars.
 - Click a blank to edit it; type letters, Backspace to erase, and Enter to check.
 - Optional browser speech reads completed words aloud.
-- Grow a daily word garden from seed to smiling flower with each of your first
-  five words. Solved words pop onto the trail with a confetti celebration;
+- Grow your adventure word garden from seed to smiling flower over its
+  ten words, with a new growth stage every two words. Solved words pop onto the trail with a confetti celebration;
   finishing an adventure earns a bigger celebration. Hints still help the garden grow.
   Animations respect the device's reduced-motion setting.
 
-Daily goals, total words, stars, and consecutive-day streaks are saved locally
-in the current browser, with no account or personal information required. The
-daily goal resets at local midnight (refreshed on the next word or page load).
-Switching difficulty starts a new trail but preserves earned progress.
+Total words, stars, and consecutive-day streaks are saved locally in the current
+browser, with no account or personal information required. The goal card and
+garden track only successful words in the current adventure, matching the trail.
+Replaying, switching difficulty, or reloading the page starts a fresh adventure
+at 0/10 but preserves earned stars, total words, and daily history for streaks.
+
+## Vocabulary
+
+Game vocabulary lives in [game_words.js](app/javascript/data/game_words.js),
+separate from the gameplay controller. The original words are preserved.
+Little sprout and Word explorer each now contain 40 entries, including 30 new
+words per level selected from the New Dolch List 1.1. Harder levels are unchanged.
+All puzzle data is bundled locally; playing does not call an external word API.
+
+The official [New Dolch List](https://www.newgeneralservicelist.com/new-dolch-list)
+by Charles Browne and Brent Culligan contains 874 words in the downloaded
+version 1.1, despite the website's general description of 875. The unmodified
+[source CSV](vendor/data/new_dolch/words.csv) is retained for future review.
+It has 120 lowercase six-letter candidates and 107 seven- or eight-letter
+candidates. Not every candidate is enabled: length alone does not establish
+spelling difficulty or suitability for a picture-clue puzzle.
+
+The [approved adaptation](app/javascript/data/new_dolch_words.js) includes
+original child-friendly clues and emoji selections, and is distributed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), like its source.
+See the [attribution and modification notice](vendor/data/new_dolch/NOTICE.txt)
+and [license text](vendor/data/new_dolch/LICENSE.txt).
+Players can also see attribution in How to play.
+
+To add more source words, review candidates in the CSV, add a unique
+`[word, emoji, clue]` entry to the appropriate array in the approved adaptation,
+and retain the license notice. Use lowercase `a`-`z` words: exactly six letters
+for Little sprout and seven or eight for Word explorer. Review the meaning,
+clue, and spelling difficulty before enabling a word. The list targets young
+English-language learners and does not certify US grade-level placement.
+Run the spelling-game system tests after vocabulary changes.
 
 ## Development
 

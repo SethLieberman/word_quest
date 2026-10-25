@@ -173,10 +173,10 @@ h1 > span { color: #8c78b7; }
 .journey-heading { display: flex; align-items: center; justify-content: space-between; }
 .journey-heading h2 { font-size: 12px; font-weight: 650; }.journey-heading h2 > span { color: #baabcb; font-size: 16px; margin-left: 4px; }
 .journey-heading p { color: #a49bab; font-size: 10px; margin-top: 5px; }.journey-heading > span { font-size: 9px; color: #a499b1; background: #f2eef8; padding: 6px 9px; border-radius: 12px; }
-.trail { display: flex; margin: 22px 10px 0; }
+.trail { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 18px; margin: 22px 10px 0; }
 .trail-stop { position: relative; flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 9px; color: #b5acbf; }
 .trail-stop::after { content: ""; width: calc(100% - 44px); position: absolute; top: 18px; left: calc(50% + 22px); border-top: 2px dashed #e9e3f0; }
-.trail-stop:last-child::after { display: none; }
+.trail-stop:nth-child(5n)::after { display: none; }
 .trail-stop { min-width: 0; }
 .trail-stop > span:last-child { max-width: 100%; overflow-wrap: anywhere; padding-inline: 3px; }
 .trail-circle { width: 37px; height: 37px; display: grid; place-items: center; background: #f4f1f8; border: 1px solid #e9e3ef; border-radius: 50%; font-size: 12px; }

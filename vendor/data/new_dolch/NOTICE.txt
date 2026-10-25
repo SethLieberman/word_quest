@@ -1,0 +1,30 @@
+New Dolch List 1.1
+=================
+
+Authors: Charles Browne and Brent Culligan
+Citation supplied with the download:
+Browne, C. & Culligan, B. (2024). New Dolch word list 1.10.
+
+Project: https://www.newgeneralservicelist.com/new-dolch-list
+Original download: https://www.newgeneralservicelist.com/s/NDL_11_stats.csv
+Retrieved: 2026-10-25
+
+words.csv is the unmodified official statistics download. It contains 874
+unique words. The website's general description mentions 875 words, but the
+version 1.1 download and its accompanying description specify 874.
+
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+The complete license is included as LICENSE.txt in this directory.
+
+Word Quest adaptation:
+app/javascript/data/new_dolch_words.js selects 30 six-letter words and
+30 seven- or eight-letter words from this source for beginner puzzles.
+Word Quest contributors added original written clues and emoji selections,
+assigned levels, reordered entries, and omitted the source's statistics.
+That adapted dataset, including these clues and emoji selections, is also
+distributed under CC BY-SA 4.0. No endorsement by the original authors is implied.
+
+The remaining source words are retained for review, not automatically enabled
+in gameplay. These are young English-language learner vocabulary selections,
+not certified US grade-level spelling assignments.

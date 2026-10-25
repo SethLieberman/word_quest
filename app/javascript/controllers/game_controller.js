@@ -1,70 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
+import WORDS from "data/game_words"
 
-const WORDS = {
-  easy: [
-    ["rabbit", "🐰", "Long ears, a fluffy tail, and a love for hopping!"],
-    ["flower", "🌼", "I bloom in the garden and bees visit me."],
-    ["turtle", "🐢", "I carry my home on my back."],
-    ["rocket", "🚀", "Three, two, one… blast off into space!"],
-    ["carrot", "🥕", "An orange vegetable that grows underground."],
-    ["pencil", "✏️", "Use me to write, draw, and erase."],
-    ["monkey", "🐵", "I swing through the trees with my long arms."],
-    ["castle", "🏰", "A grand home with towers fit for royalty."],
-    ["cookie", "🍪", "A crunchy baked treat with chocolate chips."],
-    ["button", "🔘", "Push me through a little hole to fasten your coat."]
-  ],
-  medium: [
-    ["dolphin", "🐬", "A playful ocean mammal that leaps above the waves."],
-    ["giraffe", "🦒", "My very long neck helps me reach the highest leaves."],
-    ["pumpkin", "🎃", "An orange autumn vegetable you can carve into a lantern."],
-    ["balloon", "🎈", "Fill me with air and tie me to a party string."],
-    ["chicken", "🐔", "A farm bird that lays eggs and says “cluck!”"],
-    ["tractor", "🚜", "A farmer drives me to pull heavy tools across a field."],
-    ["diamond", "💎", "A sparkling gemstone with a very hard surface."],
-    ["rainbow", "🌈", "A colorful arc that appears after the rain."],
-    ["penguin", "🐧", "A waddling bird that swims but cannot fly."],
-    ["sandwich", "🥪", "Put a tasty filling between two slices of bread."]
-  ],
-  hard: [
-    ["butterfly", "🦋", "I was a caterpillar. Now I have beautiful wings!"],
-    ["elephant", "🐘", "Big ears, a long trunk, and a mighty trumpet!"],
-    ["rainbow", "🌈", "A colorful arc that appears after the rain."],
-    ["dinosaur", "🦕", "I roamed the Earth millions of years ago."],
-    ["strawberry", "🍓", "A red fruit with tiny seeds on the outside."],
-    ["penguin", "🐧", "A waddling bird that swims but cannot fly."],
-    ["umbrella", "☂️", "Open me up to keep the rain off your head."],
-    ["bicycle", "🚲", "Two wheels and pedals take you on an adventure."],
-    ["telescope", "🔭", "Look through me to see the stars up close."],
-    ["octopus", "🐙", "An ocean animal with eight amazing arms."]
-  ],
-  advanced: [
-    ["beautiful", "🌺", "Something lovely to look at, like a garden full of flowers."],
-    ["necessary", "🎒", "Something you must have, not just something you want."],
-    ["knowledge", "📚", "The facts and understanding you gain by learning."],
-    ["different", "🦓", "Not the same as something else."],
-    ["important", "⭐", "Something that matters a great deal."],
-    ["adventure", "🗺️", "An exciting journey with new things to discover."],
-    ["dangerous", "⚠️", "Something that could cause harm, so you need to be careful."],
-    ["surprise", "🎁", "Something unexpected, like a secret birthday gift."],
-    ["disappointed", "😞", "How you might feel when something you hoped for does not happen."],
-    ["experiment", "🧪", "A scientific test you do to discover how something works."]
-  ],
-  mastermind: [
-    ["ocean", "🌊", "A vast body of salt water covering much of our planet."],
-    ["planet", "🪐", "A large round world that travels around a star."],
-    ["treasure", "💎", "A collection of valuable things hidden in a pirate's chest."],
-    ["earthquake", "🌍", "A sudden shaking of the ground caused by moving rocks deep below."],
-    ["lightning", "⚡", "A bright flash of electricity in the sky during a storm."],
-    ["telescope", "🔭", "A tool that makes distant stars and planets look closer."],
-    ["invisible", "👻", "Something that cannot be seen."],
-    ["friendship", "🤝", "The caring bond between people who enjoy being together."],
-    ["laboratory", "🧪", "A room where scientists carry out tests and discoveries."],
-    ["dictionary", "📖", "A book that explains what words mean and how to spell them."],
-    ["mysterious", "🕵️", "Something puzzling that is difficult to explain or understand."]
-  ]
-}
 const STORAGE_KEY = "word-quest-progress-v1"
 const EMPTY_PROGRESS = () => ({ total: 0, stars: 0, days: {} })
+const ADVENTURE_LENGTH = 10
+const NEXT_LEVEL = { easy: "Word explorer", medium: "Word wizard", hard: "Word scholar", advanced: "Mastermind", mastermind: "Word jumble" }
 
 function shuffle(items) {
   const result = [...items]
@@ -125,7 +65,7 @@ export default class extends Controller {
   startAdventure(level, firstVisit = false) {
     this.difficulty = level
     const bank = shuffle(WORDS[level])
-    this.deck = firstVisit ? [WORDS.easy[0], ...bank.filter((entry) => entry !== WORDS.easy[0]).slice(0, 4)] : bank.slice(0, 5)
+    this.deck = firstVisit ? [WORDS.easy[0], ...bank.filter((entry) => entry !== WORDS.easy[0]).slice(0, ADVENTURE_LENGTH - 1)] : bank.slice(0, ADVENTURE_LENGTH)
     this.completed = []
     this.levelTargets.forEach((button) => {
       const selected = button.dataset.level === level
@@ -137,28 +77,40 @@ export default class extends Controller {
 
   nextPuzzle() {
     this.celebrationTarget.replaceChildren()
+    this.celebrationTarget.dataset.finale = "false"
     this.solved = false
     this.finished = false
     this.hintsUsed = false
     this.entry = this.deck[this.completed.length]
     const [word, emoji, clue] = this.entry
-    const missingCount = this.difficulty === "mastermind" ? word.length - 2 : { easy: 1, medium: 2, hard: 3, advanced: 4 }[this.difficulty]
+    const missingCount = this.isJumble ? word.length :
+      this.difficulty === "mastermind" ? word.length - 2 : { easy: 1, medium: 2, hard: 3, advanced: 4 }[this.difficulty]
     this.missing = shuffle(Array.from({ length: word.length }, (_, index) => index)).slice(0, missingCount).sort((a, b) => a - b)
     if (word === "rabbit" && this.completed.length === 0 && this.difficulty === "easy") this.missing = [2]
     this.answers = {}
+    this.selectedTiles = {}
     this.activeSlot = this.missing[0]
     const required = [...new Set(this.missing.map((index) => word[index]))]
     const distractors = shuffle([..."aeioubcdhlmnprst"].filter((letter) => !required.includes(letter)))
     this.letters = shuffle([...required, ...distractors.slice(0, Math.max(4, required.length + 1) - required.length)])
+    if (this.isJumble) {
+      this.letters = shuffle([...word])
+      if (this.letters.join("") === word) {
+        const different = this.letters.findIndex((letter) => letter !== this.letters[0])
+        ;[this.letters[0], this.letters[different]] = [this.letters[different], this.letters[0]]
+      }
+    }
     this.frogTarget.toggleAttribute("hidden", word !== "frog")
     this.emojiTarget.hidden = word === "frog"
     this.emojiTarget.textContent = emoji
     this.sceneTarget.setAttribute("aria-label", `Picture clue: ${word}`)
-    this.promptTarget.textContent = this.difficulty === "mastermind" ? "Two letters. Can you solve the rest?" :
+    this.promptTarget.textContent = this.isJumble ? "Can you unscramble the word?" :
+      this.difficulty === "mastermind" ? "Two letters. Can you solve the rest?" :
       missingCount === 1 ? "What’s the missing letter?" : "What are the missing letters?"
     this.clueTarget.textContent = clue
-    this.roundTarget.textContent = `WORD ${this.completed.length + 1} OF 5`
-    this.chooseLabelTarget.textContent = missingCount === 1 ? "PICK A LETTER TO COMPLETE THE WORD" : "PICK LETTERS TO COMPLETE THE WORD"
+    this.roundTarget.textContent = `WORD ${this.completed.length + 1} OF ${ADVENTURE_LENGTH}`
+    this.chooseLabelTarget.textContent = this.isJumble ? "TAP TILES IN ORDER. TAP A FILLED SPACE TO RETURN ITS TILE." :
+      missingCount === 1 ? "PICK A LETTER TO COMPLETE THE WORD" : "PICK LETTERS TO COMPLETE THE WORD"
     this.feedbackTarget.textContent = ""
     this.feedbackTarget.className = "feedback"
     this.hintButtonTarget.disabled = false
@@ -166,6 +118,15 @@ export default class extends Controller {
     this.renderSlots()
     this.renderChoices()
     this.updateProgress()
+  }
+
+  get isJumble() {
+    return this.difficulty === "jumble"
+  }
+
+  clearAnswer(index) {
+    delete this.answers[index]
+    delete this.selectedTiles[index]
   }
 
   renderSlots(focus = false) {
@@ -181,7 +142,15 @@ export default class extends Controller {
         tile.disabled = this.solved
         tile.setAttribute("aria-label", `Missing letter ${index + 1}${this.answers[index] ? `: ${this.answers[index].toUpperCase()}` : ""}`)
         tile.setAttribute("aria-pressed", String(index === this.activeSlot))
-        tile.addEventListener("click", () => { this.activeSlot = index; this.renderSlots(true) })
+        tile.addEventListener("click", () => {
+          this.activeSlot = index
+          if (this.isJumble) {
+            this.clearAnswer(index)
+            this.feedbackTarget.textContent = ""
+            this.renderChoices()
+          }
+          this.renderSlots(true)
+        })
       }
       this.slotsTarget.append(tile)
     })
@@ -200,24 +169,33 @@ export default class extends Controller {
 
   renderChoices() {
     this.choicesTarget.replaceChildren()
-    this.letters.forEach((letter) => {
+    this.letters.forEach((letter, index) => {
       const button = document.createElement("button")
       button.className = "letter-choice"
       button.textContent = letter.toUpperCase()
       button.setAttribute("aria-label", `Choose ${letter.toUpperCase()}`)
-      button.disabled = this.solved
-      button.addEventListener("click", () => this.chooseLetter(letter))
+      button.disabled = this.solved || (this.isJumble && Object.values(this.selectedTiles).includes(index))
+      button.addEventListener("click", () => this.chooseLetter(letter, index))
       this.choicesTarget.append(button)
     })
   }
 
-  chooseLetter(letter) {
+  chooseLetter(letter, tileIndex) {
     if (this.solved || this.finished) return
+    if (this.isJumble) {
+      const availableIndex = tileIndex ?? this.letters.findIndex((value, index) => value === letter && !Object.values(this.selectedTiles).includes(index))
+      if (this.answers[this.activeSlot] || availableIndex < 0 || Object.values(this.selectedTiles).includes(availableIndex)) {
+        this.feedbackTarget.textContent = "Use an available tile, or tap a filled space to return its letter."
+        return
+      }
+      this.selectedTiles[this.activeSlot] = availableIndex
+    }
     this.answers[this.activeSlot] = letter
     this.activeSlot = this.missing.find((index) => !this.answers[index]) ?? this.activeSlot
     this.feedbackTarget.textContent = ""
     this.feedbackTarget.className = "feedback"
-    this.renderSlots()
+    this.renderSlots(this.isJumble)
+    if (this.isJumble) this.renderChoices()
   }
 
   handleKey(event) {
@@ -237,8 +215,9 @@ export default class extends Controller {
       if (!this.answers[this.activeSlot]) {
         this.activeSlot = [...this.missing].reverse().find((index) => index < this.activeSlot) ?? this.activeSlot
       }
-      delete this.answers[this.activeSlot]
-      this.renderSlots()
+      this.clearAnswer(this.activeSlot)
+      this.renderSlots(this.isJumble)
+      if (this.isJumble) this.renderChoices()
     }
   }
 
@@ -250,10 +229,22 @@ export default class extends Controller {
       return
     }
     this.hintsUsed = true
+    if (this.isJumble) {
+      const letter = this.entry[0][index]
+      this.clearAnswer(index)
+      let tileIndex = this.letters.findIndex((value, position) => value === letter && !Object.values(this.selectedTiles).includes(position))
+      if (tileIndex < 0) {
+        const owner = this.missing.find((position) => this.answers[position] === letter && this.answers[position] !== this.entry[0][position])
+        tileIndex = this.selectedTiles[owner]
+        this.clearAnswer(owner)
+      }
+      this.selectedTiles[index] = tileIndex
+    }
     this.answers[index] = this.entry[0][index]
     this.activeSlot = this.missing.find((position) => !this.answers[position]) ?? index
     this.feedbackTarget.textContent = `A little help: ${this.entry[0][index].toUpperCase()} belongs in space ${index + 1}.`
     this.renderSlots()
+    if (this.isJumble) this.renderChoices()
   }
 
   check() {
@@ -284,10 +275,12 @@ export default class extends Controller {
     this.renderChoices()
     this.updateProgress(true)
     if (this.sound) this.speak()
-    if (this.completed.length === 5) {
+    if (this.completed.length === ADVENTURE_LENGTH) {
       this.finished = true
       this.promptTarget.textContent = "Look how far you've grown!"
-      this.clueTarget.textContent = "Five words discovered. A whole adventure completed!"
+      this.clueTarget.textContent = NEXT_LEVEL[this.difficulty] ?
+        `Ten words discovered! Ready for a new challenge? Try ${NEXT_LEVEL[this.difficulty]} next!` :
+        "Ten words discovered! Congratulations, you've completed the highest level! Play again to keep your spelling strong."
       this.checkButtonTarget.innerHTML = 'Play again <span aria-hidden="true">↻</span>'
     } else {
       this.checkButtonTarget.innerHTML = 'Next word <span aria-hidden="true">→</span>'
@@ -296,32 +289,34 @@ export default class extends Controller {
   }
 
   updateProgress(celebrate = false) {
-    const count = Math.min(this.progress.days[today()] || 0, 5)
+    const count = this.completed.length
     this.goalCountTarget.textContent = count
-    this.goalFillTarget.style.width = `${count * 20}%`
+    this.goalFillTarget.style.width = `${count / ADVENTURE_LENGTH * 100}%`
     this.goalBarTarget.setAttribute("aria-valuenow", count)
-    this.goalMessageTarget.textContent = count === 5 ? "Daily goal complete. You're a growing star!" : "A little practice goes a long way!"
+    this.goalMessageTarget.textContent = count === ADVENTURE_LENGTH ? "Adventure goal complete. You're a growing star!" : "A little practice goes a long way!"
     const stages = ["A tiny seed, a big adventure!", "Your seed has sprouted!", "Look! Your first leaves!", "Growing taller with every word!", "A little bud, ready to bloom!", "Your word garden is in full bloom!"]
     const previousGrowth = Number(this.gardenTarget.dataset.growth || 0)
+    const growthStage = Math.floor(count / ADVENTURE_LENGTH * (stages.length - 1))
+    const previousStage = Math.floor(previousGrowth / ADVENTURE_LENGTH * (stages.length - 1))
     this.gardenTarget.dataset.growth = count
-    this.gardenTarget.setAttribute("aria-label", `Daily word garden: ${count} of 5 words. ${stages[count]}`)
-    this.gardenMessageTarget.textContent = stages[count]
+    this.gardenTarget.setAttribute("aria-label", `Adventure word garden: ${count} of ${ADVENTURE_LENGTH} words. ${stages[growthStage]}`)
+    this.gardenMessageTarget.textContent = stages[growthStage]
     this.gardenTarget.querySelectorAll("[data-stage]").forEach((part) => {
       const stage = Number(part.dataset.stage)
-      part.toggleAttribute("hidden", stage > count)
-      part.classList.toggle("just-grown", celebrate && stage === count && count > previousGrowth)
+      part.toggleAttribute("hidden", stage > growthStage)
+      part.classList.toggle("just-grown", celebrate && stage === growthStage && growthStage > previousStage)
     })
     this.pointsTarget.textContent = `${this.progress.stars} ${this.progress.stars === 1 ? "star" : "stars"}`
-    this.trailCountTarget.textContent = `${this.completed.length} of 5 discovered`
+    this.trailCountTarget.textContent = `${this.completed.length} of ${ADVENTURE_LENGTH} discovered`
     this.trailTarget.replaceChildren()
-    for (let index = 0; index < 5; index++) {
+    for (let index = 0; index < ADVENTURE_LENGTH; index++) {
       const item = document.createElement("div")
       item.className = `trail-stop${index < this.completed.length ? " complete" : ""}${index === this.completed.length ? " current" : ""}${celebrate && index === this.completed.length - 1 ? " just-discovered" : ""}`
       const circle = document.createElement("span")
       circle.className = "trail-circle"
-      circle.textContent = this.completed[index]?.[1] || (index === 4 ? "⚑" : index + 1)
+      circle.textContent = this.completed[index]?.[1] || (index === ADVENTURE_LENGTH - 1 ? "⚑" : index + 1)
       const label = document.createElement("span")
-      label.textContent = this.completed[index]?.[0] || (index === this.completed.length ? "You're here" : index === 4 ? "You did it!" : "Keep going")
+      label.textContent = this.completed[index]?.[0] || (index === this.completed.length ? "You're here" : index === ADVENTURE_LENGTH - 1 ? "You did it!" : "Keep going")
       item.append(circle, label)
       this.trailTarget.append(item)
     }
@@ -331,11 +326,11 @@ export default class extends Controller {
 
   celebrate() {
     this.celebrationTarget.replaceChildren()
-    const finale = this.completed.length === 5
+    const finale = this.completed.length === ADVENTURE_LENGTH
     this.celebrationTarget.dataset.finale = String(finale)
     const message = document.createElement("strong")
     message.className = "celebration-message"
-    message.textContent = finale ? "🌻 Five words! You bloomed!" : "🌱 One word stronger!"
+    message.textContent = finale ? "🌻 Ten words! You bloomed!" : "🌱 One word stronger!"
     this.celebrationTarget.append(message)
     const confetti = document.createElement("span")
     confetti.className = "confetti"
