@@ -216,7 +216,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_equal 107, candidates.count { |word| (7..8).cover?(word.length) }
 
     lengths = { "easy" => 6..6, "medium" => 7..8, "hard" => 7..10, "advanced" => 8..12, "mastermind" => 5..10, "jumble" => 5..10 }
-    counts = { "easy" => 40, "medium" => 40, "hard" => 10, "advanced" => 10, "mastermind" => 11, "jumble" => 11 }
+    counts = { "easy" => 40, "medium" => 40, "hard" => 30, "advanced" => 30, "mastermind" => 31, "jumble" => 31 }
     assert_equal counts.keys.sort, vocabulary.fetch("banks").keys.sort
     vocabulary.fetch("banks").each do |level, entries|
       assert_equal counts.fetch(level), entries.length
@@ -231,6 +231,7 @@ class SpellingGameTest < ApplicationSystemTestCase
         assert clue.present?, "Missing clue for #{word}"
       end
     end
+    assert_equal vocabulary.fetch("banks").fetch("mastermind"), vocabulary.fetch("banks").fetch("jumble")
 
     assert_equal %w[easy medium], vocabulary.fetch("additions").keys.sort
     vocabulary.fetch("additions").each do |level, entries|
@@ -239,6 +240,53 @@ class SpellingGameTest < ApplicationSystemTestCase
         assert_includes source_words, entry.first
         assert_includes vocabulary.fetch("banks").fetch(level), entry
       end
+    end
+  end
+
+  test "every new advanced word can be solved with the existing hints and scoring" do
+    results = page.driver.browser.execute_async_script(<<~JS)
+      const done = arguments[0];
+      import("data/game_words").then(({ default: banks }) => {
+        const element = document.querySelector("[data-controller='game']");
+        const game = window.Stimulus.getControllerForElementAndIdentifier(element, "game");
+        const results = [];
+        for (const [level, offset] of [["hard", 10], ["advanced", 10], ["mastermind", 11], ["jumble", 11]]) {
+          game.startAdventure(level);
+          for (const entry of banks[level].slice(offset)) {
+            game.deck = [entry];
+            game.completed = [];
+            game.nextPuzzle();
+            const blanks = game.missing.length;
+            const stars = game.progress.stars;
+            for (let index = 0; index < blanks; index++) game.hint();
+            game.check();
+            results.push({
+              level, word: entry[0], blanks,
+              spelled: game.slotsTarget.textContent.toLowerCase(),
+              solved: game.solved,
+              stars: game.progress.stars - stars,
+              completed: game.completed.length
+            });
+          }
+        }
+        done({ results });
+      }).catch((error) => done({ error: error.message }));
+    JS
+    assert_nil results["error"]
+    assert_equal 80, results.fetch("results").length
+    results.fetch("results").each do |result|
+      word = result.fetch("word")
+      expected_blanks = case result.fetch("level")
+      when "hard" then 3
+      when "advanced" then 4
+      when "mastermind" then word.length - 2
+      when "jumble" then word.length
+      end
+      assert_equal expected_blanks, result.fetch("blanks"), word
+      assert_equal word, result.fetch("spelled"), word
+      assert result.fetch("solved"), word
+      assert_equal 1, result.fetch("stars"), word
+      assert_equal 1, result.fetch("completed"), word
     end
   end
 
@@ -306,7 +354,6 @@ class SpellingGameTest < ApplicationSystemTestCase
       click_button "Next word" if index < 9
     end
     assert_equal 10, words.uniq.length
-    assert_empty words - %w[beautiful necessary knowledge different important adventure dangerous surprise disappointed experiment]
     assert_text "Look how far you've grown!"
     assert_selector "[data-finale='true']", text: "Ten words! You bloomed!"
     assert_text "Try Mastermind next!"

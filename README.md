@@ -48,7 +48,13 @@ at 0/10 but preserves earned stars, total words, and daily history for streaks.
 Game vocabulary lives in [game_words.js](app/javascript/data/game_words.js),
 separate from the gameplay controller. The original words are preserved.
 Little sprout and Word explorer each now contain 40 entries, including 30 new
-words per level selected from the New Dolch List 1.1. Harder levels are unchanged.
+words per level selected from the New Dolch List 1.1.
+Word wizard and Word scholar each contain 30 entries; Mastermind and Word jumble
+share a bank of 31 entries. These harder banks include 20 additional words each,
+with original clues and emoji selections, covering animals, food, everyday
+vocabulary, and science. Word wizard uses seven- to ten-letter words, Word scholar
+uses eight to twelve, and Mastermind/Word jumble use five to ten. The Word scholar
+selection practices spelling patterns rather than claiming curriculum certification.
 All puzzle data is bundled locally; playing does not call an external word API.
 
 The official [New Dolch List](https://www.newgeneralservicelist.com/new-dolch-list)
