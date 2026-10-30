@@ -1,0 +1,37 @@
+.quest-home { max-width: 1050px; margin: 0 auto; padding: 75px 28px 40px; }
+.quest-home-heading { text-align: center; max-width: 700px; margin: 0 auto 42px; }
+.quest-home-heading .eyebrow { justify-content: center; }
+.quest-home-heading h1 { width: auto; font-size: clamp(30px, 5vw, 48px); margin: 18px 0; }
+.quest-home-heading p, .quest-home-note { color: #777183; line-height: 1.8; }
+.quest-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px; }
+.quest-card { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 36px; border: 1px solid #e3dcec; border-radius: 24px; background: #fff; box-shadow: 0 12px 35px #52436f08; transition: transform .2s, box-shadow .2s; }
+.quest-card:hover { transform: translateY(-4px); box-shadow: 0 16px 35px #52436f15; }
+.math-quest-card { background: #f2f7ef; border-color: #dce6d5; }
+.quest-art { font-size: 64px; padding: 12px; }
+.quest-card h2 { font-family: "Manrope", sans-serif; font-size: 30px; }
+.quest-card p { color: #777183; line-height: 1.8; }
+.quest-detail { font-size: 12px; color: #777183; line-height: 1.7; }
+.quest-link { margin-top: auto; padding-top: 15px; color: #7160ac; font-weight: 700; }
+.math-quest-card .quest-link { color: #567348; }
+.quest-home-note { margin-top: 35px; text-align: center; font-size: 12px; }
+.quest-switch { font-size: 12px; color: #7160ac; }
+.math-quest .level-copy strong { white-space: normal; flex-wrap: wrap; }
+.math-puzzle-body { padding-bottom: 25px; text-align: center; }
+.math-art { display: block; font-size: 65px; margin: 15px auto; }
+.math-celebration { color: #64864e; min-height: 36px; padding-top: 15px; font-size: 13px; font-weight: 600; }
+.math-expression { font-family: "Manrope", sans-serif; font-size: clamp(22px, 4vw, 38px); padding: 25px 0 18px; overflow-wrap: anywhere; }
+.math-answer-label { display: block; font-size: 12px; color: #777183; margin-bottom: 10px; }
+.math-answer { width: min(190px, 100%); padding: 12px; border: 2px solid #c9b9e0; border-radius: 12px; text-align: center; font: 600 28px "Manrope", sans-serif; color: var(--ink); background: #fcfaff; }
+.math-answer:focus-visible { outline: 3px solid #b29ad8; outline-offset: 3px; }
+.math-answer[aria-invalid="true"] { border-color: #b77c67; }
+.math-goal-art { display: block; text-align: center; font-size: 75px; margin: 25px 0; }
+@media (max-width: 620px) {
+  .quest-home { padding: 40px 20px; }
+  .quest-cards { grid-template-columns: 1fr; }
+  .quest-card { padding: 27px; }
+  .sidebar .main-nav { gap: 0; }
+  .sidebar .nav-item { padding: 8px; }
+  .math-quest .brand { font-size: 16px; }
+  .math-quest .brand-mark { width: 25px; height: 28px; }
+  .math-quest .journey-heading { flex-wrap: wrap; gap: 8px; }
+}

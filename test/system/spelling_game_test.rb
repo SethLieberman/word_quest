@@ -4,9 +4,9 @@ class SpellingGameTest < ApplicationSystemTestCase
   Capybara.enable_aria_label = true
 
   setup do
-    visit root_url
+    visit word_quest_url
     page.execute_script("localStorage.clear()")
-    visit root_url
+    visit word_quest_url
   end
 
   test "solving a word, retrying, and saving progress" do
@@ -34,7 +34,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_no_selector ".celebration-message"
     assert_no_selector ".just-discovered"
 
-    visit root_url
+    visit word_quest_url
     assert_selector "[data-game-target='goalCount']", text: "0", exact_text: true
     assert_selector "[data-game-target='garden'][data-growth='0']"
     assert_no_selector ".just-grown"
@@ -139,7 +139,7 @@ class SpellingGameTest < ApplicationSystemTestCase
 
   test "corrupt saved progress surfaces a notice without stopping play" do
     page.execute_script("localStorage.setItem('word-quest-progress-v1', '{broken')")
-    visit root_url
+    visit word_quest_url
     assert_text "Saved progress couldn't be loaded."
     assert_selector ".letter-slot.missing", count: 1
     click_button "Choose B"
@@ -153,7 +153,7 @@ class SpellingGameTest < ApplicationSystemTestCase
       const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
       localStorage.setItem("word-quest-progress-v1", JSON.stringify({ total: 20, stars: 40, days: { [day]: 20 } }));
     JS
-    visit root_url
+    visit word_quest_url
     assert_text "40 stars"
     assert_selector "[data-game-target='goalCount']", text: "0", exact_text: true
     assert_selector "[data-game-target='goalBar'][aria-valuenow='0'][aria-valuemax='10']"
@@ -174,7 +174,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_selector "[data-game-target='goalCount']", text: "0", exact_text: true
     assert_selector "[data-game-target='garden'][data-growth='0']"
     assert_equal "0%", page.evaluate_script("document.querySelector('[data-game-target=\"goalFill\"]').style.width")
-    visit root_url
+    visit word_quest_url
     assert_text "41 stars"
     assert_selector "[data-game-target='goalCount']", text: "0", exact_text: true
     assert_no_selector ".just-grown"
@@ -363,7 +363,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_selector ".letter-slot.missing", count: 1
     assert_text "10 stars"
     assert_selector "[data-game-target='garden'][data-growth='0']"
-    visit root_url
+    visit word_quest_url
     assert_text "10 stars"
     click_button "How to play"
     assert_text "Word scholar has four"
@@ -485,7 +485,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_no_text "Congratulations"
     assert_selector ".letter-choice:disabled", count: 0
     assert_selector "[data-game-target='goalCount']", text: "0", exact_text: true
-    visit root_url
+    visit word_quest_url
     assert_text "11 stars"
   end
 

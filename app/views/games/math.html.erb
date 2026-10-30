@@ -1,0 +1,105 @@
+<% content_for :title, "Math Quest | Let's grow your number power" %>
+<div class="app-shell math-quest" data-controller="math">
+  <aside class="sidebar">
+    <a class="brand" href="<%= root_path %>" aria-label="Choose a quest"><span class="brand-mark" aria-hidden="true">+</span>Math<span class="brand-light">Quest</span><span class="brand-dot">.</span></a>
+    <div class="nav-label">YOUR LITTLE ADVENTURE</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="<%= math_quest_path %>" class="nav-item active" aria-current="page"><span class="nav-icon" aria-hidden="true">◇</span> Let's play</a>
+      <a href="<%= root_path %>" class="nav-item" aria-label="Choose a quest"><span class="nav-icon" aria-hidden="true">⌂</span> Choose a quest</a>
+      <button class="nav-item" data-action="math#openProgress" aria-label="My progress"><span class="nav-icon" aria-hidden="true">▥</span> My progress</button>
+      <button class="nav-item" data-action="math#openHelp" aria-label="How to play"><span class="nav-icon" aria-hidden="true">☷</span> How to play</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="little-note"><strong>Small steps.<br>Brilliant thinking.</strong><p>Every answer is a little win.</p></div>
+    </div>
+  </aside>
+  <main class="main-content">
+    <noscript><p class="storage-notice">Please enable JavaScript to play Math Quest.</p></noscript>
+    <header class="topbar"><span class="breadcrumb">A place to play. A world to learn.</span><a href="<%= word_quest_path %>" class="quest-switch">Try Word Quest →</a></header>
+    <section class="page-intro">
+      <div class="eyebrow">BIG DISCOVERIES START WITH LITTLE NUMBERS</div>
+      <h1>Let's grow your <span>number power.</span></h1>
+      <p>A little thinking. A new discovery. A whole lot of “I did it!”</p>
+    </section>
+    <section class="level-section" aria-label="Choose difficulty">
+      <div class="section-heading"><h2>Pick your adventure</h2><span>Just the right challenge for you</span></div>
+      <div class="level-options">
+        <% [
+          ["sprout", "🌱", "Number sprout", "LEVEL 1", "Addition and subtraction within 20"],
+          ["explorer", "🧭", "Number explorer", "LEVEL 2", "Addition and subtraction within 100"],
+          ["multiply", "✨", "Multiplication magic", "LEVEL 3", "Multiplication facts from 1 to 12"],
+          ["divide", "🔎", "Division detective", "LEVEL 4", "Division with whole-number answers"],
+          ["mixed", "🚀", "Operation expert", "LEVEL 5", "Mixed operations and parentheses"],
+          ["equations", "🧠", "Equation mastermind", "LEVEL 6", "Find the missing number"]
+        ].each_with_index do |(id, icon, name, tag, description), index| %>
+          <button class="level-card<%= " selected" if index.zero? %>" data-math-target="level" data-level="<%= id %>" data-action="math#changeLevel" aria-pressed="<%= index.zero? %>">
+            <span class="level-icon sprout" aria-hidden="true"><%= icon %></span>
+            <span class="level-copy"><strong><%= name %> <span class="level-tag"><%= tag %></span></strong><small><%= description %></small></span><span class="level-radio"></span>
+          </button>
+        <% end %>
+      </div>
+    </section>
+    <div class="play-layout">
+      <section class="puzzle-card" aria-label="Math puzzle">
+        <div class="puzzle-header"><span class="round-label" data-math-target="round">QUESTION 1 OF 10</span><span class="points" data-math-target="points">0 stars</span></div>
+        <div class="puzzle-body math-puzzle-body">
+          <p class="math-celebration" data-math-target="celebration" role="status" aria-live="polite"></p>
+          <span class="math-art" aria-hidden="true">🧮</span>
+          <h2>What is the answer?</h2>
+          <form data-action="submit->math#check" novalidate>
+            <p class="math-expression" id="math-expression" data-math-target="expression"></p>
+            <label class="math-answer-label" for="math-answer">Your answer</label>
+            <input id="math-answer" class="math-answer" data-math-target="answer" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="math-expression math-feedback">
+            <div class="feedback" id="math-feedback" data-math-target="feedback" role="status" aria-live="polite"></div>
+            <div class="puzzle-actions">
+              <button type="button" class="hint-button" data-math-target="hintButton" data-action="math#hint">A little hint</button>
+              <button type="submit" class="check-button" data-math-target="checkButton">Check my answer</button>
+            </div>
+          </form>
+        </div>
+        <div class="puzzle-footer">No timers. No pressure. Every try helps you grow.</div>
+      </section>
+      <aside class="game-aside">
+        <section class="goal-card">
+          <div class="card-heading"><span class="goal-icon" aria-hidden="true">⚑</span><h2>Your adventure goal</h2></div>
+          <p>Ten questions. So many discoveries.</p>
+          <span class="math-goal-art" aria-hidden="true">🌻</span>
+          <div class="goal-progress"><strong><span data-math-target="count">0</span><span class="goal-total"> / 10</span></strong><span>answers this adventure</span></div>
+          <div class="progress-track" data-math-target="bar" role="progressbar" aria-label="Math adventure goal" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span data-math-target="fill"></span></div>
+          <div class="goal-bottom"><span aria-hidden="true">⭐</span><span data-math-target="goalMessage">A little practice goes a long way!</span></div>
+        </section>
+        <section class="steps-card">
+          <h2>A little guide to big wins</h2>
+          <div class="guide-step"><span>1</span><div><strong>Look &amp; think</strong><p>Read the question and choose a strategy.</p></div></div>
+          <div class="guide-step"><span>2</span><div><strong>Give it a try</strong><p>Type your answer and press Enter.</p></div></div>
+          <div class="guide-step"><span>3</span><div><strong>Keep growing</strong><p>Hints help you learn. Mistakes never cost stars.</p></div></div>
+        </section>
+      </aside>
+    </div>
+    <section class="journey-card" aria-label="Current math adventure progress">
+      <div class="journey-heading"><div><h2>Your number trail</h2><p>Ten little steps to a bigger discovery.</p></div></div>
+      <div class="trail" data-math-target="trail"></div>
+    </section>
+    <footer class="page-footer"><span>A little curiosity today. A little more confidence tomorrow.</span><span>HAPPY LEARNING</span></footer>
+    <p class="storage-notice" data-math-target="storageNotice" role="status" hidden></p>
+  </main>
+  <dialog class="info-dialog" data-math-target="progressDialog">
+    <button class="dialog-close" data-action="math#closeDialog" aria-label="Close progress">×</button>
+    <span class="dialog-art" aria-hidden="true">🌟</span><h2>Look how you're growing!</h2>
+    <div class="progress-stats" data-math-target="progressStats"></div>
+    <p class="dialog-note">Math stars and total answers are saved in this browser, separately from Word Quest. Your adventure resets when you replay, change levels, or reload.</p>
+    <button class="check-button" data-action="math#closeDialog">Keep exploring</button>
+  </dialog>
+  <dialog class="info-dialog" data-math-target="helpDialog">
+    <button class="dialog-close" data-action="math#closeDialog" aria-label="Close instructions">×</button>
+    <span class="dialog-art" aria-hidden="true">🌱</span><h2>Ready for a number adventure?</h2>
+    <ol class="help-list">
+      <li>Choose a level, from addition and subtraction to missing-number equations.</li>
+      <li>Type a whole-number answer and press Enter or Check my answer. For equations, enter the missing number marked with ?.</li>
+      <li>In mixed operations, solve parentheses first, then multiplication and division, then addition and subtraction.</li>
+      <li>A little hint explains a strategy. Earn two stars without a hint, or one with a hint. You can always retry an incorrect answer.</li>
+      <li>Solve ten questions to finish your trail, then try the next level. You choose when to move on.</li>
+    </ol>
+    <button class="check-button" data-action="math#closeDialog">Let's play</button>
+  </dialog>
+</div>

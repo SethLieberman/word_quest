@@ -1,9 +1,39 @@
-# Word Quest
+# Word Quest and Math Quest
 
 A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
+The landing page at `/` links to Word Quest at `/word-quest` and Math Quest at
+`/math-quest`. Each game has its own saved progress.
 
-## Play
+## Math Quest
+
+Six levels offer progressively more challenging number practice:
+
+1. **Number sprout:** addition and non-negative subtraction within 20.
+2. **Number explorer:** addition and non-negative subtraction within 100,
+   with at least one number or result greater than 20.
+3. **Multiplication magic:** multiplication facts from 1 to 12.
+4. **Division detective:** exact division based on the 1-to-12 multiplication
+   facts, with whole-number answers and no zero divisors.
+5. **Operation expert:** mixed operations, including parentheses and order of
+   operations. All results are non-negative whole numbers.
+6. **Equation mastermind:** missing-number addition, subtraction, multiplication,
+   and division equations.
+
+Each adventure draws ten distinct questions from locally generated question
+banks in [math_questions.js](app/javascript/data/math_questions.js). Enter an
+answer and press Enter or Check my answer. Incorrect answers stay on the same
+question without losing stars. Hints explain a strategy instead of filling the
+answer; earn one star with a hint or two without. After ten correct answers,
+the game suggests the next level without changing it automatically.
+
+The adventure goal resets when replaying, changing level, or reloading. Total
+math questions solved and stars are saved locally under
+`math-quest-progress-v1`, separate from `word-quest-progress-v1`.
+Storage errors are shown to the player. There are no timers, accounts, or
+external question APIs.
+
+## Word Quest
 
 - **Little sprout:** six-letter words (like rabbit and turtle), with one missing letter.
 - **Word explorer:** seven- to eight-letter words (like giraffe and sandwich), with two missing letters.

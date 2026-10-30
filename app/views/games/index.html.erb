@@ -1,0 +1,27 @@
+<% content_for :title, "Quest Club | Choose your adventure" %>
+<main class="quest-home">
+  <header class="quest-home-heading">
+    <span class="eyebrow">SMALL STEPS. BIG DISCOVERIES.</span>
+    <h1>Where will your <span>curiosity take you?</span></h1>
+    <p>Pick a quest, try something new, and watch your confidence grow.</p>
+  </header>
+  <section class="quest-cards" aria-label="Choose an educational game">
+    <a class="quest-card word-quest-card" href="<%= word_quest_path %>">
+      <span class="quest-art" aria-hidden="true">📖</span>
+      <span class="eyebrow">LET YOUR WORD POWER BLOOM</span>
+      <h2>Word Quest</h2>
+      <p>Discover missing letters, explore new words, and untangle word jumbles.</p>
+      <span class="quest-detail">Six levels · Picture clues · Spelling adventures</span>
+      <span class="quest-link">Play Word Quest <span aria-hidden="true">→</span></span>
+    </a>
+    <a class="quest-card math-quest-card" href="<%= math_quest_path %>">
+      <span class="quest-art" aria-hidden="true">🧮</span>
+      <span class="eyebrow">LITTLE NUMBERS. BIG POSSIBILITIES.</span>
+      <h2>Math Quest</h2>
+      <p>Add, subtract, multiply, and solve your way to exciting new challenges.</p>
+      <span class="quest-detail">Six levels · Helpful hints · Number adventures</span>
+      <span class="quest-link">Play Math Quest <span aria-hidden="true">→</span></span>
+    </a>
+  </section>
+  <p class="quest-home-note">No timers. No pressure. Just a little practice and a whole lot of discovery.</p>
+</main>

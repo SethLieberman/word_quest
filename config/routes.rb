@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root "games#show"
+  root "games#index"
+  get "word-quest", to: "games#show", as: :word_quest
+  get "math-quest", to: "games#math", as: :math_quest
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

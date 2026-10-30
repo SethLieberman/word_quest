@@ -1,8 +1,32 @@
 require "test_helper"
 
 class GamesControllerTest < ActionDispatch::IntegrationTest
-  test "shows the spelling game with all difficulty levels" do
+  test "landing page links to both educational games" do
     get root_url
+
+    assert_response :success
+    assert_select ".quest-card", count: 2
+    assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
+    assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
+  end
+
+  test "shows Math Quest with six levels and accessible answer input" do
+    get math_quest_url
+
+    assert_response :success
+    assert_select "title", "Math Quest | Let's grow your number power"
+    assert_select "[data-controller='math']"
+    assert_select "[data-math-target='level']", count: 6
+    assert_select "[data-level='sprout'][aria-pressed='true']"
+    assert_select "label[for='math-answer']", text: "Your answer"
+    assert_select "input#math-answer[inputmode='numeric']"
+    assert_select "[data-math-target='bar'][aria-valuemax='10']"
+    assert_select "a[href=?]", root_path
+    assert_select "dialog", count: 2
+  end
+
+  test "shows the spelling game with all difficulty levels" do
+    get word_quest_url
 
     assert_response :success
     assert_select "title", "Word Quest | Let's grow your word power"
