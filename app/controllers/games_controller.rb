@@ -7,4 +7,8 @@ class GamesController < ApplicationController
 
   def math
   end
+
+  def read_aloud
+    render :read_aloud
+  end
 end

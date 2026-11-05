@@ -2,8 +2,9 @@
 
 A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
-The landing page at `/` links to Word Quest at `/word-quest` and Math Quest at
-`/math-quest`. Each game has its own saved progress.
+The landing page at `/` links to Word Quest at `/word-quest`, Math Quest at
+`/math-quest`, and Read Aloud at `/read-aloud`. Read Aloud is also available in
+both game navigation menus. Word Quest and Math Quest have separate saved progress.
 
 ## Math Quest
 
@@ -109,6 +110,13 @@ for Little sprout and seven or eight for Word explorer. Review the meaning,
 clue, and spelling difficulty before enabling a word. The list targets young
 English-language learners and does not certify US grade-level placement.
 Run the spelling-game system tests after vocabulary changes.
+
+## Read Aloud
+
+Read Aloud has three word banks: Beginning words (24 short words), Easy words
+(40 six-letter words), and Medium words (40 seven- or eight-letter words).
+Beginning words is selected first and focuses on short, familiar words.
+Learners can hear each word, sound it out, say it aloud, or type it.
 
 ## Development
 

@@ -1,13 +1,14 @@
 require "test_helper"
 
 class GamesControllerTest < ActionDispatch::IntegrationTest
-  test "landing page links to both educational games" do
+  test "landing page links to all educational activities" do
     get root_url
 
     assert_response :success
-    assert_select ".quest-card", count: 2
+    assert_select ".quest-card", count: 3
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
+    assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
   end
 
   test "shows Math Quest with six levels and accessible answer input" do
@@ -44,6 +45,29 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-game-target='helpDialog']" do
       assert_select "a[href='https://www.newgeneralservicelist.com/new-dolch-list']", text: "New Dolch List 1.1"
       assert_select "a[href='https://creativecommons.org/licenses/by-sa/4.0/']", text: "CC BY-SA 4.0"
+    end
+  end
+
+  test "read aloud practice is reachable by URL" do
+    get "/read-aloud"
+
+    assert_response :success
+    assert_select "title", "Read Aloud | Let's sound out words"
+    assert_select "[data-controller='read-aloud']"
+    assert_select "[data-read-aloud-target='level']", count: 3
+    assert_select "[data-level='beginner'][aria-pressed='true']", text: "Beginning words"
+    assert_select "[data-level='easy'][aria-pressed='false']", text: "Easy words"
+    assert_select "[data-level='medium'][aria-pressed='false']", text: "Medium words"
+    assert_select "[data-read-aloud-target='mic']"
+    assert_select "[data-read-aloud-target='typed']"
+    assert_select "input#read-aloud-typed-input"
+    assert_select "a[href=?]", root_path, text: "Choose a quest"
+  end
+
+  test "read aloud practice is linked from both game navigation menus" do
+    [ word_quest_path, math_quest_path ].each do |path|
+      get path
+      assert_select "nav[aria-label='Main navigation'] a[href=?][aria-label='Read Aloud']", read_aloud_path, count: 1
     end
   end
 end

@@ -3,7 +3,7 @@
 .quest-home-heading .eyebrow { justify-content: center; }
 .quest-home-heading h1 { width: auto; font-size: clamp(30px, 5vw, 48px); margin: 18px 0; }
 .quest-home-heading p, .quest-home-note { color: #777183; line-height: 1.8; }
-.quest-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px; }
+.quest-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 25px; }
 .quest-card { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 36px; border: 1px solid #e3dcec; border-radius: 24px; background: #fff; box-shadow: 0 12px 35px #52436f08; transition: transform .2s, box-shadow .2s; }
 .quest-card:hover { transform: translateY(-4px); box-shadow: 0 16px 35px #52436f15; }
 .math-quest-card { background: #f2f7ef; border-color: #dce6d5; }
@@ -25,6 +25,10 @@
 .math-answer:focus-visible { outline: 3px solid #b29ad8; outline-offset: 3px; }
 .math-answer[aria-invalid="true"] { border-color: #b77c67; }
 .math-goal-art { display: block; text-align: center; font-size: 75px; margin: 25px 0; }
+@media (max-width: 800px) {
+  .sidebar { flex-wrap: wrap; gap: 12px; }
+  .sidebar .main-nav { flex-wrap: wrap; }
+}
 @media (max-width: 620px) {
   .quest-home { padding: 40px 20px; }
   .quest-cards { grid-template-columns: 1fr; }

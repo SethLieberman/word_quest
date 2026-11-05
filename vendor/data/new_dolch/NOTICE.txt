@@ -18,8 +18,9 @@ https://creativecommons.org/licenses/by-sa/4.0/
 The complete license is included as LICENSE.txt in this directory.
 
 Word Quest adaptation:
-app/javascript/data/new_dolch_words.js selects 30 six-letter words and
-30 seven- or eight-letter words from this source for beginner puzzles.
+app/javascript/data/new_dolch_words.js selects 40 six-letter words and
+40 seven- or eight-letter words from this source for reading practice.
+It also includes 24 original short-word entries for beginning readers.
 Word Quest contributors added original written clues and emoji selections,
 assigned levels, reordered entries, and omitted the source's statistics.
 That adapted dataset, including these clues and emoji selections, is also

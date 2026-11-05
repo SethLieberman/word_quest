@@ -1,0 +1,32 @@
+.read-aloud { max-width: 680px; margin: 0 auto; padding: 60px 24px 50px; text-align: center; }
+.read-aloud-heading h1 { font-family: "Manrope", sans-serif; font-size: clamp(30px, 5vw, 44px); margin: 14px 0 26px; }
+.read-aloud-heading h1 span { color: #7160ac; }
+.read-aloud-levels { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.read-aloud-level { border: 1px solid #e7e3ee; background: #fff; border-radius: 999px; padding: 10px 20px; font-weight: 600; color: #6d6880; }
+.read-aloud-level[aria-pressed="true"] { background: #eeebf6; border-color: #b8a9d9; color: #5b4a94; }
+.read-aloud-progress { font-size: 12px; letter-spacing: 1px; color: #777183; margin-bottom: 18px; }
+.read-aloud-card { background: #fff; border: 1px solid #e3dcec; border-radius: 24px; padding: 32px 26px; box-shadow: 0 12px 35px #52436f08; transition: background .3s, border-color .3s; }
+.read-aloud-card.is-correct { background: #eef8ec; border-color: #b9d9ae; }
+.read-aloud-card.is-shake { animation: read-aloud-shake .4s; }
+@keyframes read-aloud-shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.read-aloud-emoji { display: block; font-size: 64px; line-height: 1.1; }
+.read-aloud-clue { color: #777183; line-height: 1.7; margin: 12px auto 18px; max-width: 480px; }
+.read-aloud-word { font-family: "Manrope", sans-serif; font-size: clamp(40px, 9vw, 64px); font-weight: 800; letter-spacing: 2px; margin: 0 0 14px; word-break: break-word; }
+.read-aloud-letters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 22px; }
+.read-aloud-letter { min-width: 46px; height: 52px; border-radius: 12px; border: 1px solid #d9d2e6; background: #f7f5fb; font-family: "Manrope", sans-serif; font-size: 24px; font-weight: 700; color: #5b4a94; }
+.read-aloud-letter:hover { background: #eeebf6; }
+.read-aloud-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.read-aloud-button { border: 0; border-radius: 12px; background: #8270bc; color: #fff; padding: 12px 18px; font-weight: 700; }
+.read-aloud-button:hover { background: #7160ac; }
+.read-aloud-button:disabled { background: #cfc8dc; color: #fff; }
+.read-aloud-mic[aria-pressed="true"] { background: #c0573f; }
+.read-aloud-unsupported { font-size: 13px; color: #8a6a2b; background: #fbf5e6; border-radius: 10px; padding: 12px; margin: 0 0 16px; line-height: 1.6; }
+.read-aloud-typed { display: grid; gap: 8px; justify-items: center; margin-bottom: 14px; }
+.read-aloud-typed label { font-size: 12px; color: #777183; }
+.read-aloud-typed-row { display: flex; gap: 8px; }
+.read-aloud-typed input { font: inherit; font-size: 18px; width: 220px; padding: 10px 12px; border: 1px solid #d9d2e6; border-radius: 10px; text-align: center; }
+.read-aloud-feedback { min-height: 1.6em; font-weight: 600; color: #5b4a94; margin: 0; }
+.read-aloud-feedback[data-tone="success"] { color: #3f7a34; }
+.read-aloud-feedback[data-tone="info"] { color: #8a6a2b; }
+.read-aloud-finished { margin-top: 30px; }
+.read-aloud-finished h2 { font-family: "Manrope", sans-serif; margin-bottom: 18px; }

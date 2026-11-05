@@ -2,6 +2,32 @@
 // CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
 // Source, changes, and attribution: vendor/data/new_dolch/NOTICE.txt
 export default {
+  beginner: [
+    ["bed", "🛏️", "A place to sleep at night."],
+    ["bug", "🐞", "A tiny insect that can crawl."],
+    ["bus", "🚌", "A large vehicle that carries people."],
+    ["cat", "🐈", "A furry pet that says meow."],
+    ["cup", "🥤", "You can drink water or milk from this."],
+    ["dog", "🐕", "A furry pet that can bark."],
+    ["fan", "🪭", "This moves air to help you stay cool."],
+    ["hat", "🎩", "You wear this on your head."],
+    ["hen", "🐔", "A chicken that can lay eggs."],
+    ["jam", "🍓", "A sweet fruit spread for toast."],
+    ["leg", "🦵", "You use this to stand, walk, and run."],
+    ["map", "🗺️", "This drawing helps you find a place."],
+    ["net", "🥅", "A mesh you can use to catch a ball."],
+    ["pen", "🖊️", "You write or draw with this."],
+    ["pig", "🐖", "A farm animal with a curly tail."],
+    ["pot", "🍲", "A deep pan for cooking food."],
+    ["red", "🔴", "The color of a ripe tomato."],
+    ["rug", "🧶", "A soft covering for part of a floor."],
+    ["sun", "☀️", "The bright star that lights up the day."],
+    ["top", "🔝", "The highest part of something."],
+    ["van", "🚐", "A vehicle that can carry people or things."],
+    ["web", "🕸️", "A spider makes this from thin threads."],
+    ["fox", "🦊", "A wild animal with a bushy tail."],
+    ["box", "📦", "A container with sides for holding things."]
+  ],
   easy: [
     ["animal", "🐾", "A living creature, such as a cat, dog, or bird."],
     ["banana", "🍌", "A long yellow fruit that you peel before eating."],
@@ -32,7 +58,17 @@ export default {
     ["summer", "☀️", "The season after spring and before autumn."],
     ["window", "🪟", "An opening with glass that lets light into a room."],
     ["winter", "⛄", "The cold season after autumn and before spring."],
-    ["yellow", "🟡", "The bright color of a lemon or a ripe banana."]
+    ["yellow", "🟡", "The bright color of a lemon or a ripe banana."],
+    ["across", "↔️", "From one side to the other side."],
+    ["almost", "🤏", "Very close to being complete, but not quite."],
+    ["always", "♾️", "At every time; never stopping."],
+    ["anyone", "🙋", "Any person at all."],
+    ["arrive", "🛬", "To get to the place where you are going."],
+    ["artist", "🎨", "A person who makes pictures or other art."],
+    ["become", "🌱", "To grow or change into something."],
+    ["decide", "🤔", "To choose what you want to do."],
+    ["little", "🤏", "Small in size or amount."],
+    ["listen", "👂", "To pay attention to a sound."]
   ],
   medium: [
     ["bedroom", "🛏️", "The room where you sleep at night."],
@@ -64,6 +100,16 @@ export default {
     ["mountain", "🏔️", "A very high piece of land that rises above the area around it."],
     ["question", "❓", "Something you ask when you want to find out an answer."],
     ["scissors", "✂️", "A tool with two blades that you use to cut paper."],
-    ["shoulder", "💪", "The part of your body where your arm joins your upper body."]
+    ["shoulder", "💪", "The part of your body where your arm joins your upper body."],
+    ["already", "✅", "Before now; something has happened by this time."],
+    ["another", "➕", "One more of the same kind."],
+    ["careful", "🧐", "Taking care to avoid mistakes or danger."],
+    ["correct", "☑️", "Right and without mistakes."],
+    ["example", "💡", "Something that helps show what an idea means."],
+    ["finally", "🏁", "At the end, after some time."],
+    ["forward", "➡️", "Toward the place in front of you."],
+    ["imagine", "💭", "To make a picture or idea in your mind."],
+    ["include", "🧩", "To have something as one part of a group."],
+    ["welcome", "👋", "A friendly greeting for someone who has just arrived."]
   ]
 }
