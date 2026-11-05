@@ -54,10 +54,18 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "title", "Read Aloud | Let's sound out words"
     assert_select "[data-controller='read-aloud']"
-    assert_select "[data-read-aloud-target='level']", count: 3
+    assert_select "[data-read-aloud-target='level']", count: 8
     assert_select "[data-level='beginner'][aria-pressed='true']", text: "Beginning words"
     assert_select "[data-level='easy'][aria-pressed='false']", text: "Easy words"
     assert_select "[data-level='medium'][aria-pressed='false']", text: "Medium words"
+    assert_select "[data-level='families']", text: "Word families"
+    assert_select "[data-level='blends']", text: "Blends"
+    assert_select "[data-level='digraphs']", text: "Two-letter sounds"
+    assert_select "[data-level='silent_e']", text: "Silent e"
+    assert_select "[data-level='sentences']", text: "Phrases & sentences"
+    assert_select "[data-mode='build']", text: "Build from sounds"
+    assert_select "[data-read-aloud-target='builder'][hidden]"
+    assert_select "button[data-action='read-aloud#markPracticed']", text: "I practiced reading"
     assert_select "[data-read-aloud-target='mic']"
     assert_select "[data-read-aloud-target='typed']"
     assert_select "input#read-aloud-typed-input"

@@ -9,46 +9,78 @@
   </header>
 
   <section class="read-aloud-levels" aria-label="Choose a reading level">
-    <button type="button" class="read-aloud-level" data-level="beginner" data-read-aloud-target="level" data-action="read-aloud#chooseLevel" aria-pressed="true">Beginning words</button>
-    <button type="button" class="read-aloud-level" data-level="easy" data-read-aloud-target="level" data-action="read-aloud#chooseLevel" aria-pressed="false">Easy words</button>
-    <button type="button" class="read-aloud-level" data-level="medium" data-read-aloud-target="level" data-action="read-aloud#chooseLevel" aria-pressed="false">Medium words</button>
+    <% [
+      ["beginner", "Beginning words"], ["families", "Word families"],
+      ["blends", "Blends"], ["digraphs", "Two-letter sounds"],
+      ["silent_e", "Silent e"], ["sentences", "Phrases & sentences"],
+      ["easy", "Easy words"], ["medium", "Medium words"]
+    ].each_with_index do |(id, label), index| %>
+      <button type="button" class="read-aloud-level" data-level="<%= id %>" data-read-aloud-target="level" data-action="read-aloud#chooseLevel" aria-pressed="<%= index.zero? %>"><%= label %></button>
+    <% end %>
   </section>
 
+  <p class="read-aloud-help" data-read-aloud-target="help"></p>
+  <section class="read-aloud-levels" aria-label="Choose an activity">
+    <button type="button" class="read-aloud-level" data-mode="read" data-read-aloud-target="mode" data-action="read-aloud#chooseMode" aria-pressed="true">Read together</button>
+    <button type="button" class="read-aloud-level" data-mode="build" data-read-aloud-target="mode" data-action="read-aloud#chooseMode" aria-pressed="false">Build from sounds</button>
+  </section>
+
+  <p class="read-aloud-audio-note">Browser sound examples are approximate. Ask an adult to model short, clear sounds without adding an extra “uh.” Hear the whole word to check how it sounds.</p>
+  <p class="read-aloud-unsupported" data-read-aloud-target="audioNotice" hidden>Audio is not available in this browser. You can still build words and practice reading with an adult.</p>
   <p class="read-aloud-progress" aria-live="polite">
     <span data-read-aloud-target="progress">WORD 1 OF 1</span>
-    · <span data-read-aloud-target="mastered">0 read</span>
+    · <span data-read-aloud-target="mastered">0 practiced</span>
   </p>
 
-  <section class="read-aloud-card" data-read-aloud-target="card" aria-labelledby="read-aloud-word-label">
+  <section class="read-aloud-card" data-read-aloud-target="card" aria-label="Reading activity">
     <span class="read-aloud-emoji" aria-hidden="true" data-read-aloud-target="emoji"></span>
     <p class="read-aloud-clue" data-read-aloud-target="clue"></p>
-    <p class="read-aloud-word" id="read-aloud-word-label" data-read-aloud-target="word" aria-label="Word to read"></p>
+    <p class="read-aloud-word" id="read-aloud-word-label" data-read-aloud-target="word"></p>
+    <div class="read-aloud-family" data-read-aloud-target="family" role="group" aria-label="Practice a word family" hidden></div>
+    <p class="read-aloud-pattern" data-read-aloud-target="pattern" hidden></p>
+    <p class="read-aloud-stage" data-read-aloud-target="stage" role="status"></p>
 
-    <div class="read-aloud-letters" data-read-aloud-target="letters" role="group" aria-label="Sound out each letter"></div>
+    <div class="read-aloud-letters" data-read-aloud-target="letters" role="group" aria-label="Hear each letter group or word"></div>
 
     <div class="read-aloud-actions">
-      <button type="button" class="read-aloud-button" data-action="read-aloud#listen">🔊 Hear the word</button>
-      <button type="button" class="read-aloud-button" data-action="read-aloud#soundOut">🔤 Sound it out</button>
-      <button type="button" class="read-aloud-button read-aloud-mic" data-read-aloud-target="mic" data-action="read-aloud#startListening" aria-pressed="false">🎤 Say it</button>
+      <button type="button" class="read-aloud-button" data-read-aloud-target="audio" data-action="read-aloud#listen">🔊 Hear the reading</button>
+      <button type="button" class="read-aloud-button" data-read-aloud-target="audio" data-action="read-aloud#soundOut">🔤 Hear & blend</button>
     </div>
 
-    <p class="read-aloud-unsupported" data-read-aloud-target="unsupported" hidden>
-      Speaking practice needs a browser with speech recognition (like Chrome or Edge). You can still type the word below.
-    </p>
-
-    <form class="read-aloud-typed" data-action="submit->read-aloud#checkTyped">
-      <label for="read-aloud-typed-input">Or type the word</label>
-      <div class="read-aloud-typed-row">
-        <input id="read-aloud-typed-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-read-aloud-target="typed">
-        <button type="submit" class="read-aloud-button">Check</button>
+    <section data-read-aloud-target="builder" aria-label="Build a word" hidden>
+      <h2 class="read-aloud-activity-title">Listen, then build the word</h2>
+      <p class="read-aloud-help">Choose a tile for each group. Tap a filled group to return its tile. Two-letter sounds stay together; silent e still needs a tile.</p>
+      <div class="read-aloud-letters" data-read-aloud-target="slots" role="group" aria-label="Your word"></div>
+      <div class="read-aloud-letters" data-read-aloud-target="tiles" role="group" aria-label="Choose letter tiles"></div>
+      <div class="read-aloud-actions">
+        <button type="button" class="read-aloud-button" data-action="read-aloud#hintBuilt">A little hint</button>
+        <button type="button" class="read-aloud-button" data-read-aloud-target="buildCheck" data-action="read-aloud#checkBuilt">Check my word</button>
       </div>
-    </form>
+    </section>
+
+    <section data-read-aloud-target="reading" aria-label="Practice reading">
+      <div class="read-aloud-actions">
+        <button type="button" class="read-aloud-button read-aloud-mic" data-read-aloud-target="mic" data-action="read-aloud#startListening" aria-pressed="false">🎤 Say it</button>
+        <button type="button" class="read-aloud-button" data-action="read-aloud#markPracticed">I practiced reading</button>
+      </div>
+      <p class="read-aloud-audio-note">The microphone can mishear children and does not score pronunciation. You can mark your practice without using it.</p>
+      <p class="read-aloud-unsupported" data-read-aloud-target="unsupported" hidden>
+        Speaking practice needs a browser with speech recognition (like Chrome or Edge). You can still type or mark your practice.
+      </p>
+      <form class="read-aloud-typed" data-action="submit->read-aloud#checkTyped">
+        <label for="read-aloud-typed-input">Or type what you read</label>
+        <div class="read-aloud-typed-row">
+          <input id="read-aloud-typed-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-read-aloud-target="typed">
+          <button type="submit" class="read-aloud-button">Check</button>
+        </div>
+      </form>
+    </section>
 
     <p class="read-aloud-feedback" role="status" aria-live="polite" data-read-aloud-target="feedback"></p>
   </section>
 
   <section class="read-aloud-finished" data-read-aloud-target="finished" hidden>
-    <h2>You read every word! 🎉</h2>
+    <h2>You practiced every reading! 🎉</h2>
     <button type="button" class="read-aloud-button" data-action="read-aloud#restart">Read them again</button>
   </section>
 </main>

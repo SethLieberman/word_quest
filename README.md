@@ -113,10 +113,48 @@ Run the spelling-game system tests after vocabulary changes.
 
 ## Read Aloud
 
-Read Aloud has three word banks: Beginning words (24 short words), Easy words
-(40 six-letter words), and Medium words (40 seven- or eight-letter words).
-Beginning words is selected first and focuses on short, familiar words.
-Learners can hear each word, sound it out, say it aloud, or type it.
+Read Aloud offers eight stages:
+
+1. **Beginning words:** 34 short words with short vowels.
+2. **Word families:** 26 words grouped by the endings `at`, `an`, `en`, `ug`,
+   `it`, `in`, and `op`.
+   The changing first letter is highlighted; tap a family word to practice it.
+3. **Blends:** 22 words such as stop and frog. Each consonant retains its sound.
+4. **Two-letter sounds:** 22 words with `sh`, `ch`, `th` (as in thin), and `ck`.
+   Each pair stays together as one letter group.
+5. **Silent e:** 22 words such as cape and kite. The final e stays quiet,
+   is highlighted with the long vowel, and is included when building a word.
+6. **Phrases & sentences:** 20 short readings with tap-to-hear words.
+   Helper words such as a, the, I, and is may need adult support.
+7. **Easy words:** 50 six-letter vocabulary words.
+8. **Medium words:** 50 seven- or eight-letter vocabulary words.
+
+Each round uses the entire selected stage. The extra reading vocabulary lives
+only in Read Aloud lessons; Word Quest's spelling banks are unchanged.
+
+Beginning words is selected first. **Read together** offers tap-to-hear groups,
+guided hear-and-blend highlighting, typing, optional speech recognition, and
+an **I practiced reading** button. For longer vocabulary, the app reads whole
+words instead of incorrectly assigning a fixed sound to every letter.
+**Build from sounds** is available in the first five stages: listen, arrange
+shuffled letter-group tiles, return tiles to edit, and ask for a hint.
+Repeated letters have separate tiles; hints preserve only the correct prefix.
+Changing stages or activities cancels pending speech and answer advancement.
+
+Browser speech examples are approximations, not recorded phonemes, and vary
+by voice and accent. An adult should model short, clear sounds without an added
+"uh." Guided audio and visual cues support practice; they are not a phonics
+assessment. Microphone mismatches never judge a child's pronunciation or block
+progress: children may listen again, type, or mark their reading practice.
+Progress is session-only; completing a stage or restarting keeps the selected
+activity. Audio failures are displayed, and reading/building remain available
+without browser speech support.
+
+Curated lessons and explicit sound groups live in
+[read_aloud_lessons.js](app/javascript/data/read_aloud_lessons.js).
+The existing New Dolch vocabulary and its attribution are unchanged.
+Run `bin/rails test test/controllers/games_controller_test.rb test/system/read_aloud_test.rb`
+after changes to reading practice.
 
 ## Development
 
