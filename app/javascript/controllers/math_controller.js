@@ -68,7 +68,12 @@ export default class extends Controller {
 
   hint() {
     if (this.solved || this.finished) return
+    if (this.hintsUsed) {
+      this.feedbackTarget.textContent = "You've used your hint for this question. Keep trying!"
+      return
+    }
     this.hintsUsed = true
+    this.hintButtonTarget.disabled = true
     this.feedbackTarget.className = "feedback"
     this.feedbackTarget.textContent = this.question.hint
     this.answerTarget.focus()

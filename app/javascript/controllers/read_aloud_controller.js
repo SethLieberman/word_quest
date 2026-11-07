@@ -20,9 +20,9 @@ function normalize(text) {
 
 export default class extends Controller {
   static targets = [
-    "level", "mode", "help", "progress", "mastered", "card", "emoji", "clue",
+    "level", "mode", "help", "progress", "mastered", "card", "emoji", "pictureButton", "clue",
     "word", "letters", "family", "pattern", "stage", "builder", "slots", "tiles",
-    "buildCheck", "mic", "unsupported", "audio", "audioNotice", "typed",
+    "buildCheck", "hintButton", "mic", "unsupported", "audio", "audioNotice", "typed",
     "reading", "feedback", "finished"
   ]
 
@@ -34,6 +34,7 @@ export default class extends Controller {
     this.level = "beginner"
     this.mode = "read"
     this.mastered = new Set()
+    this.hintedWords = new Set()
     this.index = 0
 
     this.micTarget.disabled = !this.RecognitionClass
@@ -66,6 +67,7 @@ export default class extends Controller {
     this.level = event.currentTarget.dataset.level
     this.index = 0
     this.mastered = new Set()
+    this.hintedWords = new Set()
     if (!this.lesson.phonics) this.mode = "read"
     this.showWord()
   }
@@ -83,7 +85,18 @@ export default class extends Controller {
   restart() {
     this.index = 0
     this.mastered = new Set()
+    this.hintedWords = new Set()
     this.showWord()
+  }
+
+  togglePicture() {
+    this.setPictureVisible(this.emojiTarget.hidden)
+  }
+
+  setPictureVisible(visible) {
+    this.emojiTarget.hidden = !visible
+    this.pictureButtonTarget.setAttribute("aria-expanded", String(visible))
+    this.pictureButtonTarget.textContent = visible ? "Hide picture" : "Show picture"
   }
 
   showWord() {
@@ -95,7 +108,9 @@ export default class extends Controller {
     this.finishedTarget.hidden = true
     this.cardTarget.hidden = false
     this.currentWord = this.currentEntry.text
+    this.hintButtonTarget.disabled = this.hintedWords.has(this.currentWord)
     this.emojiTarget.textContent = this.currentEntry.emoji
+    this.setPictureVisible(false)
     this.clueTarget.textContent = this.currentEntry.clue
     this.helpTarget.textContent = this.lesson.help
     this.typedTarget.value = ""
@@ -238,12 +253,18 @@ export default class extends Controller {
 
   hintBuilt() {
     if (this.isDone()) return
+    if (this.hintedWords.has(this.currentWord)) {
+      this.setFeedback("You've used your hint for this word. Listen again and keep building!", "info")
+      return
+    }
     const index = this.currentEntry.units.findIndex((unit, position) => unit.letters !== this.bank[this.selectedTiles[position]])
     if (index < 0) {
       this.setFeedback("Your groups are ready. Tap Check my word!", "info")
       return
     }
     const letters = this.currentEntry.units[index].letters
+    this.hintedWords.add(this.currentWord)
+    this.hintButtonTarget.disabled = true
     const tile = this.bank.findIndex((candidate, position) => candidate === letters && !this.selectedTiles.slice(0, index).includes(position))
     // Keep only the correct prefix so a repeated letter tile is never used twice.
     this.selectedTiles = [...this.selectedTiles.slice(0, index), tile]
@@ -416,6 +437,7 @@ export default class extends Controller {
     this.mastered.add(this.currentWord)
     this.masteredTarget.textContent = `${this.mastered.size} practiced`
     this.cardTarget.classList.add("is-correct")
+    this.hintButtonTarget.disabled = true
     if (this.mode === "build") this.renderBuilder()
     this.setFeedback(practiced ? "Well done practicing your reading! 🌟" : `Yes! ${this.currentWord} is right. 🌟`, "success")
     this.schedule(() => {
@@ -432,7 +454,8 @@ export default class extends Controller {
     this.cardTarget.classList.add("is-shake")
     this.schedule(() => this.cardTarget.classList.remove("is-shake"), 500)
     if (this.attempts >= HINT_AFTER_MISSES) {
-      if (this.mode === "build") this.hintBuilt()
+      if (this.mode === "build" && !this.hintedWords.has(this.currentWord)) this.hintBuilt()
+      else if (this.mode === "build") this.setFeedback("Listen again and check your groups. You've used your one hint for this word.", "info")
       else this.setFeedback("Let's try it together. Tap Hear & blend or ask an adult to help.", "info")
       this.soundOut()
     } else {

@@ -33,7 +33,10 @@
   </p>
 
   <section class="read-aloud-card" data-read-aloud-target="card" aria-label="Reading activity">
-    <span class="read-aloud-emoji" aria-hidden="true" data-read-aloud-target="emoji"></span>
+    <div class="read-aloud-actions">
+      <button type="button" class="read-aloud-level" data-read-aloud-target="pictureButton" data-action="read-aloud#togglePicture" aria-expanded="false" aria-controls="read-aloud-picture">Show picture</button>
+    </div>
+    <span class="read-aloud-emoji" id="read-aloud-picture" aria-hidden="true" data-read-aloud-target="emoji" hidden></span>
     <p class="read-aloud-clue" data-read-aloud-target="clue"></p>
     <p class="read-aloud-word" id="read-aloud-word-label" data-read-aloud-target="word"></p>
     <div class="read-aloud-family" data-read-aloud-target="family" role="group" aria-label="Practice a word family" hidden></div>
@@ -49,11 +52,11 @@
 
     <section data-read-aloud-target="builder" aria-label="Build a word" hidden>
       <h2 class="read-aloud-activity-title">Listen, then build the word</h2>
-      <p class="read-aloud-help">Choose a tile for each group. Tap a filled group to return its tile. Two-letter sounds stay together; silent e still needs a tile.</p>
+      <p class="read-aloud-help">Choose a tile for each group. Tap a filled group to return its tile. Two-letter sounds stay together; silent e still needs a tile. You get one hint per word, including automatic hints.</p>
       <div class="read-aloud-letters" data-read-aloud-target="slots" role="group" aria-label="Your word"></div>
       <div class="read-aloud-letters" data-read-aloud-target="tiles" role="group" aria-label="Choose letter tiles"></div>
       <div class="read-aloud-actions">
-        <button type="button" class="read-aloud-button" data-action="read-aloud#hintBuilt">A little hint</button>
+        <button type="button" class="read-aloud-button" data-read-aloud-target="hintButton" data-action="read-aloud#hintBuilt">A little hint</button>
         <button type="button" class="read-aloud-button" data-read-aloud-target="buildCheck" data-action="read-aloud#checkBuilt">Check my word</button>
       </div>
     </section>

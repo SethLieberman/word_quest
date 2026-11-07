@@ -223,12 +223,17 @@ export default class extends Controller {
 
   hint() {
     if (this.solved || this.finished) return
+    if (this.hintsUsed) {
+      this.feedbackTarget.textContent = "You've used your hint for this word. Keep trying!"
+      return
+    }
     const index = this.missing.find((position) => this.answers[position] !== this.entry[0][position])
     if (index === undefined) {
       this.feedbackTarget.textContent = "Looking good! Check your word to see."
       return
     }
     this.hintsUsed = true
+    this.hintButtonTarget.disabled = true
     if (this.isJumble) {
       const letter = this.entry[0][index]
       this.clearAnswer(index)

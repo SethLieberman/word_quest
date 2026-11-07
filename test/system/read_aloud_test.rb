@@ -34,6 +34,43 @@ class ReadAloudTest < ApplicationSystemTestCase
     assert_text "WORD 1 OF 50"
   end
 
+  test "pictures are optional and hidden again for new readings and activities" do
+    visit read_aloud_url
+    assert_no_selector "#read-aloud-picture"
+    assert_selector "[data-read-aloud-target='pictureButton'][aria-expanded='false']", text: "Show picture"
+    click_button "Show picture"
+    assert_selector "#read-aloud-picture", text: "🛏️"
+    assert_selector "[data-read-aloud-target='pictureButton'][aria-expanded='true']", text: "Hide picture"
+    click_button "Hide picture"
+    assert_no_selector "#read-aloud-picture"
+    click_button "Show picture"
+    fill_in "read-aloud-typed-input", with: "bed"
+    click_button "Check", exact: true
+    assert_text "WORD 2 OF 34", wait: 3
+    assert_no_selector "#read-aloud-picture"
+    click_button "Show picture"
+    assert_selector "#read-aloud-picture", text: "🐞"
+    click_button "Build from sounds"
+    assert_no_selector "#read-aloud-picture"
+    click_button "Show picture"
+    assert_selector "#read-aloud-picture", text: "🐞"
+    assert_button "A little hint", disabled: false
+    assert_text "1 practiced"
+    click_button "Word families"
+    assert_no_selector "#read-aloud-picture"
+    click_button "Read together"
+    click_button "Show picture"
+    click_button "Practice hat"
+    assert_no_selector "#read-aloud-picture"
+    click_button "Show picture"
+    page.execute_script("#{controller_script}.restart()")
+    assert_no_selector "#read-aloud-picture"
+    click_button "Phrases & sentences"
+    assert_no_selector "#read-aloud-picture"
+    click_button "Show picture"
+    assert_selector "#read-aloud-picture", text: "🎩"
+  end
+
   test "curated lessons have complete explicit sound groups and progressive banks" do
     visit read_aloud_url
     lessons = page.evaluate_async_script(<<~JS)
@@ -78,6 +115,7 @@ class ReadAloudTest < ApplicationSystemTestCase
         const results = [];
         for (const level of ["beginner", "families", "blends", "digraphs", "silent_e", "sentences", "easy", "medium"]) {
           controller.level = level;
+          controller.hintedWords = new Set();
           controller.mode = controller.lesson.phonics ? "build" : "read";
           for (let index = controller.words.length - 10; index < controller.words.length; index++) {
             controller.index = index;
@@ -85,7 +123,13 @@ class ReadAloudTest < ApplicationSystemTestCase
             controller.soundOut();
             const speech = window.readingSpeech.queue.map((utterance) => utterance.text);
             if (controller.lesson.phonics) {
-              for (const unit of controller.currentEntry.units) controller.hintBuilt();
+              controller.hintBuilt();
+              for (const unit of controller.currentEntry.units.slice(controller.selectedTiles.length)) {
+                const tile = controller.bank.findIndex((letters, index) =>
+                  letters === unit.letters && !controller.selectedTiles.includes(index));
+                controller.selectedTiles.push(tile);
+              }
+              controller.renderBuilder();
               controller.checkBuilt();
             } else {
               controller.typedTarget.value = controller.currentWord;
@@ -264,6 +308,7 @@ class ReadAloudTest < ApplicationSystemTestCase
     click_button "Check my word"
     click_button "Check my word"
     assert_text "Try b in group 1."
+    assert_button "A little hint", disabled: true
     assert_button "Return b from group 1"
     assert_text "WORD 1 OF 34"
     assert_text "0 practiced"
@@ -272,6 +317,40 @@ class ReadAloudTest < ApplicationSystemTestCase
     assert_selector "[data-read-aloud-target='slots'] [data-unit='0'].is-speaking"
     click_button "Add e", exact: true
     assert_selector "[data-read-aloud-target='slots'] [data-unit='0'].is-speaking"
+  end
+
+  test "one building hint is shared with automatic hints and survives activity switching" do
+    visit read_aloud_url
+    stub_speech
+    click_button "Build from sounds"
+    click_button "A little hint"
+    assert_button "A little hint", disabled: true
+    click_button "Add a", exact: true
+    click_button "Add d", exact: true
+    click_button "Check my word"
+    click_button "Check my word"
+    assert_text "You've used your one hint"
+    assert_button "Return a from group 2"
+    before = page.evaluate_script("#{controller_script}.selectedTiles")
+    page.execute_script("#{controller_script}.hintBuilt()")
+    assert_equal before, page.evaluate_script("#{controller_script}.selectedTiles")
+    click_button "Read together"
+    click_button "Build from sounds"
+    assert_button "A little hint", disabled: true
+    %w[b e d].each { |letters| click_button "Add #{letters}", exact: true }
+    click_button "Check my word"
+    assert_text "WORD 2 OF 34", wait: 3
+    assert_button "A little hint", disabled: false
+
+    click_button "Word families"
+    click_button "A little hint"
+    click_button "Read together"
+    click_button "Practice hat"
+    click_button "Practice cat"
+    click_button "Build from sounds"
+    assert_button "A little hint", disabled: true
+    page.execute_script("#{controller_script}.restart()")
+    assert_button "A little hint", disabled: false
   end
 
   test "phrases and sentences read word by word and preserve word boundaries" do

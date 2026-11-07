@@ -25,7 +25,8 @@ Each adventure draws ten distinct questions from locally generated question
 banks in [math_questions.js](app/javascript/data/math_questions.js). Enter an
 answer and press Enter or Check my answer. Incorrect answers stay on the same
 question without losing stars. Hints explain a strategy instead of filling the
-answer; earn one star with a hint or two without. After ten correct answers,
+answer; one hint is available per question. Earn one star with a hint or two
+without. After ten correct answers,
 the game suggests the next level without changing it automatically.
 
 The adventure goal resets when replaying, changing level, or reloading. Total
@@ -48,7 +49,7 @@ external question APIs.
   On desktop, words stay on one horizontally scrollable line,
   automatically following the active blank. On smaller screens, words wrap.
   Letter banks wrap on all screens.
-  Letter choices can be reused, and hints still fill one missing letter at a time.
+  Letter choices can be reused, and the one hint per word fills one missing letter.
 - Complete ten randomly selected words without repeats to finish an adventure.
   A completion message suggests the next level without switching automatically.
   Word jumble celebrates completing the highest level instead.
@@ -59,8 +60,8 @@ external question APIs.
   letters. Typing uses available tiles and Backspace returns them. A hint
   moves a matching tile into the first incorrect space, returning or moving
   previously placed tiles as needed. Clues, stars, and adventure progress still apply.
-- Use a hint to fill one letter. Earn two stars for an unassisted word or one
-  star with hints. Incorrect guesses never cost stars.
+- Use one hint per word to fill one letter. Earn two stars for an unassisted
+  word or one star with a hint. Incorrect guesses never cost stars.
 - Click a blank to edit it; type letters, Backspace to erase, and Enter to check.
 - Optional browser speech reads completed words aloud.
 - Grow your adventure word garden from seed to smiling flower over its
@@ -136,9 +137,17 @@ Beginning words is selected first. **Read together** offers tap-to-hear groups,
 guided hear-and-blend highlighting, typing, optional speech recognition, and
 an **I practiced reading** button. For longer vocabulary, the app reads whole
 words instead of incorrectly assigning a fixed sound to every letter.
+Pictures are hidden by default. **Show picture** reveals an optional picture
+clue, and **Hide picture** hides it again. Each new reading, stage, activity,
+or restart hides the picture. Revealing it does not use the word-building hint.
+Written clues remain visible.
 **Build from sounds** is available in the first five stages: listen, arrange
 shuffled letter-group tiles, return tiles to edit, and ask for a hint.
 Repeated letters have separate tiles; hints preserve only the correct prefix.
+There is one hint per word, shared by the hint button and automatic hints after
+misses. Switching activities or revisiting a family word does not restore a
+used hint. New words and new rounds get a fresh hint. Hearing the reading and
+blending sounds remain available without a limit.
 Changing stages or activities cancels pending speech and answer advancement.
 
 Browser speech examples are approximations, not recorded phonemes, and vary

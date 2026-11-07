@@ -44,6 +44,13 @@ class MathQuestTest < ApplicationSystemTestCase
     assert_selector "[data-math-target='count']", text: "0", exact_text: true
     click_button "A little hint"
     assert_text "count"
+    assert_button "A little hint", disabled: true
+    hint = find("[data-math-target='feedback']").text
+    page.execute_script(<<~JS)
+      window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller='math']"), "math").hint();
+    JS
+    assert_text "You've used your hint"
+    assert_no_text hint
     fill_in "Your answer", with: answer
     find("#math-answer").send_keys(:enter)
     assert_text "1 star for growing"
@@ -51,6 +58,7 @@ class MathQuestTest < ApplicationSystemTestCase
     assert_selector "#math-answer:disabled"
     click_button "Next question"
     assert_text "QUESTION 2 OF 10"
+    assert_button "A little hint", disabled: false
     fill_in "Your answer", with: current_answer
     click_button "Check my answer"
     assert_text "2 stars for growing"

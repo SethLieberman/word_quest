@@ -54,7 +54,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_selector ".letter-slot.missing", count: 3
 
     10.times do |index|
-      3.times { click_button "A little hint" }
+      complete_with_one_hint
       click_button "Check my word"
       assert_text "1 star for growing"
       assert_selector "[data-game-target='garden'][data-growth='#{index + 1}']"
@@ -116,6 +116,36 @@ class SpellingGameTest < ApplicationSystemTestCase
       assert_text "WORD 1 OF 10"
       assert_button "Check my word"
       assert_no_button "Next word"
+    end
+  end
+
+  test "each spelling level allows only one hint per word and resets on new puzzles" do
+    %w[easy medium hard advanced mastermind jumble].each do |level|
+      find("[data-level='#{level}']").click
+      click_button "A little hint"
+      assert_button "A little hint", disabled: true
+      before = page.evaluate_script(<<~JS)
+        (() => {
+          const game = window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller='game']"), "game");
+          return { answers: game.answers, tiles: game.selectedTiles };
+        })()
+      JS
+      page.execute_script(<<~JS)
+        window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller='game']"), "game").hint();
+      JS
+      assert_text "You've used your hint for this word."
+      after = page.evaluate_script(<<~JS)
+        (() => {
+          const game = window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller='game']"), "game");
+          return { answers: game.answers, tiles: game.selectedTiles };
+        })()
+      JS
+      assert_equal before, after
+      fill_remaining_letters
+      click_button "Check my word"
+      assert_text "1 star for growing"
+      click_button "Next word"
+      assert_button "A little hint", disabled: false
     end
   end
 
@@ -191,7 +221,7 @@ class SpellingGameTest < ApplicationSystemTestCase
       10.times do |index|
         assert_includes length, all(".letter-slot").length
         assert_selector ".letter-slot.missing", count: blanks
-        blanks.times { click_button "A little hint" }
+        complete_with_one_hint
         words << all(".letter-slot").map(&:text).join
         click_button "Check my word"
         click_button "Next word" if index < 9
@@ -243,7 +273,7 @@ class SpellingGameTest < ApplicationSystemTestCase
     end
   end
 
-  test "every new advanced word can be solved with the existing hints and scoring" do
+  test "every new advanced word can be solved with one hint and player input" do
     results = page.driver.browser.execute_async_script(<<~JS)
       const done = arguments[0];
       import("data/game_words").then(({ default: banks }) => {
@@ -258,7 +288,12 @@ class SpellingGameTest < ApplicationSystemTestCase
             game.nextPuzzle();
             const blanks = game.missing.length;
             const stars = game.progress.stars;
-            for (let index = 0; index < blanks; index++) game.hint();
+            game.hint();
+            for (const index of game.missing) {
+              if (game.answers[index] === entry[0][index]) continue;
+              game.activeSlot = index;
+              game.chooseLetter(entry[0][index]);
+            }
             game.check();
             results.push({
               level, word: entry[0], blanks,
@@ -310,7 +345,7 @@ class SpellingGameTest < ApplicationSystemTestCase
         assert_selector ".clue", text: clue
         assert_selector ".word-emoji", text: emoji
         assert_selector ".letter-slot.missing", count: blanks
-        blanks.times { click_button "A little hint" }
+        complete_with_one_hint
         click_button "Check my word"
         assert_text "You did it! #{word.upcase()}"
         click_button "Next word" if index < 9
@@ -347,7 +382,7 @@ class SpellingGameTest < ApplicationSystemTestCase
       assert_includes 8..12, all(".letter-slot").length
       assert_button "Check my word", disabled: true
       assert_selector ".clue", text: /.+/
-      4.times { click_button "A little hint" }
+      complete_with_one_hint
       words << all(".letter-slot").map(&:text).join.downcase
       click_button "Check my word"
       assert_text "1 star for growing"
@@ -379,7 +414,7 @@ class SpellingGameTest < ApplicationSystemTestCase
       assert_selector ".letter-slot:not(.missing)", count: 2
       assert_selector ".letter-slot.missing", count: length - 2
       assert_button "Check my word", disabled: true
-      (length - 2).times { click_button "A little hint" }
+      complete_with_one_hint
       words << all(".letter-slot").map(&:text).join
       click_button "Check my word"
       assert_text "1 star for growing"
@@ -435,14 +470,14 @@ class SpellingGameTest < ApplicationSystemTestCase
     assert_selector ".letter-choice:disabled", count: 8
     assert_text "0 stars"
 
-    8.times do
-      previous = all(".letter-slot").map(&:text)
-      click_button "A little hint"
-      current = all(".letter-slot").map(&:text)
-      "TREASURE".chars.each_with_index do |letter, index|
-        assert_equal letter, current[index] if previous[index] == letter
-      end
+    previous = all(".letter-slot").map(&:text)
+    click_button "A little hint"
+    assert_button "A little hint", disabled: true
+    current = all(".letter-slot").map(&:text)
+    "TREASURE".chars.each_with_index do |letter, index|
+      assert_equal letter, current[index] if previous[index] == letter
     end
+    fill_remaining_letters
     assert_equal "TREASURE", all(".letter-slot").map(&:text).join
     assert_selector ".letter-choice:disabled", count: 8
     click_button "Check my word"
@@ -468,7 +503,7 @@ class SpellingGameTest < ApplicationSystemTestCase
         page.find("body").send_keys(word, :enter)
         assert_text "2 stars for growing"
       else
-        word.length.times { click_button "A little hint" }
+        complete_with_one_hint
         click_button "Check my word"
         assert_text "1 star for growing"
       end
@@ -532,8 +567,7 @@ class SpellingGameTest < ApplicationSystemTestCase
       end
       assert page.evaluate_script("document.documentElement.scrollWidth <= innerWidth")
     end
-    blanks = all(".letter-slot.missing").length
-    (blanks - 1).times { click_button "A little hint" }
+    complete_with_one_hint
     assert page.evaluate_script(<<~JS)
       (() => {
         const row = document.querySelector(".letter-slots").getBoundingClientRect();
@@ -541,7 +575,6 @@ class SpellingGameTest < ApplicationSystemTestCase
         return tile.left >= row.left && tile.right <= row.right;
       })()
     JS
-    click_button "A little hint"
     click_button "Check my word"
     assert_text "You did it!"
     page.current_window.resize_to(320, 812)
@@ -569,5 +602,30 @@ class SpellingGameTest < ApplicationSystemTestCase
     JS
   ensure
     page.current_window.resize_to(1400, 1400)
+  end
+
+  private
+
+  def complete_with_one_hint
+    click_button "A little hint"
+    assert_button "A little hint", disabled: true
+    fill_remaining_letters
+  end
+
+  def fill_remaining_letters
+    remaining = page.evaluate_script(<<~JS)
+      (() => {
+        const game = window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller='game']"), "game");
+        return game.missing.filter((index) => game.answers[index] !== game.entry[0][index])
+          .map((index) => ({ position: index + 1, letter: game.entry[0][index].toUpperCase() }));
+      })()
+    JS
+    if page.evaluate_script('window.Stimulus.getControllerForElementAndIdentifier(document.querySelector("[data-controller=\'game\']"), "game").isJumble')
+      remaining.each { |entry| find(".letter-slot.missing:nth-child(#{entry.fetch('position')})").click }
+    end
+    remaining.each do |entry|
+      find(".letter-slot.missing:nth-child(#{entry.fetch('position')})").click
+      first(".letter-choice:not(:disabled)[aria-label='Choose #{entry.fetch('letter')}']").click
+    end
   end
 end

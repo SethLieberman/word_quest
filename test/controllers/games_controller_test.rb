@@ -66,6 +66,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-mode='build']", text: "Build from sounds"
     assert_select "[data-read-aloud-target='builder'][hidden]"
     assert_select "button[data-action='read-aloud#markPracticed']", text: "I practiced reading"
+    assert_select "#read-aloud-picture[data-read-aloud-target='emoji'][hidden]"
+    assert_select "button[data-action='read-aloud#togglePicture'][aria-expanded='false'][aria-controls='read-aloud-picture']", text: "Show picture"
     assert_select "[data-read-aloud-target='mic']"
     assert_select "[data-read-aloud-target='typed']"
     assert_select "input#read-aloud-typed-input"
