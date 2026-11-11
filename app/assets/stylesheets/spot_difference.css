@@ -1,0 +1,36 @@
+.spot-quest-card { background: #edf5f8; border-color: #d3e5ec; }
+.spot-game { max-width: 1280px; margin: 0 auto; padding: 40px 24px; }
+.spot-heading { text-align: center; margin-bottom: 30px; }
+.spot-heading .eyebrow { justify-content: center; margin-top: 24px; }
+.spot-heading h1 { width: auto; margin: 12px 0; }
+.spot-heading > p:last-child, .spot-instructions { color: #6d6880; line-height: 1.8; }
+.spot-levels { margin-bottom: 24px; }
+.spot-levels h2 { font-size: 18px; }
+.spot-levels p { color: #6d6880; line-height: 1.8; }
+.spot-level-options { display: flex; flex-wrap: wrap; gap: 12px; }
+.spot-level { padding: 12px 18px; border: 2px solid #d3c9e8; border-radius: 12px; background: #fff; color: #5b4a94; font: inherit; font-weight: 700; cursor: pointer; }
+.spot-level[aria-pressed="true"] { background: #5b4a94; border-color: #5b4a94; color: #fff; }
+.spot-level:focus-visible { outline: 3px solid #5b4a94; outline-offset: 3px; }
+.spot-puzzle { border: 1px solid #e3dcec; border-radius: 22px; background: #fff; padding: 28px; }
+.spot-puzzle > h2 { font-family: "Manrope", sans-serif; font-size: 24px; margin: 12px 0; }
+.spot-pictures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
+.spot-picture { margin: 0; min-width: 0; }
+.spot-picture figcaption { font-weight: 700; color: #5b4a94; margin-bottom: 10px; }
+.spot-board { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3 / 2; }
+.spot-board svg { display: block; width: 100%; height: 100%; }
+.spot-hotspot { position: absolute; border: 3px solid transparent; border-radius: 50%; padding: 0; background: transparent; color: transparent; }
+.spot-hotspot:focus-visible { outline: 3px solid #5b4a94; outline-offset: -4px; background: #ffffff25; }
+.spot-hotspot.is-found { border-color: #345b37; color: #fff; background: #ffffff12; text-align: right; vertical-align: top; font-weight: 800; font-size: 24px; text-shadow: 0 1px 3px #183e22, 0 -1px 3px #183e22; }
+.spot-count { margin: 24px 0 12px; font-size: 16px; font-weight: 700; color: #5b4a94; }
+.spot-feedback { min-height: 3.6em; line-height: 1.8; margin: 16px 0; color: #426a40; }
+.spot-discoveries { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px; }
+.spot-discoveries h3 { margin: 0; font-size: 15px; }
+.spot-discoveries ol { padding-left: 22px; line-height: 1.8; color: #6d6880; }
+@media (max-width: 800px) {
+  .spot-pictures { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .spot-game { padding: 28px 12px; }
+  .spot-puzzle { padding: 16px 10px; }
+  .spot-hotspot { border-width: 2px; }
+}

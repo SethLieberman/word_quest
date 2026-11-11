@@ -1,0 +1,32 @@
+.trivia-quest-card { background: #f8f3e9; border-color: #e9ddc8; }
+.trivia-quest-card .quest-link { color: #806329; }
+.trivia .level-copy strong { white-space: normal; }
+.trivia-puzzle-body { padding-top: 24px; padding-bottom: 24px; }
+.trivia-category { color: #7160ac; font-size: 11px; letter-spacing: 1px; margin-bottom: 16px; }
+.trivia-answers { border: 0; padding: 0; margin: 0; min-width: 0; width: 100%; }
+.trivia-question { font-family: "Manrope", sans-serif; font-size: clamp(20px, 3vw, 28px); font-weight: 700; line-height: 1.5; padding: 0; width: 100%; overflow-wrap: anywhere; }
+.trivia-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 24px; text-align: left; }
+.trivia-choice { display: flex; align-items: center; gap: 10px; min-width: 0; border: 2px solid #e7e3ee; border-radius: 12px; padding: 15px; cursor: pointer; line-height: 1.6; background: #fcfaff; }
+.trivia-choice span { overflow-wrap: anywhere; }
+.trivia-choice:hover { border-color: #b8a9d9; }
+.trivia-choice:has(input:checked) { border-color: #8270bc; background: #eeebf6; }
+.trivia-choice:has(input:disabled) { cursor: default; }
+.trivia-choice input { margin: 0; flex-shrink: 0; accent-color: #7160ac; }
+.trivia-choice:has(input:focus-visible) { outline: 3px solid #b29ad8; outline-offset: 3px; }
+.trivia .feedback { height: auto; min-height: 28px; line-height: 1.7; margin-top: 20px; }
+.trivia-mode-section { margin-top: 24px; }
+.trivia-mode-section h2 { font-size: 14px; margin-bottom: 12px; }
+.trivia-mode-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.trivia-mode-button { border: 1px solid #e7e3ee; background: #fff; border-radius: 999px; padding: 10px 20px; color: #6d6880; font-weight: 600; }
+.trivia-mode-button[aria-pressed="true"] { background: #eeebf6; border-color: #b8a9d9; color: #5b4a94; }
+.trivia-computer-options { margin-top: 16px; line-height: 1.7; }
+.trivia-computer-options select { font: inherit; padding: 8px; margin-left: 8px; border: 1px solid #b8a9d9; border-radius: 8px; }
+.trivia-computer-options p, .trivia-computer-feedback { margin-top: 12px; color: #6d6880; line-height: 1.7; }
+.trivia-scoreboard { display: flex; flex-wrap: wrap; gap: 24px; padding: 20px; margin-top: 20px; border: 1px solid #e3dcec; border-radius: 14px; background: #fff; }
+.trivia-scoreboard strong { display: block; font-size: 28px; color: #7160ac; }
+.trivia-scoreboard p { flex-basis: 100%; line-height: 1.7; }
+@media (max-width: 620px) {
+  .trivia-choices { grid-template-columns: 1fr; }
+  .trivia .puzzle-actions { flex-wrap: wrap; }
+  .trivia .check-button { white-space: normal; }
+}

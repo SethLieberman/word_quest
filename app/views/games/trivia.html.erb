@@ -1,0 +1,124 @@
+<% content_for :title, "Trivia | Let's grow your curiosity" %>
+<div class="app-shell trivia" data-controller="trivia">
+  <aside class="sidebar">
+    <a class="brand" href="<%= root_path %>" aria-label="Choose a quest"><span class="brand-mark" aria-hidden="true">?</span>Trivia<span class="brand-dot">.</span></a>
+    <div class="nav-label">YOUR LITTLE ADVENTURE</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="<%= trivia_path %>" class="nav-item active" aria-current="page" aria-label="Play Trivia"><span class="nav-icon" aria-hidden="true">?</span> Let's play</a>
+      <a href="<%= root_path %>" class="nav-item" aria-label="Choose a quest"><span class="nav-icon" aria-hidden="true">⌂</span> Choose a quest</a>
+      <button type="button" class="nav-item" data-action="trivia#openProgress" aria-label="My progress"><span class="nav-icon" aria-hidden="true">▥</span> My progress</button>
+      <button type="button" class="nav-item" data-action="trivia#openHelp" aria-label="How to play"><span class="nav-icon" aria-hidden="true">☷</span> How to play</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="little-note"><strong>Small questions.<br>Big discoveries.</strong><p>Every answer helps you learn.</p></div>
+    </div>
+  </aside>
+  <main class="main-content">
+    <noscript><p class="storage-notice">Please enable JavaScript to play Trivia.</p></noscript>
+    <header class="topbar"><span class="breadcrumb">A little curiosity. A world of discovery.</span><a href="<%= root_path %>" class="quest-switch">Choose a quest</a></header>
+    <section class="page-intro">
+      <div class="eyebrow">BIG DISCOVERIES START WITH LITTLE QUESTIONS</div>
+      <h1>Let's grow your <span>curiosity.</span></h1>
+      <p>Explore animals, science, places, words, and more.</p>
+    </section>
+    <section class="level-section" aria-label="Choose a trivia grade">
+      <div class="section-heading"><h2>Pick your grade</h2><span>Try the level that feels right for you</span></div>
+      <div class="level-options">
+        <% [
+          [1, "🌱", "Everyday discoveries and familiar facts"],
+          [2, "🔎", "Nature, time, words, and the world"],
+          [3, "🌍", "Science, geography, and new connections"],
+          [4, "🚀", "Deeper ideas and bigger discoveries"],
+          [5, "🧠", "Thoughtful challenges for curious minds"]
+        ].each do |grade, icon, description| %>
+          <button type="button" class="level-card<%= " selected" if grade == 1 %>" data-trivia-target="level" data-grade="<%= grade %>" data-action="trivia#changeLevel" aria-label="Grade <%= grade %>" aria-pressed="<%= grade == 1 %>">
+            <span class="level-icon sprout" aria-hidden="true"><%= icon %></span>
+            <span class="level-copy"><strong>Grade <%= grade %></strong><small><%= description %></small></span><span class="level-radio"></span>
+          </button>
+        <% end %>
+      </div>
+    </section>
+    <section class="trivia-mode-section" aria-label="Choose a play mode">
+      <h2>How would you like to play?</h2>
+      <div class="trivia-mode-buttons">
+        <button type="button" class="trivia-mode-button" data-trivia-target="mode" data-mode="solo" data-action="trivia#changeMode" aria-pressed="true">Solo</button>
+        <button type="button" class="trivia-mode-button" data-trivia-target="mode" data-mode="computer" data-action="trivia#changeMode" aria-pressed="false">Play against the computer</button>
+      </div>
+      <div class="trivia-computer-options" data-trivia-target="computerOptions" hidden>
+        <label for="trivia-computer-difficulty">Computer difficulty</label>
+        <select id="trivia-computer-difficulty" data-trivia-target="difficulty" data-action="change->trivia#changeDifficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <p>One answer each per question. Correct answers earn one match point. No timer! Changing mode or difficulty starts a fresh round.</p>
+      </div>
+    </section>
+    <section class="trivia-scoreboard" data-trivia-target="scoreboard" aria-label="Match scores" hidden>
+      <div>You <strong data-trivia-target="playerScore">0</strong></div>
+      <div>Computer <strong data-trivia-target="computerScore">0</strong></div>
+      <p data-trivia-target="matchResult" role="status" aria-live="polite"></p>
+    </section>
+    <div class="play-layout">
+      <section class="puzzle-card" aria-label="Trivia question">
+        <div class="puzzle-header"><span class="round-label" data-trivia-target="round">QUESTION 1 OF 10</span><span class="points" data-trivia-target="points">0 stars</span></div>
+        <div class="puzzle-body trivia-puzzle-body">
+          <p class="trivia-category" data-trivia-target="category"></p>
+          <form data-action="submit->trivia#check" novalidate>
+            <fieldset class="trivia-answers" aria-describedby="trivia-feedback">
+              <legend class="trivia-question" data-trivia-target="question">Loading your question...</legend>
+              <div class="trivia-choices" data-trivia-target="choices"></div>
+            </fieldset>
+            <p class="feedback" id="trivia-feedback" data-trivia-target="feedback" role="status" aria-live="polite"></p>
+            <p class="trivia-computer-feedback" data-trivia-target="computerFeedback" role="status" hidden></p>
+            <div class="puzzle-actions">
+              <button type="button" class="hint-button" data-trivia-target="hintButton" data-action="trivia#hint">A little hint</button>
+              <button type="submit" class="check-button" data-trivia-target="checkButton">Check my answer</button>
+            </div>
+          </form>
+        </div>
+        <div class="puzzle-footer">No timers. No pressure. Every try helps you grow.</div>
+      </section>
+      <aside class="game-aside">
+        <section class="goal-card">
+          <div class="card-heading"><span class="goal-icon" aria-hidden="true">⚑</span><h2>Your trivia goal</h2></div>
+          <p>Ten questions. Ten discoveries.</p>
+          <div class="goal-progress"><strong><span data-trivia-target="count">0</span><span class="goal-total"> / 10</span></strong><span>questions completed this round</span></div>
+          <div class="progress-track" data-trivia-target="bar" role="progressbar" aria-label="Trivia round goal" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span data-trivia-target="fill"></span></div>
+          <div class="goal-bottom"><span aria-hidden="true">⭐</span><span data-trivia-target="goalMessage">Every question is a new discovery.</span></div>
+        </section>
+        <section class="steps-card">
+          <h2>A little guide to big wins</h2>
+          <div class="guide-step"><span>1</span><div><strong>Read &amp; think</strong><p>Ask an adult to read with you if needed.</p></div></div>
+          <div class="guide-step"><span>2</span><div><strong>Choose &amp; check</strong><p>Select an answer, then check your choice.</p></div></div>
+          <div class="guide-step"><span>3</span><div><strong>Learn something new</strong><p>Read the explanation after a correct answer.</p></div></div>
+        </section>
+      </aside>
+    </div>
+    <section class="journey-card" aria-label="Current trivia round progress">
+      <div class="journey-heading"><div><h2>Your discovery trail</h2><p>Ten little steps to a bigger discovery.</p></div></div>
+      <div class="trail" data-trivia-target="trail"></div>
+    </section>
+    <footer class="page-footer"><span>Keep asking questions. Keep discovering.</span><span>HAPPY LEARNING</span></footer>
+    <p class="storage-notice" data-trivia-target="storageNotice" role="status" hidden></p>
+  </main>
+  <dialog class="info-dialog" data-trivia-target="progressDialog">
+    <button type="button" class="dialog-close" data-action="trivia#closeDialog" aria-label="Close progress">×</button>
+    <span class="dialog-art" aria-hidden="true">🌟</span><h2>Look how you're growing!</h2>
+    <div class="progress-stats" data-trivia-target="progressStats"></div>
+    <p class="dialog-note">Trivia stars and total answers are saved in this browser, separately from the other games. Your round resets when you replay, change grades, or reload.</p>
+    <button type="button" class="check-button" data-action="trivia#closeDialog">Keep exploring</button>
+  </dialog>
+  <dialog class="info-dialog" data-trivia-target="helpDialog">
+    <button type="button" class="dialog-close" data-action="trivia#closeDialog" aria-label="Close instructions">×</button>
+    <span class="dialog-art" aria-hidden="true">🌱</span><h2>Ready for a trivia adventure?</h2>
+    <ol class="help-list">
+      <li>Choose Grade 1, 2, 3, 4, or 5. These are suggested difficulty levels, not a school assessment.</li>
+      <li>Read the question, choose an answer, and press Check my answer. You can use Tab and the arrow keys to choose, then Tab to the check button and press Enter.</li>
+      <li>You get one hint per question. Earn two stars for a correct answer without a hint or one with a hint. Incorrect guesses never cost earned stars. Solo allows retries.</li>
+      <li>Play against a simulated computer on Easy, Medium, or Hard. Both answer the same ten questions, with one scored attempt each. Each correct answer earns one match point, even with a hint. The computer's answer appears only after you check yours. A wrong answer shows the explanation; choose Next question to continue. Match scores reset each round and are separate from saved stars.</li>
+      <li>Read the explanation, then choose Next question. Solve ten different questions to finish a round. Replay or try another grade for a new challenge.</li>
+    </ol>
+    <button type="button" class="check-button" data-action="trivia#closeDialog">Let's explore</button>
+  </dialog>
+</div>

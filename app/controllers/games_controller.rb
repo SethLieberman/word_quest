@@ -8,6 +8,12 @@ class GamesController < ApplicationController
   def math
   end
 
+  def trivia
+  end
+
+  def spot_difference
+  end
+
   def read_aloud
     render :read_aloud
   end

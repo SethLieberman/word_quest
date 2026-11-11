@@ -203,7 +203,7 @@ class MathQuestTest < ApplicationSystemTestCase
   test "math layout fits mobile and supports keyboard navigation" do
     page.current_window.resize_to(320, 900)
     visit root_url
-    assert_selector ".quest-card", count: 2
+    assert_selector ".quest-card", count: 5
     assert page.evaluate_script("document.documentElement.scrollWidth <= innerWidth")
     click_link "Math Quest"
     find("[data-level='mixed']").click

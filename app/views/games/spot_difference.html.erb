@@ -1,0 +1,33 @@
+<% content_for :title, "Spot the Difference | Look a little closer" %>
+<main class="spot-game" data-controller="spot-difference">
+  <header class="spot-heading">
+    <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+    <p class="eyebrow">LITTLE DETAILS. BIG DISCOVERIES.</p>
+    <h1>Spot the <span>Difference</span></h1>
+    <p data-spot-difference-target="goal">Compare the pictures. Find 5 differences and click them in either picture!</p>
+  </header>
+  <noscript><p class="storage-notice">Please enable JavaScript to play Spot the Difference.</p></noscript>
+  <section class="spot-levels" aria-label="Choose a difficulty">
+    <h2>Pick your level</h2>
+    <div class="spot-level-options">
+      <button type="button" class="spot-level" data-spot-difference-target="level" data-level="easy" data-action="spot-difference#changeLevel" aria-pressed="true">Easy: 5 differences</button>
+      <button type="button" class="spot-level" data-spot-difference-target="level" data-level="challenge" data-action="spot-difference#changeLevel" aria-pressed="false">Challenging: 10 differences</button>
+    </div>
+    <p>Ten puzzles in each level. Changing levels starts again at the first puzzle. Challenging adds smaller details to spot!</p>
+  </section>
+  <section class="spot-puzzle" aria-label="Picture comparison puzzle">
+    <p class="round-label" data-spot-difference-target="round">PUZZLE 1 OF 10</p>
+    <h2 tabindex="-1" data-spot-difference-target="title">Loading your pictures...</h2>
+    <p id="spot-instructions" class="spot-instructions">Click or tap a detail that is different. Found differences are marked in both pictures. Use Tab to explore picture areas and Enter or Space to select one.</p>
+    <div class="spot-pictures" data-spot-difference-target="pictures" aria-describedby="spot-instructions"></div>
+    <p class="spot-count" data-spot-difference-target="count" aria-live="polite">0 of 5 differences found</p>
+    <div class="progress-track" data-spot-difference-target="bar" role="progressbar" aria-label="Differences found" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span data-spot-difference-target="fill"></span></div>
+    <p class="spot-feedback" data-spot-difference-target="feedback" role="status" aria-live="polite"></p>
+    <button type="button" class="check-button" data-spot-difference-target="next" data-action="spot-difference#nextPuzzle" disabled>Next puzzle</button>
+    <section class="spot-discoveries" aria-label="Differences you found">
+      <h3>Your discoveries</h3>
+      <ol data-spot-difference-target="discoveries"></ol>
+    </section>
+  </section>
+  <p class="quest-home-note">No timers. No penalties. Take your time and look closely.</p>
+</main>

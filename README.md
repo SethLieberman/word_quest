@@ -1,10 +1,84 @@
-# Word Quest and Math Quest
+# Quest Club
 
 A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
 The landing page at `/` links to Word Quest at `/word-quest`, Math Quest at
-`/math-quest`, and Read Aloud at `/read-aloud`. Read Aloud is also available in
-both game navigation menus. Word Quest and Math Quest have separate saved progress.
+`/math-quest`, Read Aloud at `/read-aloud`, Trivia at `/trivia`, and
+Spot the Difference at `/spot-the-difference`.
+Read Aloud is also available in both game navigation menus. Word Quest,
+Math Quest, and Trivia have separate saved progress.
+
+## Spot the Difference
+
+Compare two original illustrations in **ten puzzles**, with two difficulty levels:
+**Easy** has five differences per puzzle; **Challenging** has ten, including
+smaller details such as missing stripes, spots, and stitches. Easy is the default.
+Both levels include a garden, beach, space, reading room, underwater world,
+park picnic, farm, bakery, campsite, and snowy afternoon.
+Click or tap a changed object in either picture: both pictures mark the
+difference, the counter updates, and a written explanation joins the discovery
+list. Finding the same detail twice does not increase the count. Other clicks
+give gentle encouragement, with no penalties or timer.
+
+Find all differences in your selected level to unlock Next puzzle; the last puzzle offers
+Play again. Markings remain visible until you move on. Pictures sit side by
+side on larger screens and stack on small screens. Keyboard players can Tab
+through picture areas and select them with Enter or Space. This is a visual
+comparison activity; descriptions of differences become available after finding
+them. Progress is session-only and resets on reload, independently of saved
+progress in the other games. Changing levels resets discoveries and returns to
+the first puzzle; replay keeps the selected level, while reload returns to Easy.
+
+The artwork and changed regions are bundled locally in
+[spot_difference_puzzles.js](app/javascript/data/spot_difference_puzzles.js),
+with no external images or APIs. Each SVG image uses a 600-by-400 coordinate
+system. Every difference has original and changed shapes, a description, and
+a nonoverlapping `[x, y, width, height]` clickable region covering that detail.
+Each scene has five `differences` and five extra `challengeDifferences`.
+The extra details appear identically in both Easy pictures, with no extra
+clickable regions; Challenging changes them and enables all ten regions.
+Run `bin/rails test test/controllers/games_controller_test.rb test/system/spot_difference_test.rb`
+after changing this game.
+
+## Trivia
+
+Five suggested difficulty levels cover **Grades 1–5**, from familiar everyday
+facts to more challenging science, geography, language, history, and number
+questions. These are practice levels, not certified curriculum assessments.
+An adult can help younger children read the questions.
+
+Each grade has 20 original multiple-choice questions with four distinct
+answers, a hint, and an explanation in
+[trivia_questions.js](app/javascript/data/trivia_questions.js).
+A round draws ten distinct questions from the selected grade; answer order
+is shuffled too. Select an answer and press Check my answer. Incorrect guesses
+stay on the question and never cost stars. There is one hint per question:
+earn two stars without a hint or one with a hint. Correct answers show a short
+explanation. Finishing suggests the next grade without switching automatically;
+Grade 5 celebrates completing the highest level.
+
+**Solo** is selected by default and keeps unlimited retries. **Play against the
+computer** offers a locally simulated opponent: Easy has a 40% chance of a
+correct answer, Medium 65%, and Hard 85%, independently for each question.
+These probabilities are not guaranteed round scores. Both players answer the
+same ten questions with one scored attempt each; one correct answer earns one
+match point, including when a hint was used. Empty submissions do not count.
+The computer's answer is revealed only after the child's submission. Wrong
+answers show the correct answer and explanation before continuing.
+The final scoreboard celebrates a win, tie, or the discoveries made in a loss.
+Match scores are session-only and separate from saved stars and correct-answer
+totals. Switching modes, opponent difficulty, grades, or replaying resets the
+round; reloading returns to Solo. No timer or AI service is involved.
+
+Use Tab to reach the answer group, arrow keys to select an answer, then Tab
+to Check my answer and press Enter. Total questions solved and stars are saved
+locally under `trivia-progress-v1`, independently of the other games. Reloading,
+changing grades, or replaying resets the round but preserves saved totals.
+Storage failures are shown to the player. There are no timers, accounts, or
+external trivia APIs.
+
+Run `bin/rails test test/controllers/games_controller_test.rb test/system/trivia_test.rb`
+after changing Trivia.
 
 ## Math Quest
 

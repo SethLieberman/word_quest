@@ -5,10 +5,50 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select ".quest-card", count: 3
+    assert_select ".quest-card", count: 5
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
     assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
+    assert_select "a.quest-card[href=?]", trivia_path, text: /Trivia/
+    assert_select "a.quest-card[href=?]", spot_difference_path, text: /Spot the Difference/
+  end
+
+  test "shows Spot the Difference with accessible puzzle controls" do
+    get spot_difference_url
+
+    assert_response :success
+    assert_select "title", "Spot the Difference | Look a little closer"
+    assert_select "[data-controller='spot-difference']"
+    assert_select "[data-spot-difference-target='round']", text: "PUZZLE 1 OF 10"
+    assert_select "button[data-level='easy'][aria-pressed='true']", text: "Easy: 5 differences"
+    assert_select "button[data-level='challenge'][aria-pressed='false']", text: "Challenging: 10 differences"
+    assert_select "[data-spot-difference-target='pictures'][aria-describedby='spot-instructions']"
+    assert_select "[role='progressbar'][aria-valuemax='5'][aria-valuenow='0']"
+    assert_select "button[data-spot-difference-target='next'][disabled]"
+    assert_select "[data-spot-difference-target='feedback'][role='status']"
+    assert_select "a[href=?]", root_path, text: "Choose a quest"
+  end
+
+  test "shows Trivia with five grades and accessible multiple choice answers" do
+    get trivia_url
+
+    assert_response :success
+    assert_select "title", "Trivia | Let's grow your curiosity"
+    assert_select "[data-controller='trivia']"
+    assert_select "[data-trivia-target='level']", count: 5
+    (1..5).each do |grade|
+      assert_select "[data-grade='#{grade}'][aria-pressed='#{grade == 1}']", text: /Grade #{grade}/
+    end
+    assert_select "fieldset[aria-describedby='trivia-feedback'] legend[data-trivia-target='question']"
+    assert_select "[data-trivia-target='round']", text: "QUESTION 1 OF 10"
+    assert_select "[data-trivia-target='bar'][aria-valuemax='10']"
+    assert_select "button[data-trivia-target='hintButton']", text: "A little hint"
+    assert_select "[data-mode='solo'][aria-pressed='true']", text: "Solo"
+    assert_select "[data-mode='computer'][aria-pressed='false']", text: "Play against the computer"
+    assert_select "[data-trivia-target='scoreboard'][hidden]"
+    assert_select "select#trivia-computer-difficulty option", count: 3
+    assert_select "a[href=?]", root_path
+    assert_select "dialog", count: 2
   end
 
   test "shows Math Quest with six levels and accessible answer input" do
