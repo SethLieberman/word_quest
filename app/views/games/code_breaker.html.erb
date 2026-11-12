@@ -1,0 +1,77 @@
+<% content_for :title, "Code Breakers | Crack a little mystery" %>
+<main class="code-game" data-controller="code-breaker">
+  <header class="code-heading">
+    <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+    <p class="eyebrow">LITTLE CLUES. BIG DISCOVERIES.</p>
+    <h1>Code <span>Breakers</span></h1>
+    <p>Decode a secret message or use clues to discover a hidden symbol code!</p>
+  </header>
+  <noscript><p class="storage-notice">Please enable JavaScript to play Code Breakers.</p></noscript>
+  <section class="code-options" aria-label="Choose your code challenge">
+    <label for="code-type">Code type</label>
+    <select id="code-type" data-code-breaker-target="type" data-action="change->code-breaker#changeType">
+      <option value="symbols">Symbol codes</option>
+      <option value="numbers">Number codes</option>
+      <option value="shifts">Letter shifts</option>
+      <option value="detective">Code Detective</option>
+    </select>
+    <h2>Pick your level</h2>
+    <div class="code-levels">
+      <% [["easy", "Easy", "Short words and a full key"], ["medium", "Medium", "Longer words and more decoding"], ["hard", "Hard", "Short phrases and fewer clues"]].each do |level, name, description| %>
+        <button type="button" class="code-level" data-code-breaker-target="level" data-level="<%= level %>" data-action="code-breaker#changeLevel" aria-pressed="<%= level == "easy" %>"><strong><%= name %></strong><span data-code-breaker-target="levelDescription"><%= description %></span></button>
+      <% end %>
+    </div>
+    <p>Ten codes per round. Changing the code type or level starts a fresh round.</p>
+  </section>
+  <section class="code-puzzle" data-code-breaker-target="cipher" aria-label="Decode a secret message">
+    <p class="round-label" data-code-breaker-target="round">CODE 1 OF 10</p>
+    <h2>Your secret message</h2>
+    <p id="code-rule" data-code-breaker-target="rule"></p>
+    <div class="code-message" data-code-breaker-target="message" role="group" aria-label="Encoded message, grouped by word"></div>
+    <p data-code-breaker-target="pattern"></p>
+    <p class="code-clue" id="code-clue" data-code-breaker-target="clue"></p>
+    <section class="code-key" aria-label="Decoding key">
+      <h3>Your decoding key</h3>
+      <p data-code-breaker-target="keyNote"></p>
+      <ul data-code-breaker-target="key"></ul>
+    </section>
+    <form data-action="submit->code-breaker#check" novalidate>
+      <label for="code-answer">Your decoded message</label>
+      <input id="code-answer" type="text" data-code-breaker-target="answer" aria-describedby="code-rule code-clue code-feedback" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <p class="code-feedback" id="code-feedback" data-code-breaker-target="feedback" role="status" aria-live="polite"></p>
+      <div class="code-actions">
+        <button type="button" class="hint-button" data-code-breaker-target="hintButton" data-action="code-breaker#hint">A little hint</button>
+        <button type="submit" class="check-button" data-code-breaker-target="checkButton">Check my answer</button>
+      </div>
+    </form>
+    <p class="code-count" data-code-breaker-target="count" aria-live="polite">0 of 10 codes cracked</p>
+    <div class="progress-track" data-code-breaker-target="bar" role="progressbar" aria-label="Codes cracked this round" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span data-code-breaker-target="fill"></span></div>
+  </section>
+  <section class="code-puzzle" data-code-breaker-target="detective" data-controller="code-detective" aria-label="Code Detective puzzle" hidden>
+    <p class="round-label" data-code-detective-target="round">CODE 1 OF 10</p>
+    <h2>Code Detective</h2>
+    <p id="detective-rule" data-code-detective-target="rule"></p>
+    <p class="detective-secret" data-code-detective-target="secret" role="img" aria-label="Hidden code"></p>
+    <p>After each guess, count the correct symbols and their positions. The totals do not tell you which symbols matched. Each secret symbol counts only once, even if your guess repeats it.</p>
+    <form data-action="submit->code-detective#check" novalidate>
+      <fieldset class="detective-fields">
+        <legend>Your guess</legend>
+        <div class="detective-slots" data-code-detective-target="slots"></div>
+      </fieldset>
+      <p class="detective-hint" data-code-detective-target="hint" role="status"></p>
+      <p class="code-feedback" id="detective-feedback" data-code-detective-target="feedback" role="status" aria-live="polite"></p>
+      <div class="code-actions">
+        <button type="button" class="hint-button" data-code-detective-target="hintButton" data-action="code-detective#hint">A little hint</button>
+        <button type="submit" class="check-button" data-code-detective-target="checkButton">Check my guess</button>
+      </div>
+    </form>
+    <section class="detective-history" aria-label="Guess history">
+      <h3>Your guess history</h3>
+      <p>Use these clues to decide what to keep and what to change.</p>
+      <ol data-code-detective-target="history"></ol>
+    </section>
+    <p class="code-count" data-code-detective-target="count" aria-live="polite">0 of 10 codes cracked</p>
+    <div class="progress-track" data-code-detective-target="bar" role="progressbar" aria-label="Detective codes cracked this round" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><span data-code-detective-target="fill"></span></div>
+  </section>
+  <p class="quest-home-note">No timers or penalties. One hint per code. Ask an adult to read a clue with you if needed. This round resets when you leave.</p>
+</main>

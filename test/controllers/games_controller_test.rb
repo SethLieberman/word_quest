@@ -5,12 +5,36 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select ".quest-card", count: 5
+    assert_select ".quest-card", count: 6
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
     assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
     assert_select "a.quest-card[href=?]", trivia_path, text: /Trivia/
     assert_select "a.quest-card[href=?]", spot_difference_path, text: /Spot the Difference/
+    assert_select "a.quest-card[href=?]", code_breaker_path, text: /Code Breakers/
+  end
+
+  test "shows Code Breakers with four types three levels and accessible answer controls" do
+    get code_breaker_url
+
+    assert_response :success
+    assert_select "title", "Code Breakers | Crack a little mystery"
+    assert_select "[data-controller='code-breaker']"
+    assert_select "label[for='code-type']", text: "Code type"
+    assert_select "select#code-type option", count: 4
+    assert_select "select#code-type option[value='detective']", text: "Code Detective"
+    assert_select "[data-code-breaker-target='detective'][data-controller='code-detective'][hidden]"
+    assert_select "fieldset.detective-fields legend", text: "Your guess"
+    assert_select "[data-code-detective-target='history']"
+    assert_select "[data-code-breaker-target='level']", count: 3
+    assert_select "[data-level='easy'][aria-pressed='true']"
+    assert_select "[data-level='medium'][aria-pressed='false']"
+    assert_select "[data-level='hard'][aria-pressed='false']"
+    assert_select "label[for='code-answer']", text: "Your decoded message"
+    assert_select "input#code-answer[aria-describedby='code-rule code-clue code-feedback']"
+    assert_select "[role='progressbar'][aria-valuemax='10'][aria-valuenow='0']"
+    assert_select "[data-code-breaker-target='feedback'][role='status']"
+    assert_select "a[href=?]", root_path, text: "Choose a quest"
   end
 
   test "shows Spot the Difference with accessible puzzle controls" do

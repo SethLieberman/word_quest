@@ -14,6 +14,9 @@ class GamesController < ApplicationController
   def spot_difference
   end
 
+  def code_breaker
+  end
+
   def read_aloud
     render :read_aloud
   end

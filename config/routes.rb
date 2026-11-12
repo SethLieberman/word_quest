@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "math-quest", to: "games#math", as: :math_quest
   get "trivia", to: "games#trivia", as: :trivia
   get "spot-the-difference", to: "games#spot_difference", as: :spot_difference
+  get "code-breakers", to: "games#code_breaker", as: :code_breaker
   # Intentionally unlinked from the rest of the site; reached by direct URL only.
   get "read-aloud", to: "games#read_aloud", as: :read_aloud
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

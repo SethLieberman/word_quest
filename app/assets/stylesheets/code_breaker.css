@@ -1,0 +1,52 @@
+.code-quest-card { background: #edf4ee; border-color: #d3e4d5; }
+.code-game { max-width: 1000px; padding: 40px 24px; margin: 0 auto; }
+.code-heading { text-align: center; margin-bottom: 30px; }
+.code-heading .eyebrow { margin-top: 24px; }
+.code-heading h1 { width: auto; margin: 12px 0; }
+.code-game p { line-height: 1.8; }
+.code-heading > p:last-child, .code-options > p { color: #6d6880; }
+.code-options { margin-bottom: 24px; }
+.code-options label, .code-puzzle label { display: block; font-weight: 700; margin-bottom: 10px; }
+.code-options select { font: inherit; max-width: 100%; padding: 12px; border: 1px solid #b8a9d9; border-radius: 10px; background: #fff; }
+.code-options h2 { font-size: 18px; margin-top: 24px; }
+.code-levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.code-level { padding: 16px; border: 2px solid #d3c9e8; border-radius: 12px; background: #fff; color: #5b4a94; font: inherit; text-align: left; cursor: pointer; }
+.code-level strong, .code-level span { display: block; }
+.code-level span { font-size: 13px; margin-top: 6px; line-height: 1.6; }
+.code-level[aria-pressed="true"] { background: #eeebf6; border-color: #8270bc; }
+.code-level:focus-visible, .code-options select:focus-visible, .code-puzzle input:focus-visible { outline: 3px solid #8270bc; outline-offset: 3px; }
+.code-puzzle { padding: 28px; border: 1px solid #e3dcec; border-radius: 22px; background: #fff; }
+.code-puzzle h2 { font-family: "Manrope", sans-serif; font-size: 24px; }
+.code-message { display: flex; flex-wrap: wrap; gap: 22px; margin: 24px 0; }
+.code-word { display: flex; flex-wrap: wrap; gap: 5px; max-width: 100%; }
+.code-token { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; min-height: 44px; padding: 4px; background: #eeebf6; border-radius: 7px; color: #514078; font-size: 22px; font-family: sans-serif; }
+.code-clue { font-weight: 700; color: #5b4a94; }
+.code-key { background: #f7f8f2; padding: 18px; border-radius: 12px; margin: 20px 0; }
+.code-key h3 { margin: 0; font-size: 16px; }
+.code-key p { color: #6d6880; }
+.code-key ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 8px; }
+.code-key li { padding: 8px; background: #fff; border-radius: 6px; font-family: sans-serif; font-size: 18px; color: #514078; text-align: center; }
+.code-puzzle input { display: block; width: 100%; box-sizing: border-box; padding: 14px; font: inherit; font-size: 20px; border: 2px solid #d3c9e8; border-radius: 10px; }
+.code-feedback { min-height: 3.6em; color: #6d6880; }
+.code-feedback.retry { color: #9a5c2f; }
+.code-feedback.success { color: #426a40; }
+.code-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
+.code-count { color: #5b4a94; font-weight: 700; margin-top: 26px; }
+.detective-fields { padding: 0; border: 0; margin: 20px 0; min-width: 0; }
+.detective-fields legend { font-weight: 700; margin-bottom: 12px; }
+.detective-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.detective-slots select { display: block; width: 100%; margin-top: 10px; padding: 12px 6px; border: 2px solid #d3c9e8; border-radius: 10px; background: #fff; font: inherit; }
+.detective-slots select:focus-visible { outline: 3px solid #8270bc; outline-offset: 3px; }
+.detective-secret, .detective-guess { font: 28px sans-serif; letter-spacing: 8px; color: #514078; }
+.detective-hint { color: #5b4a94; font-weight: 700; }
+.detective-history { margin-top: 24px; padding-top: 18px; border-top: 1px solid #e3dcec; }
+.detective-history ol { padding-left: 26px; }
+.detective-history li { padding: 16px 10px; border-bottom: 1px solid #e3dcec; }
+.detective-history li p { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .code-game { padding: 28px 12px; }
+  .code-levels { grid-template-columns: 1fr; }
+  .code-puzzle { padding: 20px 12px; }
+  .code-token { min-width: 28px; font-size: 19px; }
+  .code-actions .check-button { white-space: normal; }
+}

@@ -17,7 +17,7 @@ class SpotDifferenceTest < ApplicationSystemTestCase
     assert_button "Next puzzle", disabled: true
     click_link "Choose a quest"
     assert_current_path root_path
-    assert_selector ".quest-card", count: 5
+    assert_selector ".quest-card", count: 6
   end
 
   test "clicking either picture marks both and repeated finds do not count twice" do

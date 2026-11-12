@@ -3,10 +3,68 @@
 A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
 The landing page at `/` links to Word Quest at `/word-quest`, Math Quest at
-`/math-quest`, Read Aloud at `/read-aloud`, Trivia at `/trivia`, and
-Spot the Difference at `/spot-the-difference`.
+`/math-quest`, Read Aloud at `/read-aloud`, Trivia at `/trivia`,
+Spot the Difference at `/spot-the-difference`, and Code Breakers at `/code-breakers`.
 Read Aloud is also available in both game navigation menus. Word Quest,
 Math Quest, and Trivia have separate saved progress.
+
+## Code Breakers
+
+Four code types each offer **Easy, Medium, and Hard** levels with ten puzzles
+per round. Choose Symbol codes, Number codes, Letter shifts, or Code Detective.
+The three message-decoding types use
+the same ten messages at a given level so children can practice different ways
+of encoding familiar messages.
+
+- **Easy:** three-letter words with a full decoding key. Numbers use A = 1;
+  letter shifts move forward one place when encoding (back one to decode).
+- **Medium:** six-letter words with a full key. Letter shifts move three places.
+- **Hard:** short phrases, word boundaries, and a message clue. Symbol codes
+  show only relevant mappings with one letter missing, inferred from the clue
+  and repeated symbols. Number codes count backward (Z = 1 through A = 26).
+  Letter shifts move 7–16 places. The number and shift rules stay visible,
+  but their full keys are hidden.
+
+Type the decoded word or phrase and press Enter or Check my answer. Case,
+leading/trailing whitespace, and repeated spaces are ignored; word boundaries
+still matter. Wrong or empty answers give gentle feedback with unlimited retries.
+One hint per puzzle decodes its first symbol, number, or letter. Correct answers
+unlock Next code; the tenth unlocks Play again. Progress counts solved codes,
+without timers, penalties, or saved stars.
+
+Changing the type or level starts a fresh round. Replay keeps both choices;
+reload returns to Easy Symbol codes. The game does not read or write saved
+progress for other games. Symbols have accessible names, controls work with
+the keyboard, and messages and keys wrap on small screens.
+
+**Code Detective** is a deduction game instead of a message-decoding puzzle:
+
+- **Easy:** three positions, four available symbols, no repeated symbols.
+- **Medium:** four positions, six symbols, no repeated symbols.
+- **Hard:** four positions, six symbols, repeated symbols allowed.
+
+Choose a symbol for each labeled position and check your guess. Each entry
+in the guess history reports the total correct symbols, split into those in
+the right position and those in a different position; it does not identify
+individual matches. Repeated symbols count only as often as they appear in
+the secret, with exact-position matches counted first. Empty guesses and
+repeats at Easy/Medium show a correction without adding a history entry.
+Guesses are unlimited, with no timer or penalty. One optional hint reveals
+the first position and stays visible for that puzzle.
+
+Each round generates ten distinct secret codes locally. Solving a code keeps
+its guesses visible until Next code; Play again generates a fresh round at
+the same level. Changing level/type clears guesses, hints, and round progress.
+The secret is hidden until solved (apart from the optional hint). These puzzles
+are for learning, so secrets are held in browser memory, not protected against
+inspection. The generation and duplicate-aware scoring are in
+[code_detective.js](app/javascript/data/code_detective.js).
+
+All messages and cipher rules are bundled locally in
+[code_breaker_puzzles.js](app/javascript/data/code_breaker_puzzles.js).
+These are learning puzzles, not encryption for protecting real information.
+Run `bin/rails test test/controllers/games_controller_test.rb test/system/code_breaker_test.rb test/system/code_detective_test.rb`
+after changing this game.
 
 ## Spot the Difference
 
