@@ -1,7 +1,7 @@
 require "application_system_test_case"
 
 class CodeBreakerTest < ApplicationSystemTestCase
-  test "landing page opens the game and navigation returns to all six games" do
+  test "landing page opens the game and navigation returns to all seven games" do
     visit root_url
     find("a.quest-card", text: "Code Breakers").click
     assert_current_path code_breaker_path
@@ -13,7 +13,7 @@ class CodeBreakerTest < ApplicationSystemTestCase
     assert_button "A little hint", disabled: false
     click_link "Choose a quest"
     assert_current_path root_path
-    assert_selector ".quest-card", count: 6
+    assert_selector ".quest-card", count: 7
   end
 
   test "all ninety puzzles decode correctly and follow their difficulty rules" do

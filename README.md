@@ -4,9 +4,80 @@ A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
 The landing page at `/` links to Word Quest at `/word-quest`, Math Quest at
 `/math-quest`, Read Aloud at `/read-aloud`, Trivia at `/trivia`,
-Spot the Difference at `/spot-the-difference`, and Code Breakers at `/code-breakers`.
+Spot the Difference at `/spot-the-difference`, Code Breakers at `/code-breakers`,
+and Fleet Quest at `/fleet-quest`.
 Read Aloud is also available in both game navigation menus. Word Quest,
 Math Quest, and Trivia have separate saved progress.
+
+## Fleet Quest
+
+A private, two-player ship-finding game without accounts, names, chat, or a
+public room list. Create a game, send its invitation link to one trusted friend,
+and keep your room page. The invitation previews the room; **Join game** claims
+the second seat. Opening a link alone does not claim it. Later visitors cannot
+replace either player. A room URL is not an invitation and does not grant a seat.
+Use separate devices, browser profiles, or browsers: tabs share the same seat.
+
+Both players get a randomly placed fleet on a 6-by-6 grid: ships of lengths
+3, 2, and 2. Shuffle before choosing Ready; fleets are locked afterward.
+Player 1 goes first once both players are ready. Each move explores one square
+and passes the turn, even on a hit. Discover all seven opponent ship squares to
+win. Coordinates, hit/miss markings, sunk-ship labels, and turn banners work
+with keyboards and small screens. No timer or automatic turn forfeits.
+On phones, a compact turn banner stays pinned while scrolling. Game controls
+and connection details are collapsed initially, but errors remain visible.
+Your ocean stays open during setup; once both players are ready, the opponent's
+board comes first and your ocean collapses on phones. Tap **Your ocean** to
+inspect it at any time. Live updates preserve your choice to expand or collapse
+it. Desktop boards stay side by side and initially expanded.
+When the final square of a ship is hit, a prominent, screen-reader-announced
+notice tells the attacker they sank a ship and tells its owner they lost one.
+Each player's latest sinking notice remains visible across turns and reloads;
+all squares of a sunk ship also get a double border. Partial hits and misses
+do not trigger a sinking notice.
+
+**Turn alerts:** Action Cable sends live change notices; each browser fetches
+its authorized view. The banner and tab title announce "Your turn!".
+**Enable turn sounds** opts in to a short local chime, with an initial preview.
+Sound is off on reload and may be suspended/delayed by background-tab or device
+policies. There are no push, email, or closed-browser alerts in this version.
+A disconnected client reconnects automatically, checks state every ten seconds
+as a fallback, and refreshes when the tab becomes visible. Connection and request
+failures are shown explicitly; **Refresh game** also checks state manually.
+
+Guest seats use a random identifier in an encrypted, HTTP-only, SameSite cookie
+(Secure on HTTPS), expiring after 30 days. Only its SHA-256 digest is stored with
+each seat. Clearing cookies or moving to a different browser loses the seat;
+there is no recovery link or takeover mechanism in this iteration. Rooms expire
+after 24 hours without a join, ready, shuffle, or move; passive polling does not
+keep them alive. Expired rooms cannot be played or joined.
+
+Game state lives in SQLite, independently of other games' browser progress.
+The server validates membership, placement locks, turns, coordinates, repeated
+shots, and completion within a locked transaction. A player receives only their
+own fleet and resolved shot results, never unexplored opponent ship coordinates.
+WebSocket subscriptions require a valid guest seat and broadcast only a revision,
+not fleets, invitation links, or guest identifiers. Private pages use no-store
+and same-origin referrer headers (no referrers sent to other sites, while keeping
+Rails origin checks on same-origin forms). Invitations are bearer links: anyone you share an unused
+link with can claim Player 2, so send them privately.
+
+### Running multiplayer
+
+Run `bin/rails db:prepare` before starting/deploying this feature. Rails serves
+WebSockets at `/cable`; the existing development `async` adapter needs one Rails
+process. Production uses the existing **Solid Cable** adapter and cable database,
+so prepare all configured databases and allow WebSocket upgrades through your
+HTTPS proxy. Use your application's publicly reachable HTTPS address for friends
+on other networks; a localhost link only works on the same computer. No external
+messaging or notification service is needed.
+
+Schedule `bin/rails fleet_games:cleanup` (for example hourly) to delete expired
+rooms. Expiry is enforced even before cleanup. This first iteration is intended
+for trusted private play, not a public matchmaking service.
+
+Run `bin/rails test test/models/fleet_game_test.rb test/controllers/fleet_games_controller_test.rb test/channels/fleet_game_channel_test.rb test/system/fleet_quest_test.rb`
+after changing this game.
 
 ## Code Breakers
 

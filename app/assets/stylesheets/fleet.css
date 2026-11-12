@@ -1,0 +1,44 @@
+.fleet-quest-card { background: #eaf5fa; border-color: #bcdce9; }
+.fleet-game { max-width: 1150px; margin: 0 auto; padding: 36px 20px; }
+.fleet-game p, .fleet-game li { line-height: 1.8; }
+.fleet-heading { text-align: center; margin: 28px 0; }
+.fleet-heading h1 { width: auto; margin: 14px 0; }
+.fleet-panel { min-width: 0; background: white; border: 1px solid #d5e0ec; border-radius: 18px; padding: 24px; margin: 20px 0; }
+.fleet-panel h2 { font-size: 22px; }
+.fleet-panel h3 { margin-top: 24px; }
+.fleet-panel summary { cursor: pointer; min-height: 44px; align-content: center; font-weight: 700; }
+.fleet-own-panel summary { font-size: 22px; }
+.fleet-ocean-toggle { font-size: 12px; font-weight: 400; }
+.fleet-settings summary { font-size: 16px; }
+.fleet-board { scroll-margin-top: 100px; }
+.fleet-panel label { display: block; font-weight: 700; }
+.fleet-panel input { box-sizing: border-box; width: 100%; padding: 12px; margin: 12px 0; font: inherit; border: 1px solid #b5c9db; border-radius: 8px; }
+.fleet-panel .check-button, .fleet-panel .hint-button { margin: 6px 6px 6px 0; min-height: 44px; }
+.fleet-turn { padding: 16px; border-radius: 12px; background: #f0eef6; font-weight: 700; font-size: 18px; }
+.fleet-turn.is-your-turn { background: #e4f3df; color: #355c31; border: 2px solid #608358; }
+.fleet-sunk-notice.has-notice { padding: 16px; border: 2px solid #6b5b95; border-radius: 12px; background: #eee8fa; color: #4f3e76; font-size: 18px; font-weight: 700; }
+.fleet-error { color: #993d37; }
+.fleet-boards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.fleet-board { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+.fleet-cell { white-space: pre-line; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5px 0; border: 1px solid #9dbdd0; border-radius: 5px; background: #e3f2fa; min-height: 48px; color: #30566a; font: inherit; line-height: 1.6; font-weight: 700; }
+.fleet-cell.has-ship { background: #d7ddc9; border: 2px solid #5c7059; color: #354c32; }
+.fleet-cell.is-hit { background: #f6d6c1; color: #863e25; border: 2px solid #a85839; }
+.fleet-cell.is-sunk { border: 4px double #6b3f69; background: #eed9ed; color: #60335d; }
+.fleet-cell.is-miss { background: #eeeef2; color: #575568; }
+button.fleet-cell:disabled { cursor: default; }
+button.fleet-cell:hover:not(:disabled) { background: #b6dce9; }
+@media (max-width: 800px) {
+  .fleet-boards { grid-template-columns: 1fr; gap: 0; }
+  .fleet-heading { margin: 16px 0; }
+  .fleet-heading h1 { font-size: 32px; }
+  .fleet-turn { position: sticky; top: 0; z-index: 5; margin: 12px 0; padding: 10px 12px; font-size: 15px; line-height: 1.5; box-shadow: 0 3px 8px #30566a20; }
+  .fleet-panel { margin: 10px 0; }
+  .fleet-sunk-notice.has-notice { padding: 10px 12px; font-size: 15px; }
+  .fleet-last-move { font-size: 13px; }
+  .fleet-settings:not([open]) { padding-top: 6px; padding-bottom: 6px; }
+}
+@media (max-width: 420px) {
+  .fleet-game { padding: 24px 10px; }
+  .fleet-panel { padding: 14px 10px; }
+  .fleet-cell { font-size: 12px; min-height: 44px; }
+}

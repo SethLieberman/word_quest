@@ -1,0 +1,56 @@
+<% content_for :title, "Fleet Quest | Play together" %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+<main class="fleet-game" data-controller="fleet"
+  data-fleet-token-value="<%= @game.token %>"
+  data-fleet-state-url-value="<%= state_fleet_game_path(@game.token) %>"
+  data-fleet-ready-url-value="<%= ready_fleet_game_path(@game.token) %>"
+  data-fleet-shuffle-url-value="<%= shuffle_fleet_game_path(@game.token) %>"
+  data-fleet-fire-url-value="<%= fire_fleet_game_path(@game.token) %>">
+  <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+  <header class="fleet-heading">
+    <h1>Fleet <span>Quest</span></h1>
+    <p data-fleet-target="identity">Loading your seat...</p>
+  </header>
+  <noscript><p class="storage-notice">Please enable JavaScript to play Fleet Quest.</p></noscript>
+  <section class="fleet-panel" data-fleet-target="invitation">
+    <h2>Invite your friend</h2>
+    <p>Send this link privately. Only the first friend to join can claim Player 2. Keep this page for your own seat.</p>
+    <label for="fleet-invitation">Invitation link</label>
+    <input id="fleet-invitation" data-fleet-target="link" value="<%= @invitation_url %>" readonly>
+    <button type="button" class="check-button" data-action="fleet#copyInvitation">Copy invitation</button>
+    <p data-fleet-target="copyStatus" role="status"></p>
+  </section>
+  <p class="fleet-turn" data-fleet-target="status" role="status" aria-live="polite">Connecting to your game...</p>
+  <p class="fleet-error" data-fleet-target="error" role="alert"></p>
+  <details class="fleet-panel fleet-settings" data-fleet-target="settings" open>
+    <summary>Game controls &amp; connection</summary>
+    <p data-fleet-target="connection" role="status">Connecting live updates...</p>
+    <button type="button" class="hint-button" data-action="fleet#refresh">Refresh game</button>
+    <button type="button" class="check-button" data-fleet-target="sound" data-action="fleet#toggleSound" aria-pressed="false">Enable turn sounds</button>
+    <p>Turn sounds work while this game is open. They may be delayed in background tabs. No alerts are sent after you close the game.</p>
+  </details>
+  <div class="fleet-panel fleet-setup" data-fleet-target="setup">
+    <p>Check your ships below. Shuffle to try a different layout, then choose Ready.</p>
+    <button type="button" class="check-button" data-fleet-target="shuffle" data-action="fleet#shuffle" disabled>Shuffle my fleet</button>
+    <button type="button" class="check-button" data-fleet-target="ready" data-action="fleet#ready" disabled>Ready to play</button>
+  </div>
+  <p class="fleet-sunk-notice" data-fleet-target="sunkNotice" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="fleet-last-move" data-fleet-target="lastMove" aria-live="polite"></p>
+  <div class="fleet-boards" data-fleet-target="boards">
+    <details class="fleet-panel fleet-own-panel" data-fleet-target="ownPanel" open>
+      <summary>Your ocean <span class="fleet-ocean-toggle">— tap to show or hide</span></summary>
+      <p>Your three ships are marked S. X means hit; a dot means miss. Sunk ships have a double border.</p>
+      <div class="fleet-board" data-fleet-target="own" role="group" aria-label="Your ocean"></div>
+    </details>
+    <section class="fleet-panel" data-fleet-target="opponentPanel">
+      <h2>Your friend's ocean</h2>
+      <p>Choose an unexplored square on your turn. Find all seven ship squares to win.</p>
+      <div class="fleet-board" data-fleet-target="opponent" role="group" aria-label="Your friend's ocean"></div>
+    </section>
+  </div>
+  <p>No timers. One move per turn, even after a hit. Fleets are placed automatically; shuffle before Ready to choose a different layout.</p>
+  <p>Your seat is saved in this browser only. Rooms expire after 24 hours without a game action.</p>
+  <a class="quest-switch" href="<%= fleet_games_path %>">Create another game</a>
+</main>

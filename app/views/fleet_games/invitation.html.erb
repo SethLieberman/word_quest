@@ -1,0 +1,10 @@
+<% content_for :title, "Fleet Quest | You're invited" %>
+<main class="fleet-game">
+  <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+  <section class="fleet-panel">
+    <h1>You're invited!</h1>
+    <p>A friend has opened a private Fleet Quest room. Join as Player 2 to play.</p>
+    <p>Only join invitations from someone you know. Your seat will be remembered in this browser, with no account or name needed.</p>
+    <%= button_to "Join game", fleet_invitation_path(@game.invitation_token), class: "check-button", data: { turbo: false } %>
+  </section>
+</main>

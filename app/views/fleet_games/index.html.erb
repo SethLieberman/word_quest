@@ -1,0 +1,23 @@
+<% content_for :title, "Fleet Quest | Play together" %>
+<main class="fleet-game">
+  <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+  <header class="fleet-heading">
+    <p class="eyebrow">TWO PLAYERS. ONE OCEAN.</p>
+    <h1>Fleet <span>Quest</span></h1>
+    <p>Invite a friend and take turns finding each other's hidden ships. No accounts needed!</p>
+  </header>
+  <section class="fleet-panel">
+    <h2>Play a private game</h2>
+    <p>Create a room, send the invitation link to one friend, and keep this browser open.</p>
+    <%= button_to "Create game", fleet_games_path, class: "check-button", data: { turbo: false } %>
+    <h3>A little guide</h3>
+    <ol>
+      <li>Each player gets a 6-by-6 ocean with three ships: one of length 3 and two of length 2.</li>
+      <li>Shuffle your fleet until you like it, then choose Ready. Ships cannot move afterward.</li>
+      <li>Player 1 goes first. Choose one square on your friend's ocean. Hit or miss, the turn passes.</li>
+      <li>Find all seven ship squares to win. A banner and optional sound announce your turn.</li>
+    </ol>
+    <p>No timers or chat. Share the link privately with someone you know. Rooms expire after 24 hours without a game action.</p>
+    <p>Your seat stays in this browser. Clearing cookies or switching devices loses access. Two people need separate browsers or devices; tabs in the same browser share one seat.</p>
+  </section>
+</main>
