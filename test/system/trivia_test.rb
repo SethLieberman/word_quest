@@ -18,7 +18,7 @@ class TriviaTest < ApplicationSystemTestCase
     assert_selector "input[type='radio']", count: 4
     find("nav a[aria-label='Choose a quest']").click
     assert_current_path root_path
-    assert_selector ".quest-card", count: 7
+    assert_selector ".quest-card", count: 6
   end
 
   test "empty and wrong answers retry while one hint changes the star award" do

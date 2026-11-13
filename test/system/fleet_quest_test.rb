@@ -4,8 +4,7 @@ class FleetQuestTest < ApplicationSystemTestCase
   setup do
     @previous_forgery_protection = FleetGamesController.allow_forgery_protection
     FleetGamesController.allow_forgery_protection = true
-    visit root_url
-    find("a.quest-card", text: "Fleet Quest").click
+    visit fleet_games_url
     assert_current_path fleet_games_path
     click_button "Create game"
     assert_text "You are Player 1."
@@ -45,7 +44,7 @@ class FleetQuestTest < ApplicationSystemTestCase
       visit @room_path
       assert_text "You are Player 2."
       click_link "Choose a quest"
-      assert_selector ".quest-card", count: 7
+      assert_selector ".quest-card", count: 6
     end
   end
 

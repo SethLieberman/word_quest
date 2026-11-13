@@ -4,12 +4,16 @@ A gentle, kid-friendly spelling game built with Rails 8 and Stimulus. Complete
 missing-letter puzzles using picture clues, a letter bank, or your keyboard.
 The landing page at `/` links to Word Quest at `/word-quest`, Math Quest at
 `/math-quest`, Read Aloud at `/read-aloud`, Trivia at `/trivia`,
-Spot the Difference at `/spot-the-difference`, Code Breakers at `/code-breakers`,
-and Fleet Quest at `/fleet-quest`.
+Spot the Difference at `/spot-the-difference`, and Code Breakers at `/code-breakers`.
 Read Aloud is also available in both game navigation menus. Word Quest,
 Math Quest, and Trivia have separate saved progress.
 
 ## Fleet Quest
+
+Fleet Quest is temporarily hidden from the landing page until persistent
+database hosting is configured and multiplayer is verified on Heroku.
+Its code and direct `/fleet-quest` routes remain available; hiding the card
+does not disable existing room or invitation links.
 
 A private, two-player ship-finding game without accounts, names, chat, or a
 public room list. Create a game, send its invitation link to one trusted friend,

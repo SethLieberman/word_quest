@@ -5,14 +5,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select ".quest-card", count: 7
+    assert_select ".quest-card", count: 6
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
     assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
     assert_select "a.quest-card[href=?]", trivia_path, text: /Trivia/
     assert_select "a.quest-card[href=?]", spot_difference_path, text: /Spot the Difference/
     assert_select "a.quest-card[href=?]", code_breaker_path, text: /Code Breakers/
-    assert_select "a.quest-card[href=?]", fleet_games_path, text: /Fleet Quest/
+    assert_select "a[href=?]", fleet_games_path, count: 0
   end
 
   test "shows Code Breakers with four types three levels and accessible answer controls" do
