@@ -137,5 +137,8 @@ class FleetGame < ApplicationRecord
 
   def notify_players
     FleetGameChannel.broadcast_to(self, { revision: lock_version })
+  rescue ActiveRecord::StatementInvalid => error
+    # The game is already saved; clients fall back to polling if the cable store is unavailable.
+    Rails.logger.error("Fleet game broadcast failed: #{error.class}: #{error.message}")
   end
 end
