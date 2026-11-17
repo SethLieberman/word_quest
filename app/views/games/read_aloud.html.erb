@@ -66,7 +66,17 @@
         <button type="button" class="read-aloud-button read-aloud-mic" data-read-aloud-target="mic" data-action="read-aloud#startListening" aria-pressed="false">🎤 Say it</button>
         <button type="button" class="read-aloud-button" data-action="read-aloud#markPracticed">I practiced reading</button>
       </div>
+      <p class="read-aloud-listening" data-read-aloud-target="listeningStatus" data-state="ready" role="status" aria-live="polite"></p>
       <p class="read-aloud-audio-note">The microphone can mishear children and does not score pronunciation. You can mark your practice without using it.</p>
+      <details class="read-aloud-mic-check">
+        <summary>Check microphone</summary>
+        <p class="read-aloud-audio-note">This checks the browser-selected microphone, not headphone playback or the speech recognizer's audio input.</p>
+        <button type="button" class="read-aloud-button" data-read-aloud-target="micCheckButton" data-action="read-aloud#toggleMicrophoneCheck">Start microphone check</button>
+        <p class="read-aloud-mic-device">Input: <span data-read-aloud-target="micDevice">Not tested</span></p>
+        <label class="read-aloud-mic-meter-label" for="read-aloud-mic-level">Input level</label>
+        <meter id="read-aloud-mic-level" class="read-aloud-mic-meter" min="0" max="100" value="0" data-read-aloud-target="micLevel">0 out of 100</meter>
+        <p class="read-aloud-mic-status" data-read-aloud-target="micCheckStatus" data-state="ready" role="status" aria-live="polite">Allow microphone access, then speak to test it.</p>
+      </details>
       <p class="read-aloud-unsupported" data-read-aloud-target="unsupported" hidden>
         Speaking practice needs a browser with speech recognition (like Chrome or Edge). You can still type or mark your practice.
       </p>

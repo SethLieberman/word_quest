@@ -20,6 +20,20 @@
 .read-aloud-button:hover { background: #7160ac; }
 .read-aloud-button:disabled { background: #cfc8dc; color: #fff; }
 .read-aloud-mic[aria-pressed="true"] { background: #c0573f; }
+.read-aloud-listening { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 28px; margin: -8px 0 12px; color: #6d6880; }
+.read-aloud-listening::before { content: ""; width: 9px; height: 9px; flex: 0 0 9px; border-radius: 50%; background: #a6a2b2; }
+.read-aloud-listening[data-state="listening"] { color: #9b3f36; font-weight: 700; }
+.read-aloud-listening[data-state="listening"]::before { background: #c0573f; box-shadow: 0 0 0 4px #c0573f26; }
+.read-aloud-listening[data-state="error"] { color: #8a6a2b; }
+.read-aloud-mic-check { max-width: 430px; margin: 0 auto 18px; padding: 12px 16px; border: 1px solid #e7e3ee; border-radius: 10px; text-align: left; }
+.read-aloud-mic-check summary { color: #5b4a94; font-weight: 700; cursor: pointer; }
+.read-aloud-mic-check .read-aloud-button { display: block; margin: 12px auto; }
+.read-aloud-mic-device, .read-aloud-mic-meter-label, .read-aloud-mic-status { font-size: 12px; color: #6d6880; text-align: center; overflow-wrap: anywhere; }
+.read-aloud-mic-meter-label { display: block; margin: 12px 0 4px; }
+.read-aloud-mic-meter { display: block; width: min(100%, 300px); height: 14px; margin: 0 auto; accent-color: #3d8b63; }
+.read-aloud-mic-status { min-height: 1.5em; margin: 8px 0 0; }
+.read-aloud-mic-status[data-state="signal"] { color: #32774f; font-weight: 700; }
+.read-aloud-mic-status[data-state="error"] { color: #8a6a2b; }
 .read-aloud-unsupported { font-size: 13px; color: #8a6a2b; background: #fbf5e6; border-radius: 10px; padding: 12px; margin: 0 0 16px; line-height: 1.6; }
 .read-aloud-typed { display: grid; gap: 8px; justify-items: center; margin-bottom: 14px; }
 .read-aloud-typed label { font-size: 12px; color: #777183; }

@@ -23,7 +23,8 @@ export default class extends Controller {
     "level", "mode", "help", "progress", "mastered", "card", "emoji", "pictureButton", "clue",
     "word", "letters", "family", "pattern", "stage", "builder", "slots", "tiles",
     "buildCheck", "hintButton", "mic", "unsupported", "audio", "audioNotice", "typed",
-    "reading", "feedback", "finished"
+    "reading", "feedback", "finished", "listeningStatus", "micCheckButton", "micCheckStatus",
+    "micLevel", "micDevice"
   ]
 
   connect() {
@@ -31,6 +32,10 @@ export default class extends Controller {
     this.recognition = null
     this.timers = []
     this.speechGeneration ??= 0
+    this.micCheckStream = null
+    this.micCheckAudioContext = null
+    this.micCheckAnalyser = null
+    this.micCheckFrame = null
     this.level = "beginner"
     this.mode = "read"
     this.mastered = new Set()
@@ -39,6 +44,11 @@ export default class extends Controller {
 
     this.micTarget.disabled = !this.RecognitionClass
     this.unsupportedTarget.hidden = Boolean(this.RecognitionClass)
+    this.micCheckButtonTarget.disabled = !navigator.mediaDevices?.getUserMedia || !window.AudioContext
+    this.setListeningStatus(
+      this.RecognitionClass ? "ready" : "unavailable",
+      this.RecognitionClass ? "Speech recognition is ready. Tap Say it when you are ready." : "Speech recognition is not available in this browser."
+    )
     this.audioAvailable = Boolean(window.speechSynthesis) && typeof window.SpeechSynthesisUtterance === "function"
     this.audioTargets.forEach((button) => { button.disabled = !this.audioAvailable })
     this.audioNoticeTarget.hidden = this.audioAvailable
@@ -47,6 +57,7 @@ export default class extends Controller {
 
   disconnect() {
     this.stopListening()
+    this.stopMicrophoneCheck()
     this.clearTimers()
     this.stopSpeech()
   }
@@ -353,8 +364,14 @@ export default class extends Controller {
 
   startListening() {
     if (!this.RecognitionClass || this.isDone()) return
+    if (this.recognition) {
+      this.stopListening()
+      return
+    }
+    if (this.micCheckStream) this.stopMicrophoneCheck()
     this.stopListening()
     this.stopSpeech()
+    this.setListeningStatus("starting", "Starting speech recognition…")
     const recognition = new this.RecognitionClass()
     recognition.lang = "en-US"
     recognition.interimResults = false
@@ -362,6 +379,7 @@ export default class extends Controller {
     recognition.onstart = () => {
       if (this.recognition !== recognition) return
       this.setMicPressed(true)
+      this.setListeningStatus("listening", "Listening now. Read the word aloud.")
       this.setFeedback("Listening… your turn to read!", "info")
     }
     recognition.onresult = (event) => {
@@ -373,6 +391,7 @@ export default class extends Controller {
       }
       const heard = Array.from(result).map((alternative) => normalize(alternative.transcript))
       this.stopListening()
+      this.setListeningStatus("received", "Speech received. See the message below.")
       if (heard.includes(normalize(this.currentWord))) {
         this.succeed()
       } else {
@@ -382,12 +401,14 @@ export default class extends Controller {
     recognition.onerror = (event) => {
       if (this.recognition !== recognition) return
       console.warn("Speech recognition error:", event.error, event.message)
+      this.setListeningStatus("error", "Speech recognition stopped. See the message below.")
       this.setFeedback(`${RECOGNITION_ERRORS[event.error] || "Speech recognition couldn't hear that."} You can type or mark your practice instead. (error code: ${event.error})`, "info")
     }
     recognition.onend = () => {
       if (this.recognition !== recognition) return
       this.setMicPressed(false)
       this.recognition = null
+      this.setListeningStatus("ready", "Listening stopped. Tap Say it to try again.")
     }
     this.recognition = recognition
     try {
@@ -409,6 +430,111 @@ export default class extends Controller {
     recognition.onend = null
     recognition.abort()
     this.setMicPressed(false)
+    this.setListeningStatus("ready", "Listening stopped.")
+  }
+
+  async toggleMicrophoneCheck() {
+    if (this.micCheckStream) {
+      this.stopMicrophoneCheck()
+      return
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia || !window.AudioContext) {
+      this.setMicCheckStatus("Microphone testing is not available in this browser.", "error")
+      return
+    }
+
+    this.stopListening()
+    this.micCheckButtonTarget.disabled = true
+    this.setMicCheckStatus("Waiting for microphone permission…", "checking")
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          channelCount: 1
+        }
+      })
+      if (!this.element.isConnected) {
+        stream.getTracks().forEach((track) => track.stop())
+        return
+      }
+
+      this.micCheckStream = stream
+      const track = stream.getAudioTracks()[0]
+      this.micDeviceTarget.textContent = track?.label || "Browser-selected microphone"
+
+      const audioContext = new window.AudioContext()
+      this.micCheckAudioContext = audioContext
+      if (audioContext.state === "suspended") await audioContext.resume()
+      if (this.micCheckStream !== stream) return
+
+      const analyser = audioContext.createAnalyser()
+      analyser.fftSize = 512
+      audioContext.createMediaStreamSource(stream).connect(analyser)
+      this.micCheckAnalyser = analyser
+      this.micCheckButtonTarget.textContent = "Stop microphone check"
+      this.micCheckButtonTarget.disabled = false
+      this.setMicCheckStatus("Microphone connected. Say a few words to check the input level.", "ready")
+      this.sampleMicrophone()
+    } catch (error) {
+      this.stopMicrophoneCheck()
+      const messages = {
+        "NotAllowedError": "Microphone permission was blocked. Allow access in your browser settings and try again.",
+        "NotFoundError": "No microphone was found. Connect a headset or microphone and try again.",
+        "NotReadableError": "The microphone is busy or unavailable. Close other apps using it and try again.",
+        "SecurityError": "Microphone access requires a secure connection, such as HTTPS or localhost."
+      }
+      this.setMicCheckStatus(messages[error.name] || "The microphone check could not start. Check your browser settings and try again.", "error")
+    }
+  }
+
+  sampleMicrophone() {
+    if (!this.micCheckAnalyser || !this.micCheckStream) return
+    const samples = new Uint8Array(this.micCheckAnalyser.fftSize)
+    this.micCheckAnalyser.getByteTimeDomainData(samples)
+    const meanSquare = samples.reduce((sum, sample) => sum + (sample - 128) ** 2, 0) / samples.length
+    const level = Math.min(100, Math.round(Math.sqrt(meanSquare) * 4))
+    this.micLevelTarget.value = level
+
+    const detected = level >= 4
+    if (detected !== this.micCheckHasSignal) {
+      this.micCheckHasSignal = detected
+      this.setMicCheckStatus(
+        detected ? "Sound detected. The microphone is picking up audio." : "Microphone connected. Say a few words to check the input level.",
+        detected ? "signal" : "ready"
+      )
+    }
+    this.micCheckFrame = window.requestAnimationFrame(() => this.sampleMicrophone())
+  }
+
+  stopMicrophoneCheck() {
+    if (this.micCheckFrame !== null) window.cancelAnimationFrame(this.micCheckFrame)
+    this.micCheckFrame = null
+    this.micCheckAnalyser = null
+    this.micCheckHasSignal = false
+    this.micCheckStream?.getTracks().forEach((track) => track.stop())
+    this.micCheckStream = null
+    if (this.micCheckAudioContext && this.micCheckAudioContext.state !== "closed") {
+      this.micCheckAudioContext.close().catch(() => {})
+    }
+    this.micCheckAudioContext = null
+    this.micCheckButtonTarget.textContent = "Start microphone check"
+    this.micCheckButtonTarget.disabled = !navigator.mediaDevices?.getUserMedia || !window.AudioContext
+    this.micLevelTarget.value = 0
+    this.micDeviceTarget.textContent = "Not tested"
+    if (this.element.isConnected) this.setMicCheckStatus("Microphone check stopped.", "ready")
+  }
+
+  setListeningStatus(state, message) {
+    this.listeningStatusTarget.dataset.state = state
+    this.listeningStatusTarget.textContent = message
+  }
+
+  setMicCheckStatus(message, state) {
+    this.micCheckStatusTarget.dataset.state = state
+    this.micCheckStatusTarget.textContent = message
   }
 
   checkTyped(event) {
@@ -477,6 +603,7 @@ export default class extends Controller {
 
   setMicPressed(pressed) {
     this.micTarget.setAttribute("aria-pressed", String(pressed))
+    this.micTarget.textContent = pressed ? "Stop listening" : "🎤 Say it"
   }
 
   setFeedback(message, tone) {

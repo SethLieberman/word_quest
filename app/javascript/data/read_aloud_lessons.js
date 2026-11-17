@@ -208,7 +208,17 @@ const easyWords = [
   ["kitten", "🐈", "A young cat."],
   ["planet", "🪐", "A large round object that travels around a star."],
   ["rocket", "🚀", "A vehicle that can travel into space."],
-  ["tomato", "🍅", "A juicy red fruit often used in salads."]
+  ["tomato", "🍅", "A juicy red fruit often used in salads."],
+  ["castle", "🏰", "A large building with strong walls, often from long ago."],
+  ["clouds", "☁️", "White or gray shapes made of tiny drops of water in the sky."],
+  ["engine", "⚙️", "A machine that makes a vehicle or tool work."],
+  ["father", "👨", "A child's male parent."],
+  ["flower", "🌼", "The colorful part of a plant that can grow into seeds."],
+  ["gentle", "🕊️", "Kind, calm, and careful."],
+  ["monkey", "🐒", "An animal that can climb and has a long tail."],
+  ["rabbit", "🐇", "A small furry animal with long ears."],
+  ["silver", "🥈", "A shiny gray metal, or a color like that metal."],
+  ["turtle", "🐢", "A slow animal with a hard shell."]
 ]
 
 const mediumWords = [
@@ -222,7 +232,17 @@ const mediumWords = [
   ["library", "📚", "A place where you can borrow books."],
   ["pancake", "🥞", "A flat cake cooked in a pan."],
   ["rainbow", "🌈", "An arc of colors in the sky after rain."],
-  ["tractor", "🚜", "A farm vehicle used to pull equipment."]
+  ["tractor", "🚜", "A farm vehicle used to pull equipment."],
+  ["airplane", "✈️", "A vehicle with wings that flies through the sky."],
+  ["cupcake", "🧁", "A small cake baked in a paper cup."],
+  ["dinosaur", "🦕", "A large animal that lived long ago."],
+  ["football", "🏈", "A ball game played by carrying or kicking a ball."],
+  ["midnight", "🌙", "Twelve o'clock at night."],
+  ["notebook", "📓", "A book of blank pages for writing or drawing."],
+  ["playful", "🎈", "Full of fun and ready to play."],
+  ["seashell", "🐚", "A hard shell that once belonged to a sea animal."],
+  ["sunshine", "☀️", "The bright light that comes from the sun."],
+  ["treasure", "💎", "Something valuable that people want to find or keep."]
 ]
 
 export const LESSONS = {

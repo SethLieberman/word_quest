@@ -29,9 +29,9 @@ class ReadAloudTest < ApplicationSystemTestCase
     assert_text "WORD 2 OF 34", wait: 3
 
     click_button "Easy words"
-    assert_text "WORD 1 OF 50"
+    assert_text "WORD 1 OF 60"
     click_button "Medium words"
-    assert_text "WORD 1 OF 50"
+    assert_text "WORD 1 OF 60"
   end
 
   test "pictures are optional and hidden again for new readings and activities" do
@@ -97,7 +97,7 @@ class ReadAloudTest < ApplicationSystemTestCase
         ])));
       }).catch((error) => done({ error: error.message }));
     JS
-    expected = { "beginner" => 34, "families" => 26, "blends" => 22, "digraphs" => 22, "silent_e" => 22, "sentences" => 20, "easy" => 50, "medium" => 50 }
+    expected = { "beginner" => 34, "families" => 26, "blends" => 22, "digraphs" => 22, "silent_e" => 22, "sentences" => 20, "easy" => 60, "medium" => 60 }
     assert_equal expected.keys.sort, lessons.keys.sort
     expected.each do |id, count|
       assert_equal count, lessons.fetch(id).fetch("count"), id
@@ -106,7 +106,7 @@ class ReadAloudTest < ApplicationSystemTestCase
     end
   end
 
-  test "all eighty added readings can be completed and shared vocabulary stays unchanged" do
+  test "all one hundred added readings can be completed and shared vocabulary stays unchanged" do
     visit read_aloud_url
     stub_speech
     results = page.evaluate_script(<<~JS)
@@ -117,7 +117,8 @@ class ReadAloudTest < ApplicationSystemTestCase
           controller.level = level;
           controller.hintedWords = new Set();
           controller.mode = controller.lesson.phonics ? "build" : "read";
-          for (let index = controller.words.length - 10; index < controller.words.length; index++) {
+          const sampleSize = ["easy", "medium"].includes(level) ? 20 : 10;
+          for (let index = controller.words.length - sampleSize; index < controller.words.length; index++) {
             controller.index = index;
             controller.showWord();
             controller.soundOut();
@@ -145,9 +146,9 @@ class ReadAloudTest < ApplicationSystemTestCase
         return results;
       })()
     JS
-    assert_equal 80, results.length
-    results.group_by { |result| result.fetch("level") }.each_value do |entries|
-      assert_equal 10, entries.length
+    assert_equal 100, results.length
+    results.group_by { |result| result.fetch("level") }.each do |level, entries|
+      assert_equal ["easy", "medium"].include?(level) ? 20 : 10, entries.length
       entries.each do |entry|
         assert entry.fetch("completed"), entry.fetch("text")
         assert_equal entry.fetch("text"), entry.fetch("blend")
@@ -389,7 +390,9 @@ class ReadAloudTest < ApplicationSystemTestCase
       controller.micTarget.disabled = false;
     JS
     click_button "Say it"
+    assert_selector "[data-read-aloud-target='listeningStatus'][data-state='listening']", text: "Listening now. Read the word aloud."
     page.execute_script("window.readingRecognition.onresult({results: [[{transcript: 'bad'}]]})")
+    assert_selector "[data-read-aloud-target='listeningStatus'][data-state='received']"
     assert_text "The microphone may have heard differently."
     assert_text "WORD 1 OF 34"
     assert_text "0 practiced"
@@ -402,6 +405,39 @@ class ReadAloudTest < ApplicationSystemTestCase
     page.execute_script("window.readingRecognition.onresult({results: [[{transcript: 'BUG!'}]]})")
     assert_text "Yes! bug is right."
     assert_text "WORD 3 OF 34", wait: 3
+  end
+
+  test "microphone check shows input activity and stops its stream" do
+    visit read_aloud_url
+    page.execute_script(<<~JS)
+      const controller = #{controller_script};
+      const track = { label: "USB headset microphone", stop() { window.micTrackStopped = true; } };
+      Object.defineProperty(navigator, "mediaDevices", {
+        configurable: true,
+        value: { getUserMedia: async () => ({ getAudioTracks: () => [track], getTracks: () => [track] }) }
+      });
+      window.AudioContext = class {
+        constructor() { this.state = "running"; }
+        createAnalyser() {
+          return { fftSize: 32, getByteTimeDomainData(samples) { samples.fill(128); samples[0] = 255; } };
+        }
+        createMediaStreamSource() { return { connect() {} }; }
+        close() { this.state = "closed"; return Promise.resolve(); }
+      };
+      window.requestAnimationFrame = (callback) => { window.micCheckFrameCallback = callback; return 1; };
+      window.cancelAnimationFrame = () => {};
+      controller.micCheckButtonTarget.disabled = false;
+    JS
+
+    find("summary", text: "Check microphone").click
+    click_button "Start microphone check"
+    assert_text "USB headset microphone"
+    page.execute_script("#{controller_script}.sampleMicrophone()")
+    assert_text "Sound detected. The microphone is picking up audio."
+    assert_operator page.evaluate_script("document.querySelector('#read-aloud-mic-level').value"), :>, 0
+    click_button "Stop microphone check"
+    assert_text "Microphone check stopped."
+    assert page.evaluate_script("window.micTrackStopped")
   end
 
   test "speech errors are visible and practice remains possible without audio" do
