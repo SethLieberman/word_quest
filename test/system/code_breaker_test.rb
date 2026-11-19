@@ -89,8 +89,21 @@ class CodeBreakerTest < ApplicationSystemTestCase
     end
   end
 
+  test "each new round shuffles the full puzzle deck" do
+    visit code_breaker_url
+    page.execute_script(<<~JS)
+      Math.random = () => 0;
+      #{controller_script}.startRound("symbols", "easy");
+    JS
+    answers = page.evaluate_script("#{controller_script}.deck.map((puzzle) => puzzle.answer)")
+    assert_equal 10, answers.length
+    assert_equal 10, answers.uniq.length
+    assert_not_equal "CAT", answers.first
+  end
+
   test "empty and incorrect answers retry and each puzzle allows only one hint" do
     visit code_breaker_url
+    answer = page.evaluate_script("#{controller_script}.puzzle.answer")
     [ "", "wrong", "123", "C A T", "cat!" ].each do |answer|
       fill_in "Your decoded message", with: answer
       click_button "Check my answer"
@@ -101,13 +114,13 @@ class CodeBreakerTest < ApplicationSystemTestCase
     assert_text "Not quite"
     click_button "A little hint"
     hint = find("#code-feedback").text
-    assert_includes hint, "means C"
+    assert_includes hint, "means #{answer[0]}"
     assert_button "A little hint", disabled: true
     page.execute_script("#{controller_script}.hint()")
     assert_equal hint, find("#code-feedback").text
-    fill_in "Your decoded message", with: " cat "
+    fill_in "Your decoded message", with: " #{answer.downcase} "
     find("#code-answer").send_keys(:enter)
-    assert_text "Code cracked! The message is CAT."
+    assert_text "Code cracked! The message is #{answer}."
     assert_text "1 of 10 codes cracked"
     assert_selector "#code-answer[disabled]"
     assert_no_selector "#code-answer[aria-invalid]"
@@ -184,7 +197,7 @@ class CodeBreakerTest < ApplicationSystemTestCase
     select "Letter shifts", from: "Code type"
     assert_text "3 steps backward"
     find("[data-level='hard']").click
-    assert_text "7 steps backward"
+    assert_text page.evaluate_script("#{controller_script}.puzzle.rule")
     assert_no_selector ".code-key li"
     select "Symbol codes", from: "Code type"
     assert_text "One letter is missing"

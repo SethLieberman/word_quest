@@ -1,0 +1,2 @@
+class TrafficEvent < ApplicationRecord
+end

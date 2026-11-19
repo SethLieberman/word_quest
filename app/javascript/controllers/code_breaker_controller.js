@@ -24,7 +24,7 @@ export default class extends Controller {
 
   startRound(type = this.type, level = this.level) {
     if (!LEVELS.includes(level)) throw new Error(`Unknown code level: ${level}`)
-    this.deck = type === "detective" ? [] : puzzlesFor(type, level)
+    this.deck = type === "detective" ? [] : this.shuffle(puzzlesFor(type, level))
     this.type = type
     this.level = level
     this.completed = 0
@@ -42,6 +42,15 @@ export default class extends Controller {
       return
     }
     this.showPuzzle()
+  }
+
+  shuffle(puzzles) {
+    const shuffled = [...puzzles]
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1))
+      ;[shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]]
+    }
+    return shuffled
   }
 
   get puzzle() {

@@ -11,6 +11,7 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 14px; -webkit-font-smoothing: antialiased; }
+.traffic-privacy-note { max-width: 760px; margin: 24px auto 0; padding: 0 16px 18px; color: var(--muted); font-size: 11px; line-height: 1.6; text-align: center; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; cursor: pointer; }
 button, a { touch-action: manipulation; }

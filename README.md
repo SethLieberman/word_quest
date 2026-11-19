@@ -8,6 +8,21 @@ Spot the Difference at `/spot-the-difference`, and Code Breakers at `/code-break
 Read Aloud is also available in both game navigation menus. Word Quest,
 Math Quest, and Trivia have separate saved progress.
 
+## Traffic reports
+
+The app counts successful HTML page views and estimated daily browsers. Browser
+counts are anonymous daily estimates: they do not identify people or link visits
+across days. A first-party cookie rotates daily. The app stores only the random
+daily key, date, and Rails page name; it does not store IP addresses, user agents,
+referrers, query strings, or audio. These counts may still be subject to your
+privacy notice and applicable rules for child-directed services.
+
+Run a local report with `bin/rails traffic:report` or choose a range with
+`bin/rails traffic:report DAYS=7`. In production, run
+`bin/kamal app exec --reuse "bin/rails traffic:report DAYS=30"` to read the
+production database. Old rows can be removed with
+`bin/kamal app exec --reuse "bin/rails traffic:purge KEEP_DAYS=90"`.
+
 ## Fleet Quest
 
 Fleet Quest is temporarily hidden from the landing page until persistent
