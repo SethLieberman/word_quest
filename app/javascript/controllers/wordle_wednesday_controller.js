@@ -12,12 +12,12 @@ export default class extends Controller {
   }
 
   startRound() {
-    const choices = WORDS.filter(({ word }) => word !== this.answer?.word)
-    this.answer = choices[Math.floor(Math.random() * choices.length)]
+    if (!this.wordDeck?.length) this.wordDeck = this.shuffledWordDeck()
+    this.answer = this.wordDeck.pop()
     this.guesses = []
     this.finished = false
     this.hintUsed = false
-    this.roundTarget.textContent = "YOUR WORD"
+    this.roundTarget.textContent = `${MAX_GUESSES} guesses left`
     this.feedbackTarget.textContent = ""
     this.feedbackTarget.className = "wordle-feedback"
     this.hintTarget.textContent = ""
@@ -26,7 +26,7 @@ export default class extends Controller {
     this.inputTarget.value = ""
     this.inputTarget.removeAttribute("aria-invalid")
     this.playAgainTarget.hidden = true
-    this.keyTargets.forEach((key) => {
+    this.keyboardTarget.querySelectorAll("button").forEach((key) => {
       key.disabled = false
       key.classList.remove("correct", "present", "absent")
       key.removeAttribute("aria-label")
@@ -40,6 +40,26 @@ export default class extends Controller {
         return tile
       }))
     })
+  }
+
+  shuffledWordDeck() {
+    const deck = [...WORDS]
+    for (let index = deck.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1))
+      const current = deck[index]
+      deck[index] = deck[swapIndex]
+      deck[swapIndex] = current
+    }
+
+    const previousWord = this.answer?.word
+    const lastIndex = deck.length - 1
+    if (previousWord && deck[lastIndex].word === previousWord) {
+      const swapIndex = deck.findIndex(({ word }) => word !== previousWord)
+      const current = deck[lastIndex]
+      deck[lastIndex] = deck[swapIndex]
+      deck[swapIndex] = current
+    }
+    return deck
   }
 
   sanitizeInput() {
@@ -155,7 +175,7 @@ export default class extends Controller {
     this.finished = true
     this.inputTarget.disabled = true
     this.hintButtonTarget.disabled = true
-    this.keyTargets.forEach((key) => { key.disabled = true })
+    this.keyboardTarget.querySelectorAll("button").forEach((key) => { key.disabled = true })
     this.playAgainTarget.hidden = false
     this.feedbackTarget.className = `wordle-feedback ${won ? "success" : "retry"}`
     this.feedbackTarget.textContent = won

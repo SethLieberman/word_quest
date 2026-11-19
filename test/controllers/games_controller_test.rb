@@ -26,6 +26,9 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-wordle-wednesday-target='input'][maxlength='5']"
     assert_select "[data-wordle-wednesday-target='key']", count: 26
     assert_select "[data-wordle-wednesday-target='feedback'][role='status'][aria-live='polite']"
+    assert_select "link[rel='stylesheet'][href*='application']"
+    assert_select "link[rel='stylesheet'][href*='quests']"
+    assert_select "link[rel='stylesheet'][href*='wordle_wednesday']"
     assert_select "a[href=?]", root_path, text: "Choose a quest"
   end
 

@@ -14,6 +14,38 @@ class WordleWednesdayTest < ApplicationSystemTestCase
     assert_selector ".quest-card", count: 8
   end
 
+  test "word bank has 143 unique five-letter words and rounds do not repeat until used" do
+    visit wordle_wednesday_url
+    report = page.evaluate_async_script(<<~JS)
+      const done = arguments[0];
+      import("data/wordle_wednesday_words").then(({default: words}) => {
+        const game = #{controller_script};
+        const rounds = [game.answer.word];
+        for (let index = 1; index < words.length; index += 1) {
+          game.startRound();
+          rounds.push(game.answer.word);
+        }
+        const previousWord = game.answer.word;
+        game.startRound();
+        done({words, rounds, nextWord: game.answer.word, previousWord});
+      })
+        .catch((error) => done({error: error.message}));
+    JS
+
+    assert_nil report["error"]
+    words = report.fetch("words")
+    rounds = report.fetch("rounds")
+    assert_equal 143, words.length
+    assert_equal words.length, words.map { |entry| entry.fetch("word") }.uniq.length
+    assert_equal 143, rounds.length
+    assert_equal rounds.length, rounds.uniq.length
+    assert_not_equal report.fetch("previousWord"), report.fetch("nextWord")
+    words.each do |entry|
+      assert_match(/\A[A-Z]{5}\z/, entry.fetch("word"))
+      assert entry.fetch("hint").present?
+    end
+  end
+
   test "guesses mark duplicate letters correctly, hints work once, and a correct word ends the round" do
     visit wordle_wednesday_url
     page.execute_script("#{controller_script}.answer = {word: 'APPLE', hint: 'A crunchy fruit.'}")
@@ -67,7 +99,7 @@ class WordleWednesdayTest < ApplicationSystemTestCase
     assert_text "You got it!"
 
     click_button "Play another word"
-    assert_text "YOUR WORD"
+    assert_text "6 guesses left"
     assert_equal "", find("#wordle-guess").value
     assert_not_equal answer, page.evaluate_script("#{controller_script}.answer.word")
     assert_button "Get a hint", disabled: false
