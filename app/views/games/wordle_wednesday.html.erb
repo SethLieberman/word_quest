@@ -1,0 +1,52 @@
+<% content_for :title, "Wordle Wednesday | Guess a word" %>
+<main class="wordle-wednesday" data-controller="wordle-wednesday">
+  <header class="wordle-heading">
+    <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+    <p class="eyebrow">A LITTLE WORD PUZZLE FOR CURIOUS MINDS</p>
+    <h1>Wordle <span>Wednesday</span></h1>
+    <p>Guess the secret five-letter word in six tries. Every guess gives you a clue!</p>
+  </header>
+  <noscript><p class="wordle-feedback retry">Please enable JavaScript to play Wordle Wednesday.</p></noscript>
+  <section class="wordle-card" aria-label="Word puzzle">
+    <div class="wordle-topline">
+      <span class="wordle-round" data-wordle-wednesday-target="round">YOUR WORD</span>
+      <button type="button" class="wordle-hint-button" data-wordle-wednesday-target="hintButton" data-action="wordle-wednesday#hint">Get a hint</button>
+    </div>
+    <p class="wordle-hint" data-wordle-wednesday-target="hint" role="status" aria-live="polite"></p>
+    <div class="wordle-grid" data-wordle-wednesday-target="rows" role="grid" aria-label="Six guesses with five letters each">
+      <% 6.times do |index| %>
+        <div class="wordle-row" data-wordle-wednesday-target="row" role="row" aria-label="Guess <%= index + 1 %>">
+          <% 5.times do %>
+            <span class="wordle-tile" role="gridcell" aria-label="Empty"></span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <form class="wordle-form" data-action="submit->wordle-wednesday#submit" novalidate>
+      <label for="wordle-guess">Your five-letter guess</label>
+      <div class="wordle-entry">
+        <input id="wordle-guess" type="text" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="wordle-feedback" data-wordle-wednesday-target="input" data-action="input->wordle-wednesday#sanitizeInput">
+        <button type="submit" class="check-button">Guess</button>
+      </div>
+    </form>
+    <p class="wordle-feedback" id="wordle-feedback" data-wordle-wednesday-target="feedback" role="status" aria-live="polite"></p>
+    <div class="wordle-keyboard" data-wordle-wednesday-target="keyboard" aria-label="Letter keyboard">
+      <% ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].each do |row| %>
+        <div class="wordle-key-row">
+          <% if row == "ZXCVBNM" %>
+            <button type="button" class="wordle-key wordle-key-wide" data-key="ENTER" data-action="wordle-wednesday#pressKey">Enter</button>
+          <% end %>
+          <% row.each_char do |letter| %>
+            <button type="button" class="wordle-key" data-wordle-wednesday-target="key" data-key="<%= letter %>" data-action="wordle-wednesday#pressKey"><%= letter %></button>
+          <% end %>
+          <% if row == "ZXCVBNM" %>
+            <button type="button" class="wordle-key wordle-key-wide" data-key="BACKSPACE" aria-label="Delete last letter" data-action="wordle-wednesday#pressKey">⌫</button>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <button type="button" class="check-button wordle-play-again" data-wordle-wednesday-target="playAgain" data-action="wordle-wednesday#startRound" hidden>Play another word</button>
+    <p class="wordle-instructions">Green means the letter is right and in the right spot. Yellow means it belongs somewhere else. Gray means it is not in the word. Try any five-letter word!</p>
+  </section>
+  <p class="quest-home-note">No timers. No pressure. Every guess is a chance to learn.</p>
+</main>

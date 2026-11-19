@@ -5,14 +5,28 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select ".quest-card", count: 7
+    assert_select ".quest-card", count: 8
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
     assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
     assert_select "a.quest-card[href=?]", trivia_path, text: /Trivia/
     assert_select "a.quest-card[href=?]", spot_difference_path, text: /Spot the Difference/
     assert_select "a.quest-card[href=?]", code_breaker_path, text: /Code Breakers/
+    assert_select "a.quest-card[href=?]", wordle_wednesday_path, text: /Wordle Wednesday/
     assert_select "a.quest-card[href=?]", fleet_games_path, text: /Fleet Quest/
+  end
+
+  test "shows Wordle Wednesday with an accessible five-letter puzzle" do
+    get wordle_wednesday_url
+
+    assert_response :success
+    assert_select "title", "Wordle Wednesday | Guess a word"
+    assert_select "[data-controller='wordle-wednesday']"
+    assert_select "[data-wordle-wednesday-target='row']", count: 6
+    assert_select "[data-wordle-wednesday-target='input'][maxlength='5']"
+    assert_select "[data-wordle-wednesday-target='key']", count: 26
+    assert_select "[data-wordle-wednesday-target='feedback'][role='status'][aria-live='polite']"
+    assert_select "a[href=?]", root_path, text: "Choose a quest"
   end
 
   test "shows Code Breakers with four types three levels and accessible answer controls" do

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "trivia", to: "games#trivia", as: :trivia
   get "spot-the-difference", to: "games#spot_difference", as: :spot_difference
   get "code-breakers", to: "games#code_breaker", as: :code_breaker
+  get "wordle-wednesday", to: "games#wordle_wednesday", as: :wordle_wednesday
   resources :fleet_games, path: "fleet-quest", only: [ :index, :create, :show ], param: :id do
     member do
       get :state

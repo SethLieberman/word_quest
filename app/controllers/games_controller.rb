@@ -17,6 +17,9 @@ class GamesController < ApplicationController
   def code_breaker
   end
 
+  def wordle_wednesday
+  end
+
   def read_aloud
     render :read_aloud
   end

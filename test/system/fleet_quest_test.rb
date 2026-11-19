@@ -44,7 +44,7 @@ class FleetQuestTest < ApplicationSystemTestCase
       visit @room_path
       assert_text "You are Player 2."
       click_link "Choose a quest"
-      assert_selector ".quest-card", count: 6
+      assert_selector ".quest-card", count: 8
     end
   end
 
