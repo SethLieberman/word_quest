@@ -8,6 +8,9 @@ class GamesController < ApplicationController
   def math
   end
 
+  def twenty_four
+  end
+
   def trivia
   end
 

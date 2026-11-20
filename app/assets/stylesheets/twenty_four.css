@@ -1,0 +1,60 @@
+.twenty-four-game { --table: #e7f0e9; --table-border: #b7d0c0; --green: #2e7059; --green-dark: #225541; --orange: #c65e3b; --paper: #fffdf8; max-width: 900px; margin: 0 auto; padding: 38px 20px 46px; }
+.twenty-four-heading { text-align: center; margin-bottom: 24px; }
+.twenty-four-heading .eyebrow { justify-content: center; margin-top: 20px; color: var(--green); }
+.twenty-four-heading h1 { width: auto; margin: 10px 0; font-family: "Manrope", sans-serif; font-size: 40px; }
+.twenty-four-heading h1 span { color: var(--orange); }
+.twenty-four-heading > p:last-child, .twenty-four-mode-description { color: #5f6c64; line-height: 1.7; }
+.twenty-four-modes { display: flex; justify-content: center; gap: 4px; width: fit-content; margin: 0 auto; padding: 4px; border: 1px solid #d5ded7; border-radius: 8px; background: #f3f5f2; }
+.twenty-four-mode { min-width: 120px; min-height: 42px; border: 0; border-radius: 5px; background: transparent; color: #53615a; font: inherit; font-weight: 700; }
+.twenty-four-mode[aria-pressed="true"] { background: var(--green); color: white; }
+.twenty-four-mode-description { min-height: 1.7em; margin: 12px auto 20px; text-align: center; }
+.twenty-four-table { padding: 20px; border: 1px solid var(--table-border); border-radius: 8px; background: var(--table); }
+.twenty-four-round-controls { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.twenty-four-clock { min-width: 104px; margin: 0; color: var(--green-dark); font: 700 22px "Manrope", sans-serif; font-variant-numeric: tabular-nums; }
+.twenty-four-primary, .twenty-four-secondary { min-height: 44px; padding: 10px 16px; border: 1px solid transparent; border-radius: 6px; font: inherit; font-weight: 700; }
+.twenty-four-primary { background: var(--green); color: white; }
+.twenty-four-primary:hover:not(:disabled) { background: var(--green-dark); }
+.twenty-four-secondary { border-color: #bac8bf; background: var(--paper); color: #42584a; }
+.twenty-four-primary:disabled, .twenty-four-secondary:disabled { opacity: .5; cursor: default; }
+.twenty-four-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; max-width: 600px; margin: 0 auto; perspective: 900px; }
+.twenty-four-card { position: relative; aspect-ratio: 0.72; min-width: 0; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+.twenty-four-card-inner { position: absolute; inset: 0; display: block; transition: transform .45s ease; transform-style: preserve-3d; }
+.twenty-four-card.is-revealed .twenty-four-card-inner { transform: rotateY(180deg); }
+.twenty-four-card-back, .twenty-four-card-front { position: absolute; inset: 0; display: grid; place-items: center; border: 2px solid var(--green); border-radius: 8px; backface-visibility: hidden; font-family: "Manrope", sans-serif; font-size: clamp(30px, 7vw, 56px); font-weight: 800; }
+.twenty-four-card-back { background: repeating-linear-gradient(45deg, #d7e8dc, #d7e8dc 8px, #c8dfd0 8px, #c8dfd0 16px); color: var(--green); }
+.twenty-four-card-front { transform: rotateY(180deg); border-color: #d3b86e; background: var(--paper); color: #263d31; box-shadow: 0 4px 0 #d9c78e; }
+.twenty-four-card.is-selected .twenty-four-card-front { outline: 4px solid var(--orange); outline-offset: 3px; }
+.twenty-four-card.is-selected-1 .twenty-four-card-front { border-color: var(--green); }
+.twenty-four-card:focus-visible { outline: 3px solid #bc563c; outline-offset: 5px; }
+.twenty-four-card:disabled { cursor: default; }
+.twenty-four-equation { min-height: 34px; margin: 20px 0 16px; color: #344d3e; text-align: center; font: 700 20px "Manrope", sans-serif; font-variant-numeric: tabular-nums; }
+.twenty-four-operation-picker { margin: 0; padding: 0; border: 0; text-align: center; }
+.twenty-four-operation-picker legend { width: 100%; margin-bottom: 10px; color: #59665e; font-weight: 700; }
+.twenty-four-operations { display: flex; justify-content: center; gap: 8px; }
+.twenty-four-operation { width: 52px; height: 48px; border: 1px solid #c1d0c5; border-radius: 6px; background: var(--paper); color: var(--green-dark); font: 700 24px "Manrope", sans-serif; }
+.twenty-four-operation[aria-pressed="true"] { border-color: var(--orange); background: #fff0e8; color: #9c3e27; box-shadow: inset 0 0 0 1px var(--orange); }
+.twenty-four-operation:disabled { opacity: .55; cursor: default; }
+.twenty-four-actions { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.twenty-four-typed { max-width: 470px; margin: 22px auto 0; text-align: center; }
+.twenty-four-typed label { display: block; margin-bottom: 8px; color: #43584a; font-weight: 700; }
+.twenty-four-typed-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.twenty-four-typed input { flex: 1 1 220px; min-width: 0; max-width: 100%; padding: 10px 12px; border: 1px solid #bac8bf; border-radius: 6px; background: var(--paper); color: #263d31; font: inherit; font-size: 16px; }
+.twenty-four-typed input[aria-invalid="true"] { border-color: #a13e31; }
+.twenty-four-typed p { margin: 8px 0 0; color: #59665e; font-size: 12px; line-height: 1.5; }
+.twenty-four-feedback { min-height: 3.2em; margin: 14px 0 0; color: #43584a; text-align: center; line-height: 1.6; }
+.twenty-four-feedback[data-tone="success"] { color: #266442; font-weight: 700; }
+.twenty-four-feedback[data-tone="error"] { color: #a13e31; }
+.twenty-four-moves { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin: 0; padding: 0; list-style: none; color: #54645a; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .twenty-four-game { padding: 28px 14px 36px; }
+  .twenty-four-heading h1 { font-size: 34px; }
+  .twenty-four-table { padding: 14px 10px; }
+  .twenty-four-cards { gap: 8px; }
+  .twenty-four-card-back, .twenty-four-card-front { border-width: 1px; border-radius: 6px; }
+  .twenty-four-card.is-selected .twenty-four-card-front { outline-width: 3px; outline-offset: 2px; }
+  .twenty-four-clock { width: 100%; text-align: center; }
+  .twenty-four-equation { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .twenty-four-card-inner { transition: none; }
+}

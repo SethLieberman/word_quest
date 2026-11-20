@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root "games#index"
   get "word-quest", to: "games#show", as: :word_quest
   get "math-quest", to: "games#math", as: :math_quest
+  get "24", to: "games#twenty_four", as: :twenty_four
   get "trivia", to: "games#trivia", as: :trivia
   get "spot-the-difference", to: "games#spot_difference", as: :spot_difference
   get "code-breakers", to: "games#code_breaker", as: :code_breaker

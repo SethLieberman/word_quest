@@ -1,0 +1,54 @@
+<% content_for :title, "24 | Make twenty-four" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "twenty_four", "data-turbo-track": "reload" %>
+<% end %>
+<main class="twenty-four-game" data-controller="twenty-four">
+  <header class="twenty-four-heading">
+    <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
+    <p class="eyebrow">FOUR NUMBERS. ONE TARGET.</p>
+    <h1>Make <span>24</span></h1>
+    <p>Combine every card with addition, subtraction, multiplication, or division.</p>
+  </header>
+
+  <section class="twenty-four-modes" role="group" aria-label="Choose a game mode">
+    <button type="button" class="twenty-four-mode" data-mode="practice" data-twenty-four-target="practiceMode" data-action="twenty-four#chooseMode" aria-pressed="true">Practice</button>
+    <button type="button" class="twenty-four-mode" data-mode="timed" data-twenty-four-target="timedMode" data-action="twenty-four#chooseMode" aria-pressed="false">Timed</button>
+  </section>
+  <p class="twenty-four-mode-description" data-twenty-four-target="modeDescription"></p>
+
+  <section class="twenty-four-table" aria-label="24 card game">
+    <div class="twenty-four-round-controls">
+      <p class="twenty-four-clock" data-twenty-four-target="timer" role="timer" aria-label="Elapsed time">No timer</p>
+      <button type="button" class="twenty-four-primary" data-twenty-four-target="startButton" data-action="twenty-four#startTimedRound" hidden>Start timer and reveal cards</button>
+      <button type="button" class="twenty-four-secondary" data-twenty-four-target="newDealButton" data-action="twenty-four#newPracticeDeal">New deal</button>
+    </div>
+
+    <div class="twenty-four-cards" data-twenty-four-target="cards" role="group" aria-label="Number cards"></div>
+    <p class="twenty-four-equation" data-twenty-four-target="equation" aria-live="polite">Choose two cards, then choose an operation.</p>
+
+    <fieldset class="twenty-four-operation-picker">
+      <legend>Choose an operation</legend>
+      <div class="twenty-four-operations">
+        <% [["+", "Add"], ["-", "Subtract"], ["×", "Multiply"], ["÷", "Divide"]].each do |symbol, label| %>
+          <button type="button" class="twenty-four-operation" data-operation="<%= symbol %>" data-twenty-four-target="operation" data-action="twenty-four#selectOperation" aria-label="<%= label %>" aria-pressed="<%= symbol == "+" %>"><%= symbol %></button>
+        <% end %>
+      </div>
+    </fieldset>
+
+    <div class="twenty-four-actions">
+      <button type="button" class="twenty-four-primary" data-twenty-four-target="combineButton" data-action="twenty-four#combine" disabled>Combine cards</button>
+      <button type="button" class="twenty-four-secondary" data-twenty-four-target="undoButton" data-action="twenty-four#undo" disabled>Undo move</button>
+    </div>
+    <form class="twenty-four-typed" data-action="submit->twenty-four#checkTypedAnswer">
+      <label for="twenty-four-answer">Or type your equation</label>
+      <div class="twenty-four-typed-row">
+        <input id="twenty-four-answer" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="80" placeholder="(1 + 2) * (3 + 5)" data-twenty-four-target="typedAnswer" aria-describedby="twenty-four-typed-help">
+        <button type="submit" class="twenty-four-secondary" data-twenty-four-target="checkAnswer">Check equation</button>
+      </div>
+      <p id="twenty-four-typed-help">Use the original four cards and +, -, *, /, or parentheses.</p>
+    </form>
+    <p class="twenty-four-feedback" data-twenty-four-target="feedback" data-tone="info" role="status" aria-live="polite">Use each card once. Combine cards until one card shows 24.</p>
+    <ol class="twenty-four-moves" data-twenty-four-target="moves" aria-label="Your operations"></ol>
+  </section>
+  <p class="quest-home-note">Use all four numbers exactly once. Fractions are allowed.</p>
+</main>

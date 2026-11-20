@@ -6,15 +6,30 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "script[src=?]", "https://static.cloudflareinsights.com/beacon.min.js", count: 0
-    assert_select ".quest-card", count: 8
+    assert_select ".quest-card", count: 9
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/
+    assert_select "a.quest-card[href=?]", twenty_four_path, text: /24/
     assert_select "a.quest-card[href=?]", read_aloud_path, text: /Read Aloud/
     assert_select "a.quest-card[href=?]", trivia_path, text: /Trivia/
     assert_select "a.quest-card[href=?]", spot_difference_path, text: /Spot the Difference/
     assert_select "a.quest-card[href=?]", code_breaker_path, text: /Code Breakers/
     assert_select "a.quest-card[href=?]", wordle_wednesday_path, text: /Wordle Wednesday/
     assert_select "a.quest-card[href=?]", fleet_games_path, text: /Fleet Quest/
+  end
+
+  test "shows 24 with two modes and a four-card game board" do
+    get twenty_four_url
+
+    assert_response :success
+    assert_select "title", "24 | Make twenty-four"
+    assert_select "link[rel='stylesheet'][href*='twenty_four']"
+    assert_select "[data-controller='twenty-four']"
+    assert_select "button[data-mode='practice'][aria-pressed='true']", text: /Practice/
+    assert_select "button[data-mode='timed'][aria-pressed='false']", text: /Timed/
+    assert_select "[data-twenty-four-target='cards']"
+    assert_select "button[data-operation]", count: 4
+    assert_select "a[href=?]", root_path, text: "Choose a quest"
   end
 
   test "shows Wordle Wednesday with an accessible five-letter puzzle" do
@@ -79,6 +94,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "title", "Trivia | Let's grow your curiosity"
+    assert_select "link[rel='stylesheet'][href*='trivia']"
     assert_select "[data-controller='trivia']"
     assert_select "[data-trivia-target='level']", count: 5
     (1..5).each do |grade|

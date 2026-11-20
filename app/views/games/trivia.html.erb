@@ -1,4 +1,7 @@
 <% content_for :title, "Trivia | Let's grow your curiosity" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "trivia", "data-turbo-track": "reload" %>
+<% end %>
 <div class="app-shell trivia" data-controller="trivia">
   <aside class="sidebar">
     <a class="brand" href="<%= root_path %>" aria-label="Choose a quest"><span class="brand-mark" aria-hidden="true">?</span>Trivia<span class="brand-dot">.</span></a>
