@@ -38,6 +38,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "title", "Code Breakers | Crack a little mystery"
+    assert_select "link[rel='stylesheet'][href*='code_breaker']"
     assert_select "[data-controller='code-breaker']"
     assert_select "label[for='code-type']", text: "Code type"
     assert_select "select#code-type option", count: 4
@@ -61,6 +62,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "title", "Spot the Difference | Look a little closer"
+    assert_select "link[rel='stylesheet'][href*='spot_difference']"
     assert_select "[data-controller='spot-difference']"
     assert_select "[data-spot-difference-target='round']", text: "PUZZLE 1 OF 10"
     assert_select "button[data-level='easy'][aria-pressed='true']", text: "Easy: 5 differences"
@@ -136,6 +138,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "title", "Read Aloud | Let's sound out words"
+    assert_select "link[rel='stylesheet'][href*='read_aloud']"
     assert_select "[data-controller='read-aloud']"
     assert_select "[data-read-aloud-target='level']", count: 8
     assert_select "[data-level='beginner'][aria-pressed='true']", text: "Beginning words"

@@ -1,6 +1,7 @@
 <% content_for :title, "Fleet Quest | Play together" %>
 <% content_for :head do %>
   <meta name="turbo-cache-control" content="no-cache">
+  <%= stylesheet_link_tag "fleet", "data-turbo-track": "reload" %>
 <% end %>
 <main class="fleet-game" data-controller="fleet"
   data-fleet-token-value="<%= @game.token %>"

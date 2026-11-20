@@ -1,4 +1,7 @@
 <% content_for :title, "Code Breakers | Crack a little mystery" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "code_breaker", "data-turbo-track": "reload" %>
+<% end %>
 <main class="code-game" data-controller="code-breaker">
   <header class="code-heading">
     <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>

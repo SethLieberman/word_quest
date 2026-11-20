@@ -1,4 +1,7 @@
 <% content_for :title, "Spot the Difference | Look a little closer" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "spot_difference", "data-turbo-track": "reload" %>
+<% end %>
 <main class="spot-game" data-controller="spot-difference">
   <header class="spot-heading">
     <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>

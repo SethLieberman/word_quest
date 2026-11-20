@@ -9,6 +9,20 @@ class FleetGamesControllerTest < ActionDispatch::IntegrationTest
     @game = FleetGame.order(:id).last
   end
 
+  test "Fleet Quest pages all load the dedicated stylesheet" do
+    get fleet_games_path
+    assert_select "link[rel='stylesheet'][href*='fleet']"
+
+    @one.get fleet_game_path(@game.token)
+    assert Nokogiri::HTML(@one.response.body).at_css('link[rel="stylesheet"][href*="fleet"]')
+
+    @two.get fleet_invitation_path(@game.invitation_token)
+    assert Nokogiri::HTML(@two.response.body).at_css('link[rel="stylesheet"][href*="fleet"]')
+
+    @third.get fleet_game_path("missing")
+    assert Nokogiri::HTML(@third.response.body).at_css('link[rel="stylesheet"][href*="fleet"]')
+  end
+
   test "create remembers an encrypted guest seat and show never embeds fleets" do
     assert_equal 303, @one.response.status
     assert @one.cookies[:fleet_guest].present?

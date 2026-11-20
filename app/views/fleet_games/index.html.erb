@@ -1,4 +1,7 @@
 <% content_for :title, "Fleet Quest | Play together" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "fleet", "data-turbo-track": "reload" %>
+<% end %>
 <main class="fleet-game">
   <a class="quest-switch" href="<%= root_path %>">Choose a quest</a>
   <header class="fleet-heading">

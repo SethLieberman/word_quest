@@ -1,4 +1,7 @@
 <% content_for :title, "Read Aloud | Let's sound out words" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "read_aloud", "data-turbo-track": "reload" %>
+<% end %>
 <main class="read-aloud" data-controller="read-aloud">
   <noscript><p class="storage-notice">Please enable JavaScript to practice reading.</p></noscript>
 
