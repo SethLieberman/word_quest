@@ -8,20 +8,22 @@ Spot the Difference at `/spot-the-difference`, and Code Breakers at `/code-break
 Read Aloud is also available in both game navigation menus. Word Quest,
 Math Quest, and Trivia have separate saved progress.
 
-## Traffic reports
+## Web analytics
 
-The app counts successful HTML page views and estimated daily browsers. Browser
-counts are anonymous daily estimates: they do not identify people or link visits
-across days. A first-party cookie rotates daily. The app stores only the random
-daily key, date, and Rails page name; it does not store IP addresses, user agents,
-referrers, query strings, or audio. These counts may still be subject to your
-privacy notice and applicable rules for child-directed services.
+Optional Cloudflare Web Analytics can show aggregate page views and visitor
+estimates without moving the app or changing DNS. Create a site in Cloudflare's
+Web Analytics dashboard, then set its beacon token as a Heroku config var:
 
-Run a local report with `bin/rails traffic:report` or choose a range with
-`bin/rails traffic:report DAYS=7`. In production, run
-`bin/kamal app exec --reuse "bin/rails traffic:report DAYS=30"` to read the
-production database. Old rows can be removed with
-`bin/kamal app exec --reuse "bin/rails traffic:purge KEEP_DAYS=90"`.
+```sh
+heroku config:set CLOUDFLARE_WEB_ANALYTICS_TOKEN=YOUR_BEACON_TOKEN --app word-quest
+```
+
+Deploy the app after adding the config var. The beacon only loads in production
+when the variable is present; remove it with
+`heroku config:unset CLOUDFLARE_WEB_ANALYTICS_TOKEN --app word-quest` to disable
+analytics. The site-specific token is included in the public page source by
+design. Review Cloudflare's privacy terms and your notice for a child-directed
+site before enabling analytics.
 
 ## Fleet Quest
 

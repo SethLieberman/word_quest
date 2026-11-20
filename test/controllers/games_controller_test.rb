@@ -5,6 +5,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
+    assert_select "script[src=?]", "https://static.cloudflareinsights.com/beacon.min.js", count: 0
     assert_select ".quest-card", count: 8
     assert_select "a.quest-card[href=?]", word_quest_path, text: /Word Quest/
     assert_select "a.quest-card[href=?]", math_quest_path, text: /Math Quest/

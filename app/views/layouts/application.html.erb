@@ -26,6 +26,11 @@
 
   <body>
     <%= yield %>
-    <footer class="traffic-privacy-note">This site counts visits with a random browser code that expires daily. It does not collect names or audio.</footer>
+    <% if Rails.env.production? && ENV["CLOUDFLARE_WEB_ANALYTICS_TOKEN"].present? %>
+      <footer class="traffic-privacy-note">We use privacy-focused analytics to understand site visits. We do not collect names or audio.</footer>
+      <%= javascript_include_tag "https://static.cloudflareinsights.com/beacon.min.js",
+        type: "module",
+        data: { cf_beacon: { token: ENV.fetch("CLOUDFLARE_WEB_ANALYTICS_TOKEN") }.to_json } %>
+    <% end %>
   </body>
 </html>

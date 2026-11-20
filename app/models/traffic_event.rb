@@ -1,2 +1,0 @@
-class TrafficEvent < ApplicationRecord
-end
